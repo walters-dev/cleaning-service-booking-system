@@ -18,35 +18,30 @@ namespace CleaningServiceBookingSystemMain
                 IsUserSelected = false;
                 while (IsUserSelected == false)
                 {
-                    if (key.Key == ConsoleKey.D1)
+                    switch (key.Key)
                     {
-                        IsAdmin = true;
-                        IsUserSelected = true;
-                        Console.WriteLine("Booking Administrator is selected");
-                        Thread.Sleep(2000);
-                        Console.Clear();
+                        case ConsoleKey.D1:
+                            IsAdmin = true;
+                            IsUserSelected = true;
+                            Console.WriteLine("Booking Administrator is selected");
+                            Console.Clear();
+                            break;
+                        case ConsoleKey.D2:
+                            IsAdmin = false;
+                            IsUserSelected = true;
+                            Console.WriteLine("Operations Manager is selected");
+                            Console.Clear();
+                            break;
+                        case ConsoleKey.D3:
+                            IsAppRunning = false;
+                            IsUserSelected = true;
+                            break;
+                        default:
+                            key = Console.ReadKey(true);
+                            IsUserSelected = false;
+                            break;
                     }
-                    else if (key.Key == ConsoleKey.D2)
-                    {
-                        IsAdmin = false;
-                        IsUserSelected = true;
-                        Console.WriteLine("Operations Manager is selected");
-                        Thread.Sleep(2000);
-                        Console.Clear();
 
-                    }
-                    else if (key.Key == ConsoleKey.D3)
-                    {
-                        
-                        IsAppRunning = false;
-                        
-                        break;
-                    }
-                    else
-                    {
-                        key = Console.ReadKey(true);
-                        IsUserSelected = false;
-                    }
                 }
                 if (IsAdmin == true)
                 {
@@ -57,6 +52,8 @@ namespace CleaningServiceBookingSystemMain
                     Console.WriteLine("Enter Password:");
                     password = Console.ReadLine();
                     //password validation
+                    Console.Clear();
+                    AnsiConsole.MarkupLine("[green]Signed in[/]");
                     IsAdminMenuRunning = true;
                     while (IsAdminMenuRunning == true)
                     {
@@ -64,26 +61,76 @@ namespace CleaningServiceBookingSystemMain
                             new SelectionPrompt<string>()
                             .Title("Choose menu option")
                             .AddChoices("Create Booking", "Create New Customer", "View Bookings", "View Customers","Change user"));
-                        if (adminChoices == "Create Booking")
+                        switch (adminChoices)
                         {
-                            AnsiConsole.MarkupLine("[green]Create booking selected[/]");
-                            var createBookingChoices = AnsiConsole.Prompt(
-                                new SelectionPrompt<string>()
-                                .Title("Choose customer:")
-                                .AddChoices("Existing customer", "New customer"));
+                            case "Create Booking":
+                                AnsiConsole.MarkupLine("[green]Create booking selected[/]");
+                                var createBookingChoices = AnsiConsole.Prompt(
+                                    new SelectionPrompt<string>()
+                                    .Title("Choose customer:")
+                                    .AddChoices("Existing customer", "New customer"));
 
-                            if (createBookingChoices == "Existing customer")
-                            {
-                                AnsiConsole.MarkupLine("[green]Existing customer selected[/]");
-                            }
-                            else if (createBookingChoices == "New customer")
-                            {
+                                if (createBookingChoices == "Existing customer")
+                                {
+                                    AnsiConsole.MarkupLine("[green]Existing customer selected[/]");
+                                }
+                                else if (createBookingChoices == "New customer")
+                                {
+                                    confirmData = false;
+                                    while (confirmData == false)
+                                    {
+                                        AnsiConsole.MarkupLine("[green]New Customer selected[/]");
+                                        //new customer proccess 
+                                        var confirmNewCusChoices = AnsiConsole.Prompt(
+                                            new SelectionPrompt<string>()
+                                            .Title("Is the customer details correct:")
+                                            .AddChoices("Yes", "No"));
+
+                                        if (confirmNewCusChoices == "Yes")
+                                        {
+                                            confirmData = true;
+                                            //save customer data to sql
+                                        }
+                                        else
+                                        {
+                                            confirmData = false; // loop it
+                                        }
+                                    }
+                                }
+                                /*
+                                 System displays house types and service types from SQL Server
+                                 Staff enters number of rooms, booking date, add-ons and recurring option.
+                                 System validates all inputs and calculates subtotal, discount, surcharge and final total
+                                 */
+                                confirmData = false;
+                                while (confirmData == false)
+                                {
+                                    var confirmBookingChoice = AnsiConsole.Prompt(
+                                            new SelectionPrompt<string>()
+                                            .Title("Is the booking details correct:")
+                                            .AddChoices("Yes", "No"));
+
+                                    if (confirmBookingChoice == "Yes")
+                                    {
+                                        confirmData = true;
+                                        //save booking data to sql
+                                    }
+                                    else
+                                    {
+                                        confirmData = false; // loop it
+                                    }
+                                }
+                                break;
+                            case "Create New Customer":
+
+                                AnsiConsole.MarkupLine("[green]New Customer selected[/]");
+
                                 confirmData = false;
                                 while (confirmData == false)
                                 {
                                     AnsiConsole.MarkupLine("[green]New Customer selected[/]");
                                     //new customer proccess 
-                                    var confirmNewCusChoices = AnsiConsole.Prompt(
+                                     var confirmNewCusChoices = AnsiConsole.Prompt(
                                         new SelectionPrompt<string>()
                                         .Title("Is the customer details correct:")
                                         .AddChoices("Yes", "No"));
@@ -98,75 +145,22 @@ namespace CleaningServiceBookingSystemMain
                                         confirmData = false; // loop it
                                     }
                                 }
-                            }
-                            /*
-                             System displays house types and service types from SQL Server
-                             Staff enters number of rooms, booking date, add-ons and recurring option.
-                             System validates all inputs and calculates subtotal, discount, surcharge and final total
-                             */
-                            confirmData = false;
-                            while (confirmData == false)
-                            {
-                                var confirmBookingChoice = AnsiConsole.Prompt(
+                                break;
+                            case "View Bookings":
+                                //enter booking date and customer
+                                AnsiConsole.MarkupLine("[green]View Bookings selected[/]");
+                                var viewBookingsChoices = AnsiConsole.Prompt(
                                         new SelectionPrompt<string>()
-                                        .Title("Is the booking details correct:")
-                                        .AddChoices("Yes", "No"));
-
-                                if (confirmBookingChoice == "Yes")
-                                {
-                                    confirmData = true;
-                                    //save booking data to sql
-                                }
-                                else
-                                {
-                                    confirmData = false; // loop it
-                                }
-                            }
-
-                        }
-                        else if (adminChoices == "Create New Customer")
-                        {
-
-                            AnsiConsole.MarkupLine("[green]New Customer selected[/]");
-
-                            confirmData = false;
-                            while (confirmData == false)
-                            {
-                                AnsiConsole.MarkupLine("[green]New Customer selected[/]");
-                                //new customer proccess 
-                                var confirmNewCusChoices = AnsiConsole.Prompt(
-                                    new SelectionPrompt<string>()
-                                    .Title("Is the customer details correct:")
-                                    .AddChoices("Yes", "No"));
-
-                                if (confirmNewCusChoices == "Yes")
-                                {
-                                    confirmData = true;
-                                    //save customer data to sql
-                                }
-                                else
-                                {
-                                    confirmData = false; // loop it
-                                }
-                            }
-                        }
-                        else if (adminChoices == "View Bookings")
-                        {
-                            //enter booking date and customer
-                            AnsiConsole.MarkupLine("[green]View Bookings selected[/]");
-                            var confirmNewCusChoices = AnsiConsole.Prompt(
-                                    new SelectionPrompt<string>()
-                                    .Title("Is the customer details correct:")
-                                    .AddChoices("View", "Report", "Update", "Change status"));
-                        }
-                        else if (adminChoices == "View Customers")
-                        {
-                            AnsiConsole.MarkupLine("[green]View Customers selected[/]");
-                            //select customer by contact
-                        }
-                        else if (adminChoices == "Change user")
-                        {
-                            IsAdminMenuRunning = false;
+                                        .Title("Choose option:")
+                                        .AddChoices("View", "Report", "Update", "Change status"));
+                                break;
+                            case "View Customers":
+                                AnsiConsole.MarkupLine("[green]View Customers selected[/]");
+                                //select customer by contact
+                                break;
+                            case "Change user":
+                                IsAdminMenuRunning = false;
+                                break;
                         }
                     }
                 }
@@ -184,21 +178,20 @@ namespace CleaningServiceBookingSystemMain
                             new SelectionPrompt<string>()
                             .Title("Choose menu option:")
                             .AddChoices("Bookings", "Summaries", "Trends", "Change user"));
-                        if (managerChoices == "Bookings")
+                        switch (managerChoices)
                         {
-                            AnsiConsole.MarkupLine("[green]Booking selected[/]");
-                        }
-                        else if (managerChoices == "Summaries")
-                        {
-                            AnsiConsole.MarkupLine("[green]Summaries selected[/]");
-                        }
-                        else if (managerChoices == "Trends")
-                        {
-                            AnsiConsole.MarkupLine("[green]Trends selected[/]");
-                        }
-                        else if(managerChoices == "Change user")
-                        {
-                            IsManagerRunning = false;
+                            case "Bookings":
+                                AnsiConsole.MarkupLine("[green]Booking selected[/]");
+                                break;
+                            case "Summaries":
+                                AnsiConsole.MarkupLine("[green]Summaries selected[/]");
+                                break;
+                            case "Trends":
+                                AnsiConsole.MarkupLine("[green]Trends selected[/]");
+                                break;
+                            case "Change user":
+                                IsManagerRunning = false;
+                                break;
                         }
                     }
                 }
