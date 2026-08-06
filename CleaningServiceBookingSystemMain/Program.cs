@@ -7,6 +7,7 @@ namespace CleaningServiceBookingSystemMain
     {
         static void Main(string[] args)
         {
+
            //Declare variables and initialization
             bool IsAdmin = false, IsUserSelected = false, confirmData, IsAppRunning = true, IsAdminMenuRunning, IsManagerRunning;
             string username, password;
