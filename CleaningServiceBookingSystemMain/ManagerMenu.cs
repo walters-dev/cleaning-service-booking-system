@@ -3,7 +3,7 @@ using System;
 
 public class ManagerMenu
 {
-	public Class1()
+	public void ViewManagerMenu()
 	{
         //declare and intialize variables
         bool IsManagerRunning = true;

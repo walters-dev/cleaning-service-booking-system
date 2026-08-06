@@ -3,7 +3,7 @@ using System;
 
 public class AdminMenu
 {
-	public Class1()
+	public void ViewAdminMenu()
 	{
 
         //declare and intialize variables
