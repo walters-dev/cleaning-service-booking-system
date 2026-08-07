@@ -3,33 +3,37 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
-
-public class Encryption
+namespace RedAcademy.Encryption
 {
-	public string HashPassword(string password)
+
+
+	public class Encryption
 	{
-        //salt = CreateSalt();
-		//string base64Salt = Convert.ToBase64String(salt);
-        return BCrypt.Net.BCrypt.HashPassword(password, 12);
-		
-    }
-	public bool VerifyPassword(string hashPassword, string enteredPassword, string salt)
-	{
-        var isValid = BCrypt.Net.BCrypt.Verify(enteredPassword, hashPassword);
-		if (isValid)
+		public string HashPassword(string password)
 		{
-			return true;
+			//salt = CreateSalt();
+			//string base64Salt = Convert.ToBase64String(salt);
+			return BCrypt.Net.BCrypt.HashPassword(password, 12);
+
 		}
-		else
+		public bool VerifyPassword(string hashPassword, string enteredPassword, string salt="")
 		{
-			return false;
+			var isValid = BCrypt.Net.BCrypt.Verify(enteredPassword, hashPassword);
+			if (isValid)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
 		}
-        
+		/*static byte[] CreateSalt()
+		{
+			byte[] salt = new byte[16];
+			RandomNumberGenerator.Fill(salt); //fills salt array with random numbers
+			return salt;
+		}*/
 	}
-	/*static byte[] CreateSalt()
-	{
-        byte[] salt = new byte[16];
-        RandomNumberGenerator.Fill(salt); //fills salt array with random numbers
-        return salt;
-	}*/
 }

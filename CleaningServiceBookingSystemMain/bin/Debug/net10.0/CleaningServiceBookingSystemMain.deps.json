@@ -8,10 +8,146 @@
     ".NETCoreApp,Version=v10.0": {
       "CleaningServiceBookingSystemMain/1.0.0": {
         "dependencies": {
+          "ScottBrady91.AspNetCore.Identity.BCryptPasswordHasher": "1.3.0",
           "Spectre.Console.Cli": "0.55.0"
         },
         "runtime": {
           "CleaningServiceBookingSystemMain.dll": {}
+        }
+      },
+      "BCrypt.Net-Next/4.0.2": {
+        "runtime": {
+          "lib/net5.0/BCrypt.Net-Next.dll": {
+            "assemblyVersion": "4.0.2.0",
+            "fileVersion": "4.0.2.0"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Cryptography.Internal/2.1.0": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Cryptography.Internal.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.18136"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Cryptography.KeyDerivation/2.1.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Cryptography.Internal": "2.1.0"
+        },
+        "runtime": {
+          "lib/netcoreapp2.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.18136"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration/2.1.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "2.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Configuration.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.18136"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Abstractions/2.1.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "2.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.18136"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Binder/2.1.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "2.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Configuration.Binder.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.18136"
+          }
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/2.1.0": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.18136"
+          }
+        }
+      },
+      "Microsoft.Extensions.Identity.Core/2.1.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Cryptography.KeyDerivation": "2.1.0",
+          "Microsoft.Extensions.Logging": "2.1.0",
+          "Microsoft.Extensions.Options": "2.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Identity.Core.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.18136"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging/2.1.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Binder": "2.1.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.0",
+          "Microsoft.Extensions.Logging.Abstractions": "2.1.0",
+          "Microsoft.Extensions.Options": "2.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Logging.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.18136"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/2.1.0": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.18136"
+          }
+        }
+      },
+      "Microsoft.Extensions.Options/2.1.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.0",
+          "Microsoft.Extensions.Primitives": "2.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Options.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.18136"
+          }
+        }
+      },
+      "Microsoft.Extensions.Primitives/2.1.0": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Primitives.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.18136"
+          }
+        }
+      },
+      "ScottBrady91.AspNetCore.Identity.BCryptPasswordHasher/1.3.0": {
+        "dependencies": {
+          "BCrypt.Net-Next": "4.0.2",
+          "Microsoft.Extensions.Identity.Core": "2.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/ScottBrady91.AspNetCore.Identity.BCryptPasswordHasher.dll": {
+            "assemblyVersion": "1.3.0.0",
+            "fileVersion": "1.3.0.0"
+          }
         }
       },
       "Spectre.Console/0.55.0": {
@@ -83,6 +219,97 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "BCrypt.Net-Next/4.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LyNKpIpr4GraRD9+xlTviyxxbZpF6J4xJf7DvraC1mR8PSN/KonGc4rt8C/fjkD3vaEvgA7BcvsbHFCOjgczyQ==",
+      "path": "bcrypt.net-next/4.0.2",
+      "hashPath": "bcrypt.net-next.4.0.2.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Cryptography.Internal/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-oqKoj5d+zR7/R2T03jq69fJ5w48dJ3Yw+XO3ORJGIV7Vd4eJhwvAOpEQKC3vWyQIKZWEkndIxaWMbfODJY/vsQ==",
+      "path": "microsoft.aspnetcore.cryptography.internal/2.1.0",
+      "hashPath": "microsoft.aspnetcore.cryptography.internal.2.1.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Cryptography.KeyDerivation/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-13LH47Gj9SAY8BReIypBOQKT1Imlt1h11mbhk5rtI0s7R0jti7pjxZUKZEiVK8o9NUAGfL0yF6A2PXLRImBZ+w==",
+      "path": "microsoft.aspnetcore.cryptography.keyderivation/2.1.0",
+      "hashPath": "microsoft.aspnetcore.cryptography.keyderivation.2.1.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SS8ce1GYQTkZoOq5bskqQ+m7xiXQjnKRiGfVNZkkX2SX0HpXNRsKnSUaywRRuCje3v2KT9xeacsM3J9/G2exsQ==",
+      "path": "microsoft.extensions.configuration/2.1.0",
+      "hashPath": "microsoft.extensions.configuration.2.1.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.Abstractions/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lMmUjAKvY9r6QmxCS15iSb6ulhwnh0zp44NtnVJ+HIDLFmu4iej41U+dU58On8NRezmlgRXiQtLnBeZSzYNKQg==",
+      "path": "microsoft.extensions.configuration.abstractions/2.1.0",
+      "hashPath": "microsoft.extensions.configuration.abstractions.2.1.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.Binder/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Fls0O54Ielz1DiVYpcmiUpeizN1iKGGI5yAWAoShfmUvMcQ8jAGOK1a+DaflHA5hN9IOKvmSos0yewDYAIY0ZA==",
+      "path": "microsoft.extensions.configuration.binder/2.1.0",
+      "hashPath": "microsoft.extensions.configuration.binder.2.1.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8/CtASu80UIoyG+r8FstrmZW5GLtXxzoYpjj3jV0FKZCL5CiFgSH3pAmqut/dC68mu7N1bU6v0UtKKL3gCUQGQ==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/2.1.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.2.1.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Identity.Core/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ANFe9HR9thO9CU9x8mc7h1uw75Aqz5uDe7xgGM6t2iBITEidLNhULzqPidI0xV2Mg54pdPMA8/vtS5FRLCQWgQ==",
+      "path": "microsoft.extensions.identity.core/2.1.0",
+      "hashPath": "microsoft.extensions.identity.core.2.1.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kuZbZMMHb7ibzhLdn9/R1+PAAFKntlF10tOw4loB8VuQkHvSrBE6IzW1rhBLsEdmLXOgi2zFbwcXFrxzSM6ybA==",
+      "path": "microsoft.extensions.logging/2.1.0",
+      "hashPath": "microsoft.extensions.logging.2.1.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Abstractions/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GfD2VtvN9z1W+m6pZZe98yh9VWTSdNY2dZSxtca9uFIY6aBI6twvskMvLO/ktClBOTQmAov/7Em+IWFlHepa0A==",
+      "path": "microsoft.extensions.logging.abstractions/2.1.0",
+      "hashPath": "microsoft.extensions.logging.abstractions.2.1.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Options/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VOM1pPMi9+7/4Vc9aPLU8btHOBQy1+AvpqxLxFI2OVtqGv+1klPaV59g9R6aSt2U7ijfB3TjvAO4Tc/cn9/hxA==",
+      "path": "microsoft.extensions.options/2.1.0",
+      "hashPath": "microsoft.extensions.options.2.1.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Primitives/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gMwH6wgWOPfyfLfMLEP+ZF7/MSJq35e0xxKEYUjt8veEznY45nBVqdfI876+9SFQq2ChcqKf2UyYc2XYj2v27w==",
+      "path": "microsoft.extensions.primitives/2.1.0",
+      "hashPath": "microsoft.extensions.primitives.2.1.0.nupkg.sha512"
+    },
+    "ScottBrady91.AspNetCore.Identity.BCryptPasswordHasher/1.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sGextj6W3FoVendsM4o9drn/ss4NUQVRBfMLrePzmpkpHFjPUlEt0vxwVyjtyJPhZdbvH7hc4WwAFh0kq+g7xQ==",
+      "path": "scottbrady91.aspnetcore.identity.bcryptpasswordhasher/1.3.0",
+      "hashPath": "scottbrady91.aspnetcore.identity.bcryptpasswordhasher.1.3.0.nupkg.sha512"
     },
     "Spectre.Console/0.55.0": {
       "type": "package",
