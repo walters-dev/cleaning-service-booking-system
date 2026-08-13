@@ -1,9 +1,7 @@
 ﻿using System;
 using Spectre;
 using Spectre.Console;
-using RedAcademy.Manager;
-using RedAcademy.Admin;
-namespace CleaningServiceBookingSystemMain
+namespace CleaningServiceBookingSystemMain.ConsoleUI
 {
     class Program
     {
@@ -28,15 +26,21 @@ namespace CleaningServiceBookingSystemMain
                             IsUserSelected = true;
                             Console.WriteLine("Booking Administrator is selected");
                             Console.Clear();
+                            AdminMenu adminMenu = new AdminMenu();
+                            adminMenu.ViewAdminMenu();
                             break;
                         case ConsoleKey.D2:
                             IsAdmin = false;
                             IsUserSelected = true;
                             Console.WriteLine("Operations Manager is selected");
                             Console.Clear();
+                            ManagerMenu managerMenu = new ManagerMenu();
+                            managerMenu.ViewManagerMenu();
                             break;
                         case ConsoleKey.D3:
+                            Console.WriteLine("Application is terminated");
                             IsAppRunning = false;
+                            IsAdmin = false;
                             IsUserSelected = true;
                             break;
                         default:
@@ -46,7 +50,7 @@ namespace CleaningServiceBookingSystemMain
                     }
 
                 }
-                if (IsAdmin == true)
+               /* if (IsAdmin == true)
                 {
                     AdminMenu adminMenu = new AdminMenu();
                     adminMenu.ViewAdminMenu();
@@ -61,7 +65,7 @@ namespace CleaningServiceBookingSystemMain
                     //manager side
                     ManagerMenu managerMenu = new ManagerMenu();
                     managerMenu.ViewManagerMenu();
-                }
+                }*/
             }
             
         }

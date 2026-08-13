@@ -1,8 +1,9 @@
 ﻿using Spectre.Console;
 using System;
-using RedAcademy.Encryption;
+using CleaningServiceBookingSystemMain;
+using CleaningServiceBookingSystemMain.Application;
 
-namespace RedAcademy.Admin
+namespace CleaningServiceBookingSystemMain.ConsoleUI
 {
 
 
@@ -18,7 +19,7 @@ namespace RedAcademy.Admin
             username = Console.ReadLine();
             //username validation
 
-            Encryption.Encryption cryptography = new Encryption.Encryption();
+            Encryption cryptography = new Encryption();
             Console.WriteLine("Enter Password:");
             password = Console.ReadLine();
             //cryptography.VerifyPassword(password, password);
@@ -130,7 +131,7 @@ namespace RedAcademy.Admin
                         //select customer by contact
                         break;
                     case "Add Admin":
-                        Console.WriteLine(cryptography.HashPassword(password));
+                       Console.WriteLine(cryptography.HashPassword(password));
 
                         break;
                     case "Change user":

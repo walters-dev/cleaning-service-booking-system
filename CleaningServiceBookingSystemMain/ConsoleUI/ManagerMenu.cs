@@ -1,7 +1,7 @@
 ﻿using Spectre.Console;
 using System;
 
-namespace RedAcademy.Manager
+namespace CleaningServiceBookingSystemMain.ConsoleUI
 {
 
 
