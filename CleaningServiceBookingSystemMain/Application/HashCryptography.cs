@@ -11,8 +11,7 @@ namespace CleaningServiceBookingSystemMain.Application
 	{
 		public string HashPassword(string password)
 		{
-			//salt = CreateSalt();
-			//string base64Salt = Convert.ToBase64String(salt);
+			
 			return BCrypt.Net.BCrypt.HashPassword(password, 12);
 
 		}
@@ -29,11 +28,6 @@ namespace CleaningServiceBookingSystemMain.Application
 			}
 
 		}
-		/*static byte[] CreateSalt()
-		{
-			byte[] salt = new byte[16];
-			RandomNumberGenerator.Fill(salt); //fills salt array with random numbers
-			return salt;
-		}*/
+		
 	}
 }
