@@ -6,11 +6,11 @@ namespace CleaningServiceBookingSystemMain.Domain.Models
 {
     public class Bookings
     {
-        public string BookingID { get; set; }
-        public string CustomerID { get; set; }
-        public string HouseTypeID { get; set; }
-        public string ServiceTypeID { get; set; }
-        public string DiscountRuleID { get; set; }
+        public string BookingId { get; set; }
+        public string CustomerId { get; set; }
+        public string HouseTypeId { get; set; }
+        public string ServiceTypeId { get; set; }
+        public string DiscountRuleId { get; set; }
         public DateTime BookingDate { get; set; }
         public int NumberOfRooms { get; set; }
         public bool IsRecurring { get; set; }
@@ -19,7 +19,7 @@ namespace CleaningServiceBookingSystemMain.Domain.Models
         public decimal DiscountAmount { get; set; }
         public decimal SurchargeAmount { get; set; }
         public decimal TotalAmount { get; set; }
-        public string Status { get; set; }
+        public string BookingStatus { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string UpdatdeBy { get; set; }

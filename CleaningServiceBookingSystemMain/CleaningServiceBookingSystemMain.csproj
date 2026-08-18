@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Application\HashCryptography.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
