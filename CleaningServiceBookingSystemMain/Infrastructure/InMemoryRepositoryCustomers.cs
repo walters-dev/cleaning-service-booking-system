@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data.SqlClient;
+using System.Data;
+using Microsoft.Data.SqlClient;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
@@ -11,24 +13,48 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
     {
         string connectionString =
             "Server=localhost;Database=CleaningServiceBooking;Trusted_Connection=True;TrustServerCertificate=True;";
-        IList<Customers> GetCustomers()
+         public IList<Customers> GetCustomers()
         {
             List<Customers> customersInfo = new List<Customers>();
             using (SqlConnection connection = new SqlConnection(
                connectionString))
             {
-                SqlCommand command = new SqlCommand(queryString, connection);
+                SqlCommand command = new SqlCommand("queryString", connection);//waiting for sql procedure
+                command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
-                command.ExecuteNonQuery();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    var customer = new Customers()
+                    {
+                        CustomerId = reader["CustomerId"].ToString(),
+                        FullName = reader["FullName"].ToString(),
+                        PhoneNumber = reader["PhoneNumber"].ToString(),
+                        Email = reader["Email"].ToString(),
+                        PhyAddress = reader["Phy"].ToString(),
+                        CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"))
+                    };
+                }
+                //command.ExecuteNonQuery();
             }
-
+            return customersInfo;
         }
-        Customers GetCustomerById(int? Id)// ? means it can be null
+        public Customers GetCustomerById(int? Id)// ? means it can be null
+        {
+            Customers customers = new Customers();
+            return customers;
+        }
+        public void Add(Customers customers)
         {
 
         }
-        void Add(Customers customers);
-        void Update(Customers customers);
-        void Delete(Customers customers);
+        public void Update(Customers customers)
+        {
+
+        }
+        public void Delete(Customers customers)
+        {
+
+        }
     }
 }
