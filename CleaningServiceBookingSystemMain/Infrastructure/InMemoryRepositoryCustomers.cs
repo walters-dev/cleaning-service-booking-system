@@ -11,8 +11,9 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
 {
     public class InMemoryRepositoryCustomers : ICustomerRepository
     {
+        //methods need to be public or cannot implement interface member
         string connectionString =
-            "Server=localhost;Database=CleaningServiceBooking;Trusted_Connection=True;TrustServerCertificate=True;";
+            "Server=localhost;Database=CleaningServiceBooking;Trusted_Connection=True;TrustServerCertificate=True;";//use method instead when it is made
          public IList<Customers> GetCustomers()
         {
             List<Customers> customersInfo = new List<Customers>();
@@ -78,11 +79,29 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         }
         public void Update(Customers customers)
         {
-
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand("queryString", connection);//waiting for sql procedure
+                command.CommandType = CommandType.StoredProcedure;
+                command.Connection.Open();
+                command.Parameters.AddWithValue("@Fullname", customers.FullName);
+                command.Parameters.AddWithValue("@PhoneNumber", customers.PhoneNumber);
+                command.Parameters.AddWithValue("@Email", customers.Email);
+                command.Parameters.AddWithValue("@PhyAddress", customers.PhyAddress);
+                command.Parameters.AddWithValue("@CreatedAt", customers.CreatedAt);
+                command.ExecuteNonQuery();
+            }
         }
         public void Delete(Customers customers)
         {
-
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand("queryString", connection);//waiting for sql procedure
+                command.CommandType = CommandType.StoredProcedure;
+                command.Connection.Open();
+                command.Parameters.AddWithValue("@Id", customers.CustomerId);
+                command.ExecuteNonQuery();
+            }
         }
     }
 }
