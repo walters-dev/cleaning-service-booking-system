@@ -8,7 +8,7 @@ namespace CleaningServiceBookingSystemMain.Application
     public interface ICustomerRepository
     {
         IList<Customers> GetCustomers();
-        Customers GetCustomerByID(int? ID);// ? means it can be null
+        Customers GetCustomerById(int? Id);// ? means it can be null
         void Add(Customers customers);
         void Update(Customers customers);
         void Delete(Customers customers);
@@ -16,7 +16,7 @@ namespace CleaningServiceBookingSystemMain.Application
     public interface IBookingsRepository 
     {
         IList<Bookings> GetBookings();
-        Bookings GetBookingsByID(int? ID);
+        Bookings GetBookingsById(int? Id);
         void Add(Bookings bookings);
         void Update(Bookings bookings);
         void Delete(Bookings bookings);
@@ -29,7 +29,7 @@ namespace CleaningServiceBookingSystemMain.Application
     public interface IAdminRepository
     {
         IList<Admins> GetAdmins();
-        Admins GetAdminsByID(int? ID);
+        Admins GetAdminsById(int? Id);
         void Add(Admins admins);
         void Update(Admins admins);
         void Delete(Admins admins);
@@ -37,28 +37,28 @@ namespace CleaningServiceBookingSystemMain.Application
     public interface IHouseTypesRepository
     {
        IList<HouseTypes> GetHouseTypes();
-       HouseTypes GetHouseTypesByID(int? ID);
+       HouseTypes GetHouseTypesById(int? Id);
     }
     public interface IServiceTypesRepository
     {
         IList<ServiceTypes> GetServiceTypes();
-        ServiceTypes GetServiceTypesByID(int? ID);
+        ServiceTypes GetServiceTypesById(int? Id);
     }
     public interface IDiscountRulesRepository
     {
         IList<DiscountRules> GetDiscountRules();
-        DiscountRules GetDiscountRulesByID(int? ID);
+        DiscountRules GetDiscountRulesById(int? Id);
         void Add(DiscountRules discountRules);
         //add update and delete if have time
     }
     public interface IAddOnsRepository
     {
         IList<AddOns> GetAddOns();
-        AddOns AddOnsByID(int? ID);
+        AddOns AddOnsByID(int? Id);
     }
     public interface IBookingAddOnsRepository
     {
         IList<BookingAddOns> GetBookingAddOns();
-        BookingAddOns bookingAddOnsByID(int? ID);
+        BookingAddOns bookingAddOnsByID(int? Id);
     }
 }

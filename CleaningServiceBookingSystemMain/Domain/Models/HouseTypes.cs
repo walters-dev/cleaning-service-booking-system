@@ -6,7 +6,7 @@ namespace CleaningServiceBookingSystemMain.Domain.Models
 {
     public class HouseTypes
     {
-        public string HouseTypeID { get; set; }
+        public string HouseTypeId { get; set; }
         public string Name { get; set; }
         public decimal BaseRate { get; set; }
         public decimal RatePerRate { get; set; }
