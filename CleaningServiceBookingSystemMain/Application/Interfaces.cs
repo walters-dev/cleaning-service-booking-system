@@ -60,5 +60,7 @@ namespace CleaningServiceBookingSystemMain.Application
     {
         IList<BookingAddOns> GetBookingAddOns();
         BookingAddOns bookingAddOnsByID(int? Id);
+        void Add(BookingAddOns bookingAddOns);
+        void Update(BookingAddOns bookingAddOns);
     }
 }
