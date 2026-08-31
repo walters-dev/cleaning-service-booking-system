@@ -20,11 +20,11 @@ namespace CleaningServiceBookingSystemMain.Application
         void Add(Bookings bookings);
         void Update(Bookings bookings);
         void Delete(Bookings bookings);
-        void DiaplayListByRange(Bookings bookings);
-        void DisplayBookingHistory(Bookings bookings);
-        void DisplayRevenueSummary(Bookings bookings);
-        void DisplayBookingsByHouseType(Bookings bookings);
-        void DisplayDiscountUsage(Bookings bookings);
+        IList<BookingByDate> ListByRange();
+        IList<CustomerBookingHistory> BookingHistory();
+        IList<BookingRevenueSummary> RevenueSummary();
+        IList<BookingByHouseType> BookingsByHouseType();
+        IList<BookingDiscountUsage> DiscountUsage();
     }
     public interface IAdminRepository
     {

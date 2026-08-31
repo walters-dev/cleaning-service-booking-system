@@ -144,25 +144,142 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.ExecuteNonQuery();
             }
         }
-        public void DiaplayListByRange(Bookings bookings)
+        public IList<BookingByDate> ListByRange(DateTime startDate, DateTime endDate)
         {
+            List<BookingByDate> bookingsInfo = new List<BookingByDate>();
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                command.Parameters.AddWithValue("@StartDate", startDate);
+                command.Parameters.AddWithValue("@EndDate", endDate);
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    var booking = new BookingByDate()
+                    {
+                        BookingId = reader.GetString(reader.GetOrdinal("b.BookingId")),
+                        Fullname = reader.GetString(reader.GetOrdinal("c.Fullname")),
+                        HouseName = reader.GetString(reader.GetOrdinal("h.HouseName")),
+                        ServiceName = reader.GetString(reader.GetOrdinal("s.ServiceName")),
+                        BookingDate = reader.GetDateTime(reader.GetOrdinal("b.BookingDate")),
+                        NumberOfRooms = reader.GetInt32(reader.GetOrdinal("b.NumberOfRooms")),
+                        TotalAmount = reader.GetDecimal(reader.GetOrdinal("b.TotalAmount")),
+                        BookingStatus = reader.GetString(reader.GetOrdinal("b.BookingStatus"))
+                    };
 
+                    bookingsInfo.Add(booking);
+                }
+            }
+            return bookingsInfo;
         }
-        public void DisplayBookingHistory(Bookings bookings)
+        public IList<CustomerBookingHistory> BookingHistory()
         {
+            List<CustomerBookingHistory> bookingsInfo = new List<CustomerBookingHistory>();
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                command.Parameters.AddWithValue("@StartDate", startDate);
+                command.Parameters.AddWithValue("@EndDate", endDate);
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    var booking = new CustomerBookingHistory()
+                    {
+                        BookingId = reader.GetString(reader.GetOrdinal("b.BookingId")),
+                        Fullname = reader.GetString(reader.GetOrdinal("c.Fullname")),
+                        HouseName = reader.GetString(reader.GetOrdinal("h.HouseName")),
+                        ServiceName = reader.GetString(reader.GetOrdinal("s.ServiceName")),
+                        BookingDate = reader.GetDateTime(reader.GetOrdinal("b.BookingDate")),
+                        NumberOfRooms = reader.GetInt32(reader.GetOrdinal("b.NumberOfRooms")),
+                        TotalAmount = reader.GetDecimal(reader.GetOrdinal("b.TotalAmount")),
+                        BookingStatus = reader.GetString(reader.GetOrdinal("b.BookingStatus"))
+                    };
 
+                    bookingsInfo.Add(booking);
+                }
+            }
+            return bookingsInfo;
         }
-        public void DisplayRevenueSummary(Bookings bookings)
+        public IList<BookingRevenueSummary> RevenueSummary()
         {
+            List<BookingRevenueSummary> bookingsInfo = new List<BookingRevenueSummary>();
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                command.Parameters.AddWithValue("@StartDate", startDate);
+                command.Parameters.AddWithValue("@EndDate", endDate);
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    var booking = new BookingRevenueSummary()
+                    {
+                        ServiceName = reader.GetString(reader.GetOrdinal("s.ServiceName")),
+                        BookingCount = reader.GetInt32(reader.GetOrdinal("BookingCount")),
+                        TotalRevenue = reader.GetDecimal(reader.GetOrdinal("TotalRevenue"))
+                    };
 
+                    bookingsInfo.Add(booking);
+                }
+            }
+            return bookingsInfo;
         }
-        public void DisplayBookingsByHouseType(Bookings bookings)
+        public IList<BookingByHouseType> BookingsByHouseType()
         {
+            List<BookingByHouseType> bookingsInfo = new List<BookingByHouseType>();
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                command.Parameters.AddWithValue("@StartDate", startDate);
+                command.Parameters.AddWithValue("@EndDate", endDate);
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    var booking = new BookingByHouseType()
+                    {
+                        HouseName = reader.GetString(reader.GetOrdinal("h.HouseName")),
+                        BookingCount = reader.GetInt32(reader.GetOrdinal("BookingCount"))
+                    };
 
+                    bookingsInfo.Add(booking);
+                }
+            }
+            return bookingsInfo;
         }
-        public void DisplayDiscountUsage(Bookings bookings)
+        public IList<BookingDiscountUsage> DiscountUsage()
         {
+            List<BookingDiscountUsage> bookingsInfo = new List<BookingDiscountUsage>();
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                command.Parameters.AddWithValue("@StartDate", startDate);
+                command.Parameters.AddWithValue("@EndDate", endDate);
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    var booking = new BookingDiscountUsage()
+                    {
+                        DiscountName = reader.GetString(reader.GetOrdinal("d.DiscountName")),
+                        BookingId = reader.GetString(reader.GetOrdinal("b.BookingId")),
+                        Fullname = reader.GetString(reader.GetOrdinal("c.Fullname")),
+                        SubTotal = reader.GetDecimal(reader.GetOrdinal("b.SubTotal")),
+                        DiscountAmount = reader.GetDecimal(reader.GetOrdinal("b.DiscountAmount")),
+                        AmountAfterDiscount = reader.GetDecimal(reader.GetOrdinal("AmountAfterDiscount"))
+                    };
 
+                    bookingsInfo.Add(booking);
+                }
+            }
+            return bookingsInfo;
         }
     }
 }
