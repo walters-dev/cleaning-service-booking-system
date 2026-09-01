@@ -10,6 +10,6 @@ namespace CleaningServiceBookingSystemMain.Domain.Models
         public string AddOnsName { get; set; }
         public decimal Rate { get; set; }
         public string PricingType { get; set; }
-        public bool IsActive { get; set; }
+        public bool? IsActive { get; set; }//? because the bool in the database is sometimes null
     }
 }

@@ -10,6 +10,6 @@ namespace CleaningServiceBookingSystemMain.Domain.Models
         public string Name { get; set; }
         public decimal DisPercentage { get; set; }
         public string CriteriaDescription { get; set; }
-        public bool IsActive { get; set; }
+        public bool? IsActive { get; set; }//? because the bool in the database is sometimes null
     }
 }
