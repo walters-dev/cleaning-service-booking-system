@@ -12,6 +12,6 @@ namespace CleaningServiceBookingSystemMain.Domain.Models
         public decimal RatePerRate { get; set; }
         public int MinRooms { get; set; }
         public int MaxRooms { get; set; }
-        public bool IsActive { get; set; }
+        public bool? IsActive { get; set; }//? because the bool in the database is sometimes null
     }
 }

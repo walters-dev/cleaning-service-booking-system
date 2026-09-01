@@ -29,7 +29,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         AddOnsName = reader.GetString(reader.GetOrdinal("AddOnsName")),
                         Rate = reader.GetDecimal(reader.GetOrdinal("Rate")),
                         PricingType = reader.GetString(reader.GetOrdinal("PricingType")),
-                        IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"))
+                        IsActive = reader.GetBoolean(reader.GetOrdinal("isActive"))
                     };
                     addOnsInfo.Add(addOns);
                 }
@@ -51,7 +51,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     addOnsInfo.AddOnsName = reader.GetString(reader.GetOrdinal("AddOnsName"));
                     addOnsInfo.Rate = reader.GetDecimal(reader.GetOrdinal("Rate"));
                     addOnsInfo.PricingType = reader.GetString(reader.GetOrdinal("PricingType"));
-                    addOnsInfo.IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"));
+                    addOnsInfo.IsActive = reader.GetBoolean(reader.GetOrdinal("isActive"));
                 }
             }
             return addOnsInfo;

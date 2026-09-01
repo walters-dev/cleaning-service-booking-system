@@ -25,10 +25,10 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     var discountRules = new DiscountRules()
                     {
                         DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRuleId")),
-                        Name = reader.GetString(reader.GetOrdinal("Name")),
-                        DisPercentage = reader.GetDecimal(reader.GetOrdinal("DisPercentage")),
+                        Name = reader.GetString(reader.GetOrdinal("DiscountName")),
+                        DisPercentage = reader.GetDecimal(reader.GetOrdinal("DiscPercentage")),
                         CriteriaDescription = reader.GetString(reader.GetOrdinal("CriteriaDescription")),
-                        IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"))
+                        IsActive = reader.GetBoolean(reader.GetOrdinal("isActive"))
                     };
                     discountRulesInfo.Add(discountRules);
                 }

@@ -28,9 +28,9 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     {
                         CustomerId = reader.GetString(reader.GetOrdinal("CustomerId")),
                         FullName = reader.GetString(reader.GetOrdinal("FullName")),
-                        PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
+                        PhoneNumber = reader.GetString(reader.GetOrdinal("Phonenumber")),
                         Email = reader.GetString(reader.GetOrdinal("Email")),
-                        PhyAddress = reader.GetString(reader.GetOrdinal("PhyAddress")),
+                        PhyAddress = reader.GetString(reader.GetOrdinal("PhysAddress")),
                         CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
                         CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy")),
                         UpdatdeBy = reader.GetString(reader.GetOrdinal("UpdatedBy")),
@@ -55,9 +55,9 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 {
                     customersInfo.CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"));
                     customersInfo.FullName = reader.GetString(reader.GetOrdinal("FullName"));
-                    customersInfo.PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber"));
+                    customersInfo.PhoneNumber = reader.GetString(reader.GetOrdinal("@Phonenumber"));
                     customersInfo.Email = reader.GetString(reader.GetOrdinal("Email"));
-                    customersInfo.PhyAddress = reader.GetString(reader.GetOrdinal("PhyAddress"));
+                    customersInfo.PhyAddress = reader.GetString(reader.GetOrdinal("PhysAddress"));
                     customersInfo.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
                     customersInfo.CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"));
                     customersInfo.UpdatdeBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));
@@ -76,9 +76,9 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 //need to add a thing for id
                 command.Parameters.AddWithValue("@CustomerID", customers.CustomerId);
                 command.Parameters.AddWithValue("@Fullname", customers.FullName);
-                command.Parameters.AddWithValue("@PhoneNumber", customers.PhoneNumber);
+                command.Parameters.AddWithValue("@Phonenumber", customers.PhoneNumber);
                 command.Parameters.AddWithValue("@Email", customers.Email);
-                command.Parameters.AddWithValue("@PhyAddress", customers.PhyAddress);
+                command.Parameters.AddWithValue("@PhysAddress", customers.PhyAddress);
                 command.Parameters.AddWithValue("@CreatedAt", customers.CreatedAt);
                 command.Parameters.AddWithValue("@CreatedBy", customers.CreatedAt);
                 command.ExecuteNonQuery();
@@ -92,9 +92,9 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 command.Parameters.AddWithValue("@Fullname", customers.FullName);
-                command.Parameters.AddWithValue("@PhoneNumber", customers.PhoneNumber);
+                command.Parameters.AddWithValue("@Phonenumber", customers.PhoneNumber);
                 command.Parameters.AddWithValue("@Email", customers.Email);
-                command.Parameters.AddWithValue("@PhyAddress", customers.PhyAddress);
+                command.Parameters.AddWithValue("@PhysAddress", customers.PhyAddress);
                 command.Parameters.AddWithValue("@UpdatedAt", customers.UpdatedAt);
                 command.Parameters.AddWithValue("@UpdatedBy", customers.UpdatdeBy);
                 command.ExecuteNonQuery();

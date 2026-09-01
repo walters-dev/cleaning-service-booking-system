@@ -64,8 +64,8 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Connection.Open();
                 //need to add a thing for id
                 command.Parameters.AddWithValue("@BookingAddOnId", bookingAddOns.BookingAddOnId);
-                command.Parameters.AddWithValue("@BookingId", bookingAddOns.BookingId);
-                command.Parameters.AddWithValue("@AddOnId", bookingAddOns.AddOnId);
+                command.Parameters.AddWithValue("@Booking_id", bookingAddOns.BookingId);
+                command.Parameters.AddWithValue("@AddOn_id", bookingAddOns.AddOnId);
                 command.Parameters.AddWithValue("@Quantity", bookingAddOns.Quantity);
                 command.Parameters.AddWithValue("@LineAmount", bookingAddOns.LineAmount);
                 command.ExecuteNonQuery();
@@ -80,8 +80,8 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Connection.Open();
                 //need to add a thing for id
                 command.Parameters.AddWithValue("@BookingAddOnId", bookingAddOns.BookingAddOnId);
-                command.Parameters.AddWithValue("@BookingId", bookingAddOns.BookingId);
-                command.Parameters.AddWithValue("@AddOnId", bookingAddOns.AddOnId);
+                command.Parameters.AddWithValue("@Booking_id", bookingAddOns.BookingId);
+                command.Parameters.AddWithValue("@AddOn_id", bookingAddOns.AddOnId);
                 command.Parameters.AddWithValue("@Quantity", bookingAddOns.Quantity);
                 command.Parameters.AddWithValue("@LineAmount", bookingAddOns.LineAmount);
                 command.ExecuteNonQuery();

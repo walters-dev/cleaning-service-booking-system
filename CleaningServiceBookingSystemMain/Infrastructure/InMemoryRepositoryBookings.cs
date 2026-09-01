@@ -22,16 +22,18 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
+                    int active = reader.GetOrdinal("IsRecurring");
                     var booking = new Bookings()
                     {
                         BookingId = reader.GetString(reader.GetOrdinal("BookingId")),
-                        CustomerId = reader.GetString(reader.GetOrdinal("CustomerId")),
-                        HouseTypeId = reader.GetString(reader.GetOrdinal("HouseTypeId")),
-                        ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypeId")),
-                        DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRuleId")),
+                        CustomerId = reader.GetString(reader.GetOrdinal("Customers_id")),
+                        HouseTypeId = reader.GetString(reader.GetOrdinal("Housetypes_id")),
+                        ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypes_id")),
+                        DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id")),
                         BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate")),
                         NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms")),
-                        IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring")),
+
+                        IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring")),//............................................
                         RecurringBookingType = reader.GetString(reader.GetOrdinal("RecurringBookingType")),
                         SubTotal = reader.GetDecimal(reader.GetOrdinal("SubTotal")),
                         DiscountAmount = reader.GetDecimal(reader.GetOrdinal("DiscountAmount")),
@@ -39,7 +41,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         TotalAmount = reader.GetDecimal(reader.GetOrdinal("TotalAmount")),
                         BookingStatus = reader.GetString(reader.GetOrdinal("BookingStatus")),
                         CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
-                        CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy")),
+                        CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"))
                     };
                     bookingsInfo.Add(booking);
                 }
@@ -58,10 +60,10 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 while (reader.Read())
                 {
                     bookingsInfo.BookingId = reader.GetString(reader.GetOrdinal("BookingId"));
-                    bookingsInfo.CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"));
-                    bookingsInfo.HouseTypeId = reader.GetString(reader.GetOrdinal("HouseTypeId"));
-                    bookingsInfo.ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypeId"));
-                    bookingsInfo.DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRuleId"));
+                    bookingsInfo.CustomerId = reader.GetString(reader.GetOrdinal("Customers_id"));
+                    bookingsInfo.HouseTypeId = reader.GetString(reader.GetOrdinal("Housetypes_id"));
+                    bookingsInfo.ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypes_id"));
+                    bookingsInfo.DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id"));
                     bookingsInfo.BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate"));
                     bookingsInfo.NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms"));
                     bookingsInfo.IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring"));
@@ -88,13 +90,13 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Connection.Open();
                 //need to add a thing for id
                 command.Parameters.AddWithValue("@BookingId", bookings.BookingId);
-                command.Parameters.AddWithValue("@CustomerId", bookings.CustomerId);
-                command.Parameters.AddWithValue("@HouseTypeId", bookings.HouseTypeId);
-                command.Parameters.AddWithValue("@ServiceTypeId", bookings.ServiceTypeId);
-                command.Parameters.AddWithValue("@DiscountRuleId", bookings.DiscountRuleId);
+                command.Parameters.AddWithValue("@Customers_id", bookings.CustomerId);
+                command.Parameters.AddWithValue("@Housetypes_id", bookings.HouseTypeId);
+                command.Parameters.AddWithValue("@ServiceTypes_id", bookings.ServiceTypeId);
+                command.Parameters.AddWithValue("@DiscountRule_id", bookings.DiscountRuleId);
                 command.Parameters.AddWithValue("@BookingDate", bookings.BookingDate);
                 command.Parameters.AddWithValue("@NumberOfRooms", bookings.NumberOfRooms);
-                command.Parameters.AddWithValue("@IsRecurring", bookings.IsRecurring); 
+                command.Parameters.AddWithValue("@IsRecurring", bookings.IsRecurring);//............................................ 
                 command.Parameters.AddWithValue("@RecurringBookingType", bookings.RecurringBookingType); 
                 command.Parameters.AddWithValue("@SubTotal", bookings.SubTotal); 
                 command.Parameters.AddWithValue("@DiscountAmount", bookings.DiscountAmount); 
@@ -115,13 +117,13 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Connection.Open();
                 //need to add a thing for id
                 command.Parameters.AddWithValue("@BookingId", bookings.BookingId);
-                command.Parameters.AddWithValue("@CustomerId", bookings.CustomerId);
-                command.Parameters.AddWithValue("@HouseTypeId", bookings.HouseTypeId);
-                command.Parameters.AddWithValue("@ServiceTypeId", bookings.ServiceTypeId);
-                command.Parameters.AddWithValue("@DiscountRuleId", bookings.DiscountRuleId);
+                command.Parameters.AddWithValue("@Customers_id", bookings.CustomerId);
+                command.Parameters.AddWithValue("@Housetypes_id", bookings.HouseTypeId);
+                command.Parameters.AddWithValue("@ServiceTypes_id", bookings.ServiceTypeId);
+                command.Parameters.AddWithValue("@DiscountRule_id", bookings.DiscountRuleId);
                 command.Parameters.AddWithValue("@BookingDate", bookings.BookingDate);
                 command.Parameters.AddWithValue("@NumberOfRooms", bookings.NumberOfRooms);
-                command.Parameters.AddWithValue("@IsRecurring", bookings.IsRecurring);
+                command.Parameters.AddWithValue("@IsRecurring", bookings.IsRecurring);//............................................
                 command.Parameters.AddWithValue("@RecurringBookingType", bookings.RecurringBookingType);
                 command.Parameters.AddWithValue("@SubTotal", bookings.SubTotal);
                 command.Parameters.AddWithValue("@DiscountAmount", bookings.DiscountAmount);
@@ -182,8 +184,8 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                command.Parameters.AddWithValue("@StartDate", startDate);
-                command.Parameters.AddWithValue("@EndDate", endDate);
+                //command.Parameters.AddWithValue("@StartDate", startDate);
+                //command.Parameters.AddWithValue("@EndDate", endDate);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
@@ -212,8 +214,8 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                command.Parameters.AddWithValue("@StartDate", startDate);
-                command.Parameters.AddWithValue("@EndDate", endDate);
+                //command.Parameters.AddWithValue("@StartDate", startDate);
+                //command.Parameters.AddWithValue("@EndDate", endDate);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
@@ -237,8 +239,8 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                command.Parameters.AddWithValue("@StartDate", startDate);
-                command.Parameters.AddWithValue("@EndDate", endDate);
+                //command.Parameters.AddWithValue("@StartDate", startDate);
+                //command.Parameters.AddWithValue("@EndDate", endDate);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
@@ -261,8 +263,8 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                command.Parameters.AddWithValue("@StartDate", startDate);
-                command.Parameters.AddWithValue("@EndDate", endDate);
+                //command.Parameters.AddWithValue("@StartDate", startDate);
+                //command.Parameters.AddWithValue("@EndDate", endDate);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {

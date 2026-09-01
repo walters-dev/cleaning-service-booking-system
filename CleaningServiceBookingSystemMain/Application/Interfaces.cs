@@ -20,7 +20,7 @@ namespace CleaningServiceBookingSystemMain.Application
         void Add(Bookings bookings);
         void Update(Bookings bookings);
         void Delete(Bookings bookings);
-        IList<BookingByDate> ListByRange();
+        IList<BookingByDate> ListByRange(DateTime startDate, DateTime endDate);
         IList<CustomerBookingHistory> BookingHistory();
         IList<BookingRevenueSummary> RevenueSummary();
         IList<BookingByHouseType> BookingsByHouseType();
