@@ -6,9 +6,9 @@ namespace CleaningServiceBookingSystemMain.Domain.Models
 {
     public class ServiceTypes
     {
-        public string ServiceTypeID { get; set; }
+        public string ServiceTypeId { get; set; }
         public decimal Multiplier { get; set; }
-        public string Description { get; set; }
+        public string ServiceDescription { get; set; }
         public bool IsActive { get; set; }
     }
 }
