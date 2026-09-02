@@ -7,7 +7,7 @@ namespace CleaningServiceBookingSystemMain.Application
 {
     public interface IHouseTypesRepository
     {
-        IList<HouseTypes> GetHouseTypes();
-        HouseTypes GetHouseTypesById(int? Id);
+        IList<HouseTypes> GetHouseTypes();      //gets list of all House Types from storage
+        HouseTypes GetHouseTypesById(int? Id);  //gets a specific House Type from storage
     }
 }
