@@ -22,7 +22,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             Encryption cryptography = new Encryption();//creates encryption class
             Console.WriteLine("Enter Password:");//................................................
             password = Console.ReadLine();
-            //cryptography.VerifyPassword(password, password);
+            //cryptography.VerifyPassword(, Admins.AdminsPassword);
             //password validation
             Console.Clear();
             AnsiConsole.MarkupLine("[green]Signed in[/]");

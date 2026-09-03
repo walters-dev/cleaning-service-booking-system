@@ -127,32 +127,7 @@ BEGIN
 END
 GO
 /*SERVICE PROCEDURES ==================================================================================================================================================================================================== */
-CREATE PROCEDURE AddServiceType
-    @ServiceTypeId VARCHAR(7),
-    @ServiceName VARCHAR(MAX),
-    @ServiceDescription VARCHAR(MAX),
-    @Multiplier DECIMAL(10,2),
-    @isActive BIT
-AS
-BEGIN
-    INSERT INTO Servicetypes
-    (
-        ServiceTypeId,
-        ServiceName,
-        ServiceDescription,
-        Multiplier,
-        isActive
-    )
-    VALUES
-    (
-        @ServiceTypeId,
-        @ServiceName,
-        @ServiceDescription,
-        @Multiplier,
-        @isActive
-    );
 
-END;
 GO
 
 CREATE PROCEDURE AddDiscountRule
@@ -529,3 +504,87 @@ BEGIN
 END;
 GO
 GO
+/*length procedures*/
+
+GO
+CREATE PROCEDURE AdminRowCount
+AS
+BEGIN
+SELECT
+    COUNT(AdminTable.Admin_Id) AS RowsCount
+FROM AdminTable
+END;
+
+GO
+CREATE PROCEDURE CustomersRowCount
+AS
+BEGIN
+SELECT
+    COUNT(Customers.CustomerId) AS RowsCount
+FROM Customers
+END;
+
+GO
+CREATE PROCEDURE HousetypesRowCount
+AS
+BEGIN
+SELECT
+    COUNT(Housetypes.HouseTypesid) AS RowsCount
+FROM Housetypes
+END;
+
+GO
+CREATE PROCEDURE ServicetypesRowCount
+AS
+BEGIN
+SELECT
+    COUNT(Servicetypes.ServiceTypeId) AS RowsCount
+FROM Servicetypes
+END;
+
+GO
+CREATE PROCEDURE DiscountRulesRowCount
+AS
+BEGIN
+SELECT
+    COUNT(DiscountRules.DiscountRuleId) AS RowsCount
+FROM DiscountRules
+END;
+
+GO
+CREATE PROCEDURE AddOnsRowCount
+AS
+BEGIN
+SELECT
+    COUNT(AddOns.AddOnId) AS RowsCount
+FROM AddOns
+END;
+
+GO
+CREATE PROCEDURE BookingsRowCount
+AS
+BEGIN
+SELECT
+    COUNT(Bookings.BookingId) AS RowsCount
+FROM Bookings
+END;
+
+GO
+CREATE PROCEDURE BookingAddOnsRowCount
+AS
+BEGIN
+SELECT
+    COUNT(BookingAddOns.BookingAddOnId) AS RowsCount
+FROM BookingAddOns
+END;
+/*password procedure*/
+GO
+CREATE PROCEDURE GetAdminPassword
+@AdminID VARCHAR(7)
+AS
+BEGIN
+SELECT
+    AdminTable.Admin_Password
+FROM AdminTable
+WHERE AdminTable.Admin_Id = @AdminID
+END;
