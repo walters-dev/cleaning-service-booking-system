@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Runtime.Intrinsics.Arm;
 using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
@@ -32,8 +33,8 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id")),
                         BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate")),
                         NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms")),
-
-                        IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring")),//............................................
+                        //IsRecurring = reader.IsDBNull(active) ? (bool?)null : reader.GetBoolean(active);
+                        //IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring")),//............................................
                         RecurringBookingType = reader.GetString(reader.GetOrdinal("RecurringBookingType")),
                         SubTotal = reader.GetDecimal(reader.GetOrdinal("SubTotal")),
                         DiscountAmount = reader.GetDecimal(reader.GetOrdinal("DiscountAmount")),
