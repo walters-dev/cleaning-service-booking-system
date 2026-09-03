@@ -19,14 +19,14 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             username = Console.ReadLine();
             //username validation
 
-            Encryption cryptography = new Encryption();
-            Console.WriteLine("Enter Password:");
+            Encryption cryptography = new Encryption();//creates encryption class
+            Console.WriteLine("Enter Password:");//................................................
             password = Console.ReadLine();
             //cryptography.VerifyPassword(password, password);
             //password validation
             Console.Clear();
             AnsiConsole.MarkupLine("[green]Signed in[/]");
-            IsAdminMenuRunning = true;
+            IsAdminMenuRunning = true;              //keeps admin menu in loop
             while (IsAdminMenuRunning == true)
             {
                 var adminChoices = AnsiConsole.Prompt(
