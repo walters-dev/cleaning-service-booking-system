@@ -50,22 +50,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                     }
 
                 }
-               /* if (IsAdmin == true)
-                {
-                    AdminMenu adminMenu = new AdminMenu();
-                    adminMenu.ViewAdminMenu();
-
-                }
-                else if (IsAppRunning == false)
-                {
-                    Console.WriteLine("Application is terminated");
-                }
-                else if(IsAdmin == false)
-                {
-                    //manager side
-                    ManagerMenu managerMenu = new ManagerMenu();
-                    managerMenu.ViewManagerMenu();
-                }*/
             }
             
         }
