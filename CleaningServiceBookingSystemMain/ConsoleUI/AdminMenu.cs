@@ -5,6 +5,7 @@ using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
 using Spectre.Console;
 using System;
+using System.Linq.Expressions;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI
 {
@@ -26,6 +27,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             Encryption cryptography = new Encryption();//creates encryption class
             while (IsCorrectPassword = false)
             {
+                //get new input.....................................................................................................................................................
                 IsCorrectPassword = cryptography.VerifyPassword(admins.AdminPassword, getAdminPassword.Password);
             }
             Console.Clear();
@@ -139,7 +141,25 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         var viewBookingsChoices = AnsiConsole.Prompt(
                                 new SelectionPrompt<string>()
                                 .Title("Choose option:")
-                                .AddChoices("View", "Report", "Update", "Change status"));
+                                .AddChoices("View", "Report", "Update", "Change status"));                      //update could be removed?? also report of what................................................................................................................
+                        switch (viewBookingsChoices)
+                        {
+                            case "View":
+                                InMemoryRepositoryBookings inMemoryRepositoryBookings = new InMemoryRepositoryBookings();
+                                Bookings booking = new Bookings();
+                                IList<Bookings> bookings = inMemoryRepositoryBookings.GetBookings();
+                                Console.WriteLine($"Booking Date\tNumber of rooms \tBooking Status\tTotal Amount\tCreated by\tCreated at\tUpdated at\tUpdated by\tCustomer Name\tCustomer Address"); //display headers for bookings
+                                foreach (var element in bookings)
+                                {
+                                    Console.WriteLine($"{element.BookingDate}\t{element.NumberOfRooms}\t{element.BookingStatus}\t{element.TotalAmount}\t{element.CreatedBy}\t{element.CreatedAt}\t{element.UpdatedAt}\t{element.UpdatedBy} customers name then address"); //displays booking info then repeats till last booking
+                                }
+                                break;
+                            case "Report":
+                                break;
+                            case "Change status":
+                                break;
+                        }
+                        
                         break;
                     case "View Customers":                                                          //view customers chosen from admin menu
                         AnsiConsole.MarkupLine("[green]View Customers selected[/]");
