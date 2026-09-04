@@ -25,6 +25,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     var serviceTypes = new ServiceTypes()
                     {
                         ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypeId")),
+                        ServiceName = reader.GetString(reader.GetOrdinal("ServiceName")),
                         Multiplier = reader.GetDecimal(reader.GetOrdinal("Multiplier")),
                         ServiceDescription = reader.GetString(reader.GetOrdinal("ServiceDescription")),
                         IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"))
@@ -34,7 +35,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
             return serviceTypesInfo;
         }
-        public ServiceTypes GetServiceTypesById(int? Id)
+        public ServiceTypes GetServiceTypesById(string? Id)
         {
             ServiceTypes houseTypesInfo = new ServiceTypes();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
@@ -46,6 +47,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 while (reader.Read())
                 {
                     houseTypesInfo.ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypeId"));
+                    houseTypesInfo.ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceName"));
                     houseTypesInfo.Multiplier = reader.GetDecimal(reader.GetOrdinal("Multiplier"));
                     houseTypesInfo.ServiceDescription = reader.GetString(reader.GetOrdinal("ServiceDescription"));
                     houseTypesInfo.IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"));

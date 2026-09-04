@@ -8,6 +8,6 @@ namespace CleaningServiceBookingSystemMain.Application
     public interface IServiceTypesRepository
     {
         IList<ServiceTypes> GetServiceTypes();      //gets list of all Service Types from storage
-        ServiceTypes GetServiceTypesById(int? Id);  //gets a specific Service Type from storage
+        ServiceTypes GetServiceTypesById(string? Id);  //gets a specific Service Type from storage
     }
 }

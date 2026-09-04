@@ -49,7 +49,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
                 return bookingsInfo;
         }
-        public Bookings GetBookingsById(int? Id)
+        public Bookings GetBookingsById(string? Id)
         {
             Bookings bookingsInfo = new Bookings();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))

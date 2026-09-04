@@ -42,7 +42,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
             return customersInfo;
         }
-        public Customers GetCustomerById(int? Id)// ? means it can be null
+        public Customers GetCustomerById(string? Id)// ? means it can be null
         {
             Customers customersInfo = new Customers();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))

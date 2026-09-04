@@ -37,7 +37,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
             return houseTypesInfo;
         }
-        public HouseTypes GetHouseTypesById(int? Id)
+        public HouseTypes GetHouseTypesById(string? Id)
         {
             HouseTypes houseTypesInfo = new HouseTypes();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))

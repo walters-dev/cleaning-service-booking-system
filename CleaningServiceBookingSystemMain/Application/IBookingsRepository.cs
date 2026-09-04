@@ -8,7 +8,7 @@ namespace CleaningServiceBookingSystemMain.Application
     public interface IBookingsRepository
     {
         IList<Bookings> GetBookings();                                              //gets list of all bookings from storage
-        Bookings GetBookingsById(int? Id);                                          //gets a specific booking from storage
+        Bookings GetBookingsById(string? Id);                                          //gets a specific booking from storage
         void Add(Bookings bookings);                                                //Adds a booking to storage
         void Update(Bookings bookings);                                             //edits an already existing booking record to storage
         void Delete(Bookings bookings);                                             //deletes an booking from storage
