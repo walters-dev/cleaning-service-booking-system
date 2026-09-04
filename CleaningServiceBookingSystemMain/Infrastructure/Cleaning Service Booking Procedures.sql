@@ -396,7 +396,7 @@ BEGIN
 END;
 GO
 CREATE PROCEDURE CustomerBookingHistory
-    @CustomerId VARCHAR(7)
+    @Email VARCHAR(7)
 AS
 BEGIN
 
@@ -422,7 +422,7 @@ BEGIN
     INNER JOIN Servicetypes s
         ON b.ServiceTypes_id = s.ServiceTypeId
 
-    WHERE c.CustomerId = @CustomerId
+    WHERE c.Email = @Email
 
     ORDER BY b.BookingDate DESC;
 
@@ -580,11 +580,11 @@ END;
 /*password procedure*/
 GO
 CREATE PROCEDURE GetAdminPassword
-@AdminID VARCHAR(7)
+@Username VARCHAR(7)
 AS
 BEGIN
 SELECT
     AdminTable.Admin_Password
 FROM AdminTable
-WHERE AdminTable.Admin_Id = @AdminID
+WHERE AdminTable.Username = @Username
 END;

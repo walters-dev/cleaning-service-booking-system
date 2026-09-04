@@ -1,7 +1,10 @@
-﻿using Spectre.Console;
-using System;
+﻿using CleaningServiceBookingSystem.Application;
 using CleaningServiceBookingSystemMain;
 using CleaningServiceBookingSystemMain.Application;
+using CleaningServiceBookingSystemMain.Domain.Models;
+using CleaningServiceBookingSystemMain.Infrastructure;
+using Spectre.Console;
+using System;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI
 {
@@ -13,17 +16,18 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
         {
 
             //declare and intialize variables
-            bool IsAdminMenuRunning, IsConfirmData;
+            bool IsAdminMenuRunning, IsConfirmData, IsCorrectPassword;
             string username, password;
-            Console.WriteLine("Enter Username:");
-            username = Console.ReadLine();
-            //username validation
 
+            AdminInput adminInput = new AdminInput();
+            Admins admins = new Admins();
+            admins = adminInput.GetAdminInput();                 //gets user input
+            GetAdminPassword getAdminPassword = new GetAdminPassword(admins.Username);
             Encryption cryptography = new Encryption();//creates encryption class
-            Console.WriteLine("Enter Password:");//................................................
-            password = Console.ReadLine();
-            //cryptography.VerifyPassword(, Admins.AdminsPassword);
-            //password validation
+            while (IsCorrectPassword = false)
+            {
+                IsCorrectPassword = cryptography.VerifyPassword(admins.AdminPassword, getAdminPassword.Password);
+            }
             Console.Clear();
             AnsiConsole.MarkupLine("[green]Signed in[/]");
             IsAdminMenuRunning = true;              //keeps admin menu in loop
@@ -32,10 +36,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                 var adminChoices = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                     .Title("Choose menu option")
-                    .AddChoices("Create Booking", "Create New Customer", "View Bookings", "View Customers", "Change user", "Add Admin"));
+                    .AddChoices("Create Booking", "Create New Customer", "View Bookings", "View Customers", "Change user", "Add Admin")); // display admin menu options
                 switch (adminChoices)
                 {
-                    case "Create Booking":
+                    case "Create Booking":                                                  //create booking chosen from admin menu
                         AnsiConsole.MarkupLine("[green]Create booking selected[/]");
                         var createBookingChoices = AnsiConsole.Prompt(
                             new SelectionPrompt<string>()
@@ -52,7 +56,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             while (IsConfirmData == false)
                             {
                                 AnsiConsole.MarkupLine("[green]New Customer selected[/]");
-                                //new customer proccess 
+                                //new customer proccess
+                                CustomerInput customerInput = new CustomerInput();
+                                Customers customers = new Customers();
+                                customers = customerInput.GetCustomerInput();
                                 var confirmNewCusChoices = AnsiConsole.Prompt(
                                     new SelectionPrompt<string>()
                                     .Title("Is the customer details correct:")
@@ -62,6 +69,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 {
                                     IsConfirmData = true;
                                     //save customer data to sql
+                                    InMemoryRepositoryCustomers inMemoryRepositoryCustomers = new InMemoryRepositoryCustomers();
+                                    inMemoryRepositoryCustomers.Add(customers);
                                 }
                                 else
                                 {
@@ -93,7 +102,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             }
                         }
                         break;
-                    case "Create New Customer":
+                    case "Create New Customer":                                         //create new customer chosen from admin menu
 
                         AnsiConsole.MarkupLine("[green]New Customer selected[/]");
 
@@ -102,6 +111,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         {
                             AnsiConsole.MarkupLine("[green]New Customer selected[/]");
                             //new customer proccess 
+                            CustomerInput customerInput = new CustomerInput();
+                            Customers customers = new Customers();
+                            customers = customerInput.GetCustomerInput();
+
                             var confirmNewCusChoices = AnsiConsole.Prompt(
                                new SelectionPrompt<string>()
                                .Title("Is the customer details correct:")
@@ -111,6 +124,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             {
                                 IsConfirmData = true;
                                 //save customer data to sql
+                                InMemoryRepositoryCustomers inMemoryRepositoryCustomers = new InMemoryRepositoryCustomers();
+                                inMemoryRepositoryCustomers.Add(customers);
                             }
                             else
                             {
@@ -118,7 +133,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             }
                         }
                         break;
-                    case "View Bookings":
+                    case "View Bookings":                                                           //view bookings chosen from admin menu
                         //enter booking date and customer
                         AnsiConsole.MarkupLine("[green]View Bookings selected[/]");
                         var viewBookingsChoices = AnsiConsole.Prompt(
@@ -126,16 +141,17 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 .Title("Choose option:")
                                 .AddChoices("View", "Report", "Update", "Change status"));
                         break;
-                    case "View Customers":
+                    case "View Customers":                                                          //view customers chosen from admin menu
                         AnsiConsole.MarkupLine("[green]View Customers selected[/]");
                         //select customer by contact
-                        break;
-                    case "Add Admin":
-                       Console.WriteLine(cryptography.HashPassword(password));
 
                         break;
-                    case "Change user":
-                        IsAdminMenuRunning = false;
+                    case "Add Admin":                                                           //add admin chosen from admin menu
+                       //Console.WriteLine(cryptography.HashPassword(password));
+
+                        break;
+                    case "Change user":                                                           //add change user chosen from admin menu
+                        IsAdminMenuRunning = false;                                               //this will exit the admin menu loop
                         break;
                     
                 }

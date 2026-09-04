@@ -1,10 +1,10 @@
-﻿using CleaningServiceBookingSystem.Domain;
-using CleaningServiceBookingSystemMain.Domain.Models;
+﻿using CleaningServiceBookingSystemMain.Domain.Models;
 
 namespace CleaningServiceBookingSystem.Application
 {
     public class CustomerInput
     {
+
         public Customers GetCustomerInput()
         {
             Customers customer = new Customers();

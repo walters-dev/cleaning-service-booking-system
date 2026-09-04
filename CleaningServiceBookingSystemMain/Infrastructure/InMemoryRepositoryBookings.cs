@@ -157,6 +157,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 connection.Open();
                 command.Parameters.AddWithValue("@StartDate", startDate);
                 command.Parameters.AddWithValue("@EndDate", endDate);
+                command.ExecuteNonQuery();
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
@@ -177,7 +178,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
             return bookingsInfo;
         }
-        public IList<CustomerBookingHistory> BookingHistory()
+        public IList<CustomerBookingHistory> BookingHistory(string Email)
         {
             List<CustomerBookingHistory> bookingsInfo = new List<CustomerBookingHistory>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
@@ -185,7 +186,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                //command.Parameters.AddWithValue("@StartDate", startDate);
+                command.Parameters.AddWithValue("@Email", Email);
                 //command.Parameters.AddWithValue("@EndDate", endDate);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())

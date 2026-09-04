@@ -3,7 +3,7 @@ using = CleaningServiceBooking
 
 CREATE TABLE AdminTable (
     Admin_Id VARCHAR(7) PRIMARY KEY,
-    Username VARCHAR(20),
+    Username VARCHAR(20) UNIQUE,
     Admin_Password VARCHAR(50),
     Email VARCHAR(50)
 );

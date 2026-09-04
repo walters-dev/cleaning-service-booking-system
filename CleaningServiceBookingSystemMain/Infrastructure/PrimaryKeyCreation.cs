@@ -23,7 +23,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlDataReader reader = command.ExecuteReader();
                 id = reader.GetInt32("RowsCount");
             }
-            return "AT"+id;
+            return "AT" + (id + 1);
         }
 
         public string CustomersRowCount()
@@ -37,7 +37,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlDataReader reader = command.ExecuteReader();
                 id = reader.GetInt32("RowsCount");
             }
-            return "CT" + id;
+            return "CT" + (id + 1);
         }
         public string HousetypesRowCount()
         {
@@ -50,7 +50,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlDataReader reader = command.ExecuteReader();
                 id = reader.GetInt32("RowsCount");
             }
-            return "HT" + id;
+            return "HT" + (id + 1);
         }
         public string ServicetypesRowCount()
         {
@@ -63,7 +63,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlDataReader reader = command.ExecuteReader();
                 id = reader.GetInt32("RowsCount");
             }
-            return "ST" + id;
+            return "ST" + (id + 1);
         }
 
         public string DiscountRulesRowCount()
@@ -77,7 +77,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlDataReader reader = command.ExecuteReader();
                 id = reader.GetInt32("RowsCount");
             }
-            return "DR" + id;
+            return "DR" + (id + 1);
         }
 
         public string AddOnsRowCount()
@@ -91,7 +91,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlDataReader reader = command.ExecuteReader();
                 id = reader.GetInt32("RowsCount");
             }
-            return "AD" + id;
+            return "AD" + (id + 1);
         }
 
         public string BookingsRowCount()
@@ -105,7 +105,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlDataReader reader = command.ExecuteReader();
                 id = reader.GetInt32("RowsCount");
             }
-            return "BT" + id;
+            return "BT" + (id + 1);
         }
 
         public string BookingAddOnsRowCount()
@@ -119,7 +119,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlDataReader reader = command.ExecuteReader();
                 id = reader.GetInt32("RowsCount");
             }
-            return "BA" + id;
+            return "BA" + (id + 1);
         }
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.Data.SqlClient;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
+    private readonly IList<Customers> 
     public class InMemoryRepositoryCustomers : ICustomerRepository
     {
         //methods need to be public or cannot implement interface member
@@ -55,7 +56,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 {
                     customersInfo.CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"));
                     customersInfo.FullName = reader.GetString(reader.GetOrdinal("FullName"));
-                    customersInfo.PhoneNumber = reader.GetString(reader.GetOrdinal("@Phonenumber"));
+                    customersInfo.PhoneNumber = reader.GetString(reader.GetOrdinal("Phonenumber"));
                     customersInfo.Email = reader.GetString(reader.GetOrdinal("Email"));
                     customersInfo.PhyAddress = reader.GetString(reader.GetOrdinal("PhysAddress"));
                     customersInfo.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
