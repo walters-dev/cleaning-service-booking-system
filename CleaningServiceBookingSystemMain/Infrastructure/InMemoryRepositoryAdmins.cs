@@ -34,7 +34,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
             return adminsInfo;
         }
-        public Admins GetAdminsById(int? Id)
+        public Admins GetAdminsById(string? Id)
         {
             Admins adminsInfo = new Admins();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))

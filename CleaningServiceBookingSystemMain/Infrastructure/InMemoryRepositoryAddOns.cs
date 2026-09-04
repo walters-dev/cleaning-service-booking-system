@@ -36,7 +36,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
             return addOnsInfo;
         }
-        public AddOns AddOnsByID(int? Id)
+        public AddOns AddOnsByID(string? Id)
         {
             AddOns addOnsInfo = new AddOns();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))

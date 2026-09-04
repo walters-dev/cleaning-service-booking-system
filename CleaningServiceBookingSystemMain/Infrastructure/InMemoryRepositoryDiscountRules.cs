@@ -35,7 +35,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
             return discountRulesInfo;
         }
-        public DiscountRules GetDiscountRulesById(int? Id)
+        public DiscountRules GetDiscountRulesById(string? Id)
         {
             DiscountRules discountRulesInfo = new DiscountRules();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
