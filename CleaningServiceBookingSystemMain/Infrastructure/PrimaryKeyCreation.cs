@@ -17,7 +17,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("AdminRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.AdminRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -31,7 +31,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("CustomersRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.CustomersRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -44,7 +44,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("HousetypesRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.HousetypesRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -57,7 +57,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("ServicetypesRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.ServicetypesRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -71,7 +71,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("DiscountRulesRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.DiscountRulesRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -85,7 +85,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("DiscountRulesRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.DiscountRulesRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -99,7 +99,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("DiscountRulesRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.DiscountRulesRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -113,7 +113,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("DiscountRulesRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.DiscountRulesRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();

@@ -54,7 +54,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             Bookings bookingsInfo = new Bookings();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("GetBooking", connection);
+                SqlCommand command = new SqlCommand("dbo.GetBooking", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -86,7 +86,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("AddBooking", connection);
+                SqlCommand command = new SqlCommand("dbo.AddBooking", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 //need to add a thing for id
@@ -113,7 +113,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("UpdateBooking", connection);
+                SqlCommand command = new SqlCommand("dbo.UpdateBooking", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 //need to add a thing for id
@@ -140,7 +140,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("DeleteCustomer", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.DeleteCustomer", connection);//waiting for sql procedure.......................................................................
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 command.Parameters.AddWithValue("@BookingId", bookings.BookingId);
@@ -152,7 +152,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<BookingByDate> bookingsInfo = new List<BookingByDate>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
+                SqlCommand command = new SqlCommand("dbo.BookingListByDateRange", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 command.Parameters.AddWithValue("@StartDate", startDate);
@@ -183,7 +183,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<CustomerBookingHistory> bookingsInfo = new List<CustomerBookingHistory>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
+                SqlCommand command = new SqlCommand("dbo.BookingListByDateRange", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 command.Parameters.AddWithValue("@Email", Email);
@@ -213,7 +213,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<BookingRevenueSummary> bookingsInfo = new List<BookingRevenueSummary>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
+                SqlCommand command = new SqlCommand("dbo.BookingListByDateRange", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 //command.Parameters.AddWithValue("@StartDate", startDate);
@@ -238,7 +238,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<BookingByHouseType> bookingsInfo = new List<BookingByHouseType>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
+                SqlCommand command = new SqlCommand("dbo.BookingListByDateRange", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 //command.Parameters.AddWithValue("@StartDate", startDate);
@@ -262,7 +262,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<BookingDiscountUsage> bookingsInfo = new List<BookingDiscountUsage>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("BookingListByDateRange", connection);
+                SqlCommand command = new SqlCommand("dbo.BookingListByDateRange", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 //command.Parameters.AddWithValue("@StartDate", startDate);

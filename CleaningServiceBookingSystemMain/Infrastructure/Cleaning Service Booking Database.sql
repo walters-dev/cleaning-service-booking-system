@@ -4,7 +4,7 @@ using = CleaningServiceBooking
 CREATE TABLE AdminTable (
     Admin_Id VARCHAR(7) PRIMARY KEY,
     Username VARCHAR(20) UNIQUE,
-    Admin_Password VARCHAR(50),
+    Admin_Password VARCHAR(70),
     Email VARCHAR(50)
 );
 
@@ -139,3 +139,6 @@ CREATE TABLE BookingAddOns (
         REFERENCES AddOns(AddOnId)
 );
 
+INSERT INTO AdminTable(Admin_Id, Username, Admin_Password, Email)
+VALUES
+('AT1','Admin','$2a$12$l8VsryAFB6I5iM44fc4XVuuxlq/EdYnBSVtRnUHWIG7c6BKhwO85i','admin@gmail.com')

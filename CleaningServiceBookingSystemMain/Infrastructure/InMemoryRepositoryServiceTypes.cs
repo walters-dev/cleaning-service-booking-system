@@ -40,7 +40,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             ServiceTypes houseTypesInfo = new ServiceTypes();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("GetCustomer", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.GetCustomer", connection);//waiting for sql procedure.......................................................................
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 SqlDataReader reader = command.ExecuteReader();

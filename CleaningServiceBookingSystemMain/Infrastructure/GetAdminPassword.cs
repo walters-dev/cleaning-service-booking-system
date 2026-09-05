@@ -16,13 +16,16 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("GetAdminPassword", connection);
+                SqlCommand command = new SqlCommand("dbo.GetAdminPassword", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 command.Parameters.AddWithValue("@Username", userName);
                 command.ExecuteNonQuery();
-                SqlDataReader reader = command.ExecuteReader();
-                Password = reader.GetString(reader.GetOrdinal("Admin_Password"));
+                using SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    Password = reader.GetString(reader.GetOrdinal("Admin_Password"));
+                }
             }
         }
     }

@@ -1,5 +1,5 @@
 CREATE DATABASE CleaningServiceBooking
-using = CleaningServiceBooking
+use CleaningServiceBooking
 GO
 /*Customer PROCEDURES*/
 /* =================================================================================================================================*/
@@ -502,8 +502,8 @@ BEGIN
     ORDER BY d.DiscountName ASC, b.BookingDate DESC;
 
 END;
-GO
-GO
+go
+go
 /*length procedures*/
 
 GO
@@ -588,3 +588,4 @@ SELECT
 FROM AdminTable
 WHERE AdminTable.Username = @Username
 END;
+exec GetAdminPassword @Username = 'admin'

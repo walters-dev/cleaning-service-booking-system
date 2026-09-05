@@ -9,7 +9,7 @@ using Microsoft.Data.SqlClient;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
-    private readonly IList<Customers> 
+    //private readonly IList<Customers> 
     public class InMemoryRepositoryCustomers : ICustomerRepository
     {
         //methods need to be public or cannot implement interface member
@@ -19,7 +19,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<Customers> customersInfo = new List<Customers>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("GetAllCustomers", connection);
+                SqlCommand command = new SqlCommand("dbo.GetAllCustomers", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -48,7 +48,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             Customers customersInfo = new Customers();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("GetCustomer", connection);
+                SqlCommand command = new SqlCommand("dbo.GetCustomer", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -71,7 +71,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("AddCustomer", connection);
+                SqlCommand command = new SqlCommand("dbo.AddCustomer", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 //need to add a thing for id
@@ -89,7 +89,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("UpdateCustomer", connection);
+                SqlCommand command = new SqlCommand("dbo.UpdateCustomer", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 command.Parameters.AddWithValue("@Fullname", customers.FullName);
@@ -105,7 +105,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("DeleteCustomer", connection);
+                SqlCommand command = new SqlCommand("dbo.DeleteCustomer", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 command.Parameters.AddWithValue("@CustomerID", customers.CustomerId);

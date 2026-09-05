@@ -40,7 +40,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             DiscountRules discountRulesInfo = new DiscountRules();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("GetCustomer", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.GetCustomer", connection);//waiting for sql procedure.......................................................................
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -59,7 +59,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("AddBooking", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.AddBooking", connection);//waiting for sql procedure.......................................................................
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 //need to add a thing for id

@@ -4,6 +4,7 @@ using CleaningServiceBookingSystemMain.Application;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
 using Spectre.Console;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Linq.Expressions;
 
@@ -17,7 +18,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
         {
 
             //declare and intialize variables
-            bool IsAdminMenuRunning, IsConfirmData, IsCorrectPassword;
+            bool IsAdminMenuRunning, IsConfirmData, IsCorrectPassword = false;
             string username, password;
 
             AdminInput adminInput = new AdminInput();
@@ -25,10 +26,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             admins = adminInput.GetAdminInput();                 //gets user input
             GetAdminPassword getAdminPassword = new GetAdminPassword(admins.Username);
             Encryption cryptography = new Encryption();//creates encryption class
-            while (IsCorrectPassword = false)
+            while (IsCorrectPassword == false)
             {
                 //get new input.....................................................................................................................................................
-                IsCorrectPassword = cryptography.VerifyPassword(admins.AdminPassword, getAdminPassword.Password);
+                IsCorrectPassword = cryptography.VerifyPassword(getAdminPassword.Password, admins.AdminPassword);
             }
             Console.Clear();
             AnsiConsole.MarkupLine("[green]Signed in[/]");
@@ -167,7 +168,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
 
                         break;
                     case "Add Admin":                                                           //add admin chosen from admin menu
-                       //Console.WriteLine(cryptography.HashPassword(password));
+                       Console.WriteLine(cryptography.HashPassword(admins.AdminPassword));
 
                         break;
                     case "Change user":                                                           //add change user chosen from admin menu
