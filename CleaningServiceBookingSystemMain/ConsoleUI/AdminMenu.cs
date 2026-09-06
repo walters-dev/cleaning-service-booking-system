@@ -18,18 +18,28 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
         {
 
             //declare and intialize variables
-            bool IsAdminMenuRunning, IsConfirmData, IsCorrectPassword = false;
+            bool IsAdminMenuRunning, IsConfirmData, IsCorrectPassword;
             string username, password;
 
             AdminInput adminInput = new AdminInput();
             Admins admins = new Admins();
             admins = adminInput.GetAdminInput();                 //gets user input
-            GetAdminPassword getAdminPassword = new GetAdminPassword(admins.Username);
+           // GetAdminPassword getAdminPassword = new GetAdminPassword(admins.Username);
+            InMemoryRepositoryAdmins inMemoryRepositoryAdmins = new InMemoryRepositoryAdmins();
+            password =inMemoryRepositoryAdmins.GetAdminPasswordByUsername(admins.Username);
+            while (password == null)
+            {
+                AnsiConsole.MarkupLine("[red]No admin by that username or Incorrect password[/]");
+                admins = adminInput.GetAdminInput();
+                password = inMemoryRepositoryAdmins.GetAdminPasswordByUsername(admins.Username);
+            }
             Encryption cryptography = new Encryption();//creates encryption class
+            IsCorrectPassword = cryptography.VerifyPassword(password, admins.AdminPassword);
             while (IsCorrectPassword == false)
             {
+                AnsiConsole.MarkupLine("[red]Incorrect password[/]");
                 //get new input.....................................................................................................................................................
-                IsCorrectPassword = cryptography.VerifyPassword(getAdminPassword.Password, admins.AdminPassword);
+                IsCorrectPassword = cryptography.VerifyPassword(password, admins.AdminPassword);
             }
             Console.Clear();
             AnsiConsole.MarkupLine("[green]Signed in[/]");

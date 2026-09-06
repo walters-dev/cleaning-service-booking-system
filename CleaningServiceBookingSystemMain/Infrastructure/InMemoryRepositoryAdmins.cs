@@ -94,5 +94,27 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.ExecuteNonQuery();
             }
         }
+
+        public string GetAdminPasswordByUsername(string userName)
+        {
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.GetAdminPassword", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                command.Parameters.AddWithValue("@Username", userName);
+                command.ExecuteNonQuery();
+                using SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    return reader.GetString(reader.GetOrdinal("Admin_Password"));
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            
+        }
     }
 }

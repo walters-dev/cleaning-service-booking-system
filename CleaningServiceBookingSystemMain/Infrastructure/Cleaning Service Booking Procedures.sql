@@ -12,6 +12,15 @@ BEGIN
      WHERE CustomerId=@CustomerID;
 END;
 GO
+CREATE PROCEDURE GetCustomerByEmail
+    @Email VARCHAR (7)
+AS
+BEGIN
+     SELECT *
+     FROM Customers 
+     WHERE Email LIKE '%' + @Email + '%';
+END;
+GO
 CREATE PROCEDURE UpdateCustomer
     @CustomerID VARCHAR (7),
     @Fullname VARCHAR(MAX),
@@ -185,6 +194,13 @@ BEGIN
         @isActive
     );
 
+END;
+/*booking procedures*/
+GO 
+CREATE PROCEDURE GetAllBookings
+AS
+BEGIN
+SELECT * FROM Bookings
 END;
 GO
 CREATE PROCEDURE AddBooking
