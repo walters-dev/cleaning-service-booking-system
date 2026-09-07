@@ -1,9 +1,10 @@
 ﻿using CleaningServiceBookingSystemMain.Domain.Models;
+using CleaningServiceBookingSystem.Application.Validators;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CleaningServiceBookingSystem.Application
+namespace CleaningServiceBookingSystemMain.Application.InputMethods
 {
     public class AdminInput
     {
@@ -12,18 +13,18 @@ namespace CleaningServiceBookingSystem.Application
             Admins admin = new Admins();
 
             Console.WriteLine();
-            Console.WriteLine("======== ADMIN INFORMATION ========");
+            Console.WriteLine("===== ADMIN INFORMATION =====");
 
-            Console.Write("Enter Admin Id: ");
+            Console.Write("Enter admin ID: ");
             admin.AdminId = Console.ReadLine() ?? "";
 
-            Console.WriteLine("Enter Username: ");
+            Console.Write("Enter username: ");
             admin.Username = Console.ReadLine() ?? "";
 
-            Console.WriteLine("Enter Password: ");
+            Console.Write("Enter password: ");
             admin.AdminPassword = Console.ReadLine() ?? "";
 
-            Console.WriteLine("Enter Email: ");
+            Console.Write("Enter email: ");
             admin.Email = Console.ReadLine() ?? "";
 
             return admin;

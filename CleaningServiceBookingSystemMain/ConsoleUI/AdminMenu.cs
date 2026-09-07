@@ -3,6 +3,7 @@ using CleaningServiceBookingSystemMain;
 using CleaningServiceBookingSystemMain.Application;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
+using CleaningServiceBookingSystemMain.Application.InputMethods;
 using Spectre.Console;
 using Microsoft.Data.SqlClient;
 using System;
@@ -49,7 +50,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                 var adminChoices = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                     .Title("Choose menu option")
-                    .AddChoices("Create Booking", "Create New Customer", "View Bookings", "View Customers", "Change user", "Add Admin")); // display admin menu options
+                    .AddChoices("Create Booking", "Create New Customer", "View Bookings", "View Customer", "Change user", "Add Admin")); // display admin menu options
                 switch (adminChoices)
                 {
                     case "Create Booking":                                                  //create booking chosen from admin menu
@@ -93,7 +94,11 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         }
                         InMemoryRepositoryBookings createBooking = new InMemoryRepositoryBookings();
                         Bookings newBooking = new Bookings();
-                        //newBooking = input;
+                        ServiceTypeInput serviceTypeInput = new ServiceTypeInput();//i thonk all of this is supposed to be in BookingInput.............................................................................
+                        HouseTypeInput houseTypeInput = new HouseTypeInput();
+
+                        //BookingInput bookingInput = new BookingInput(houseTypeInput, serviceTypeInput.GetServiceTypeInput(),);
+                       // newBooking = ;
                         /*
                         System displays house types and service types from SQL Server
                         Staff enters number of rooms, booking date, add-ons and recurring option.
@@ -175,8 +180,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         }
                         
                         break;
-                    case "View Customers":                                                          //view customers chosen from admin menu
-                        AnsiConsole.MarkupLine("[green]View Customers selected[/]");
+                    case "View Customer":                                                          //view customers chosen from admin menu
+                        AnsiConsole.MarkupLine("[green]View Customer selected[/]");
                         //select customer by contact
                         //input for email.....................................................................................
                         InMemoryRepositoryCustomers viewCustomer = new InMemoryRepositoryCustomers();
@@ -185,8 +190,30 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         Console.WriteLine($"{customer.FullName} {customer.PhoneNumber} {customer.Email} {customer.PhyAddress}");
                         break;
                     case "Add Admin":                                                           //add admin chosen from admin menu
-                       Console.WriteLine(cryptography.HashPassword(admins.AdminPassword));
+                        IsConfirmData = false;
+                        while (IsConfirmData == false)
+                        {
+                            AdminInput newAdminInput = new AdminInput();
+                            Admins newAdmin = new Admins();
+                            newAdmin = newAdminInput.GetAdminInput();                 //gets user input
+                            InMemoryRepositoryAdmins newInMemoryRepositoryAdmins = new InMemoryRepositoryAdmins();
 
+                            var confirmNewAdminChoices = AnsiConsole.Prompt(
+                                   new SelectionPrompt<string>()
+                                   .Title("Is the admin details correct:")
+                                   .AddChoices("Yes", "No"));
+                            if (confirmNewAdminChoices == "Yes")
+                            {
+                                newAdmin.AdminPassword = cryptography.HashPassword(newAdmin.AdminPassword);
+                                newInMemoryRepositoryAdmins.Add(newAdmin);
+                                IsConfirmData = true;
+                            }
+                            else
+                            {
+                                IsConfirmData = false;
+                            }
+                            
+                        }
                         break;
                     case "Change user":                                                           //add change user chosen from admin menu
                         IsAdminMenuRunning = false;                                               //this will exit the admin menu loop

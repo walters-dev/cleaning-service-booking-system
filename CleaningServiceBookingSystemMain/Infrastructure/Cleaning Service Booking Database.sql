@@ -4,7 +4,7 @@ using = CleaningServiceBooking
 CREATE TABLE AdminTable (
     Admin_Id VARCHAR(7) PRIMARY KEY,
     Username VARCHAR(20) UNIQUE,
-    Admin_Password VARCHAR(70),
+    Admin_Password VARCHAR(90),
     Email VARCHAR(50)
 );
 
@@ -130,7 +130,7 @@ CREATE TABLE BookingAddOns (
     Booking_id VARCHAR(7),
     AddOn_id VARCHAR(10),
     Quantity INT,
-    LineAmount VARCHAR(255),
+    LineAmount decimal,
 
     FOREIGN KEY (Booking_id)
         REFERENCES Bookings(BookingId),
