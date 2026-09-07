@@ -136,7 +136,20 @@ BEGIN
 END
 GO
 /*SERVICE PROCEDURES ==================================================================================================================================================================================================== */
-
+GO 
+CREATE PROCEDURE GetAllServiceTypes
+AS
+BEGIN
+    SELECT * FROM Servicetypes
+END;
+GO
+CREATE PROCEDURE GetServiceType
+@ServiceId VARCHAR(7)
+AS
+BEGIN
+    SELECT * FROM Servicetypes
+    WHERE ServiceTypeId = @ServiceId
+END;
 GO
 
 CREATE PROCEDURE AddDiscountRule
