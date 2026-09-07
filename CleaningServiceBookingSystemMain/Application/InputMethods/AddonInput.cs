@@ -37,11 +37,11 @@ namespace CleaningServiceBookingSystemMain.Application
 
             while (true)
             {
-                Console.Write("Choose an add-on: ");
+                Console.Write("Choose an add-on: "); //this needs to loop until all addons added or user specifies that they dont want to add more
 
                 if (!int.TryParse(Console.ReadLine(),out int choice) || choice > i)
                 {
-                    Console.WriteLine("Please enter a valid number.");
+                    Console.WriteLine("Please enter a valid number."); 
 
                     continue;
                 }

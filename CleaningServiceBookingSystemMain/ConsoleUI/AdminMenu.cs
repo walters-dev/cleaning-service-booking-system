@@ -94,11 +94,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         }
                         InMemoryRepositoryBookings createBooking = new InMemoryRepositoryBookings();
                         Bookings newBooking = new Bookings();
-                        ServiceTypeInput serviceTypeInput = new ServiceTypeInput();//i thonk all of this is supposed to be in BookingInput.............................................................................
-                        HouseTypeInput houseTypeInput = new HouseTypeInput();
 
-                        //BookingInput bookingInput = new BookingInput(houseTypeInput, serviceTypeInput.GetServiceTypeInput(),);
-                       // newBooking = ;
+                        BookingInput bookingInput = new BookingInput();
+                        newBooking = bookingInput.GetBookingInput();
                         /*
                         System displays house types and service types from SQL Server
                         Staff enters number of rooms, booking date, add-ons and recurring option.
@@ -174,8 +172,47 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 }
                                 break;
                             case "Report":
+
                                 break;
                             case "Change status":
+                                //get booking by customer/date
+                                //show booking? then confirmation
+                                IsConfirmData = false;
+                                while (IsConfirmData == false)
+                                {
+                                    var confirmSelectedBookingChoices = AnsiConsole.Prompt(
+                                        new SelectionPrompt<string>()
+                                        .Title("Is the booking details correct:")
+                                        .AddChoices("Yes", "No"));
+                                    switch (confirmSelectedBookingChoices)
+                                    {
+                                        case "Yes":
+                                            IsConfirmData = true;
+                                            var changeStatusChoices = AnsiConsole.Prompt(
+                                                new SelectionPrompt<string>()
+                                                .Title("Choose option:")
+                                                .AddChoices("Pending", "Confirmed", "Completed", "Cancelled"));
+                                            switch (changeStatusChoices)
+                                            {
+                                                case "Pending":
+
+                                                    break;
+                                                case "Confirmed":
+
+                                                    break;
+                                                case "Completed":
+
+                                                    break;
+                                                case "Cancelled":
+
+                                                    break;
+                                            }
+                                            break;
+                                        case "No":
+
+                                            break;
+                                    }
+                                }       
                                 break;
                         }
                         

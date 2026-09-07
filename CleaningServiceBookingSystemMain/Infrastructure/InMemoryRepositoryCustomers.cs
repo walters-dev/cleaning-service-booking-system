@@ -82,7 +82,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@PhysAddress", customers.PhyAddress);
                 command.Parameters.AddWithValue("@CreatedAt", customers.CreatedAt);
                 command.Parameters.AddWithValue("@CreatedBy", customers.CreatedAt);
-                command.ExecuteNonQuery();
+                command.ExecuteNonQuery();                                          //saves new customer to database
             }
         }
         public void Update(Customers customers)
@@ -132,7 +132,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     customersInfo.PhyAddress = reader.GetString(reader.GetOrdinal("PhysAddress"));
                     customersInfo.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
                     customersInfo.CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"));
-                    // customersInfo.UpdatdeBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));
+                    // customersInfo.UpdatdeBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));          this is breaking everything
                     //customersInfo.UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt"));
                 }
             }

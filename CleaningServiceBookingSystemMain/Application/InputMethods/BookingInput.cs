@@ -12,22 +12,23 @@ namespace CleaningServiceBookingSystemMain.Application.InputMethods
         private readonly BookingValidator _validator =
             new BookingValidator();
 
-        public BookingInput(
-            HouseTypeInput houseTypeInput,
-            ServiceTypeInput serviceTypeInput,
-            DiscountInput discountInput)
-        {
-            _houseTypeInput = houseTypeInput;
-            _serviceTypeInput = serviceTypeInput;
-            _discountInput = discountInput;
-        }
+        //public BookingInput(
+        //    HouseTypeInput houseTypeInput,
+        //    ServiceTypeInput serviceTypeInput,
+        //    DiscountInput discountInput)
+        //{
+        //    _houseTypeInput = houseTypeInput;
+        //    _serviceTypeInput = serviceTypeInput;
+        //    _discountInput = discountInput;
+        //}
 
         public Bookings GetBookingInput()
         {
             while (true)
             {
-                Bookings booking = new Bookings();
 
+                Bookings booking = new Bookings();
+               
                 Console.WriteLine();
                 Console.WriteLine("===== BOOKING INFORMATION =====");
 
@@ -38,6 +39,8 @@ namespace CleaningServiceBookingSystemMain.Application.InputMethods
                 ServiceTypes serviceTypes = new ServiceTypes();
                 serviceTypes = _serviceTypeInput.GetServiceTypeInput();
                 booking.ServiceTypeId = serviceTypes.ServiceTypeId;
+
+
 
                 Console.Write("Enter number of rooms: ");
                 booking.NumberOfRooms = GetInteger();
