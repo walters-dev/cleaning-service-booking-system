@@ -61,7 +61,14 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                id = reader.GetInt32("RowsCount");
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
             }
             return "ST" + (id + 1);
         }
@@ -75,7 +82,14 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                id = reader.GetInt32("RowsCount");
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
             }
             return "DR" + (id + 1);
         }
@@ -89,7 +103,14 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                id = reader.GetInt32("RowsCount");
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
             }
             return "AD" + (id + 1);
         }
@@ -103,7 +124,14 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                id = reader.GetInt32("RowsCount");
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
             }
             return "BT" + (id + 1);
         }
@@ -117,7 +145,14 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                id = reader.GetInt32("RowsCount");
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
             }
             return "BA" + (id + 1);
         }

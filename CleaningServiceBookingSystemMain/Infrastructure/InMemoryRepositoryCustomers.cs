@@ -112,5 +112,31 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.ExecuteNonQuery();
             }
         }
+        public Customers GetCustomersByEmail(string email)
+        {
+            Customers customersInfo = new Customers();
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.GetCustomerByEmail", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Connection.Open();
+                command.Parameters.AddWithValue("@Email", email);
+                command.ExecuteNonQuery();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    customersInfo.CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"));
+                    customersInfo.FullName = reader.GetString(reader.GetOrdinal("FullName"));
+                    customersInfo.PhoneNumber = reader.GetString(reader.GetOrdinal("Phonenumber"));
+                    customersInfo.Email = reader.GetString(reader.GetOrdinal("Email"));
+                    customersInfo.PhyAddress = reader.GetString(reader.GetOrdinal("PhysAddress"));
+                    customersInfo.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
+                    customersInfo.CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"));
+                    // customersInfo.UpdatdeBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));
+                    //customersInfo.UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt"));
+                }
+            }
+            return customersInfo;
+        }
     }
 }

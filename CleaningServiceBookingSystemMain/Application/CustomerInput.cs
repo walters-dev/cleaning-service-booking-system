@@ -1,15 +1,18 @@
 ﻿using CleaningServiceBookingSystemMain.Domain.Models;
+using CleaningServiceBookingSystemMain.Infrastructure;
 
 namespace CleaningServiceBookingSystem.Application
 {
     public class CustomerInput
     {
 
-        public Customers GetCustomerInput()
+        public Customers GetCustomerInput(string username)
         {
             Customers customer = new Customers();
 
             Console.WriteLine("===== CUSTOMER INFORMATION =====");
+            PrimaryKeyCreation primaryKeyCreation = new PrimaryKeyCreation();
+            customer.CustomerId = primaryKeyCreation.CustomersRowCount();
 
             Console.Write("Enter full name: ");
             customer.FullName = Console.ReadLine();
@@ -22,6 +25,9 @@ namespace CleaningServiceBookingSystem.Application
 
             Console.Write("Enter address: ");
             customer.PhyAddress = Console.ReadLine();
+
+            customer.CreatedAt = DateTime.Today;
+            customer.CreatedBy = username;
 
             return customer;
         }

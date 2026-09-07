@@ -29,7 +29,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             password =inMemoryRepositoryAdmins.GetAdminPasswordByUsername(admins.Username);
             while (password == null)
             {
-                AnsiConsole.MarkupLine("[red]No admin by that username or Incorrect password[/]");
+                AnsiConsole.MarkupLine("[red]No admin by that username[/]");
                 admins = adminInput.GetAdminInput();
                 password = inMemoryRepositoryAdmins.GetAdminPasswordByUsername(admins.Username);
             }
@@ -38,7 +38,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             while (IsCorrectPassword == false)
             {
                 AnsiConsole.MarkupLine("[red]Incorrect password[/]");
-                //get new input.....................................................................................................................................................
+                admins.AdminPassword = Console.ReadLine();//get new input.....................................................................................................................................................
                 IsCorrectPassword = cryptography.VerifyPassword(password, admins.AdminPassword);
             }
             Console.Clear();
@@ -72,7 +72,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 //new customer proccess
                                 CustomerInput customerInput = new CustomerInput();
                                 Customers customers = new Customers();
-                                customers = customerInput.GetCustomerInput();
+                                customers = customerInput.GetCustomerInput(admins.Username);
                                 var confirmNewCusChoices = AnsiConsole.Prompt(
                                     new SelectionPrompt<string>()
                                     .Title("Is the customer details correct:")
@@ -91,6 +91,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 }
                             }
                         }
+                        InMemoryRepositoryBookings createBooking = new InMemoryRepositoryBookings();
+                        Bookings newBooking = new Bookings();
+                        //newBooking = input;
                         /*
                         System displays house types and service types from SQL Server
                         Staff enters number of rooms, booking date, add-ons and recurring option.
@@ -108,6 +111,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             {
                                 IsConfirmData = true;
                                 //save booking data to sql
+                                createBooking.Add(newBooking);
                             }
                             else
                             {
@@ -117,8 +121,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         break;
                     case "Create New Customer":                                         //create new customer chosen from admin menu
 
-                        AnsiConsole.MarkupLine("[green]New Customer selected[/]");
-
                         IsConfirmData = false;
                         while (IsConfirmData == false)
                         {
@@ -126,7 +128,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             //new customer proccess 
                             CustomerInput customerInput = new CustomerInput();
                             Customers customers = new Customers();
-                            customers = customerInput.GetCustomerInput();
+                            customers = customerInput.GetCustomerInput(admins.Username);
 
                             var confirmNewCusChoices = AnsiConsole.Prompt(
                                new SelectionPrompt<string>()
@@ -139,6 +141,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 //save customer data to sql
                                 InMemoryRepositoryCustomers inMemoryRepositoryCustomers = new InMemoryRepositoryCustomers();
                                 inMemoryRepositoryCustomers.Add(customers);
+                                AnsiConsole.MarkupLine("[green]Customer successfully added[/]");
                             }
                             else
                             {
@@ -153,12 +156,12 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 new SelectionPrompt<string>()
                                 .Title("Choose option:")
                                 .AddChoices("View", "Report", "Update", "Change status"));                      //update could be removed?? also report of what................................................................................................................
+                        InMemoryRepositoryBookings viewBookings = new InMemoryRepositoryBookings();
                         switch (viewBookingsChoices)
                         {
                             case "View":
-                                InMemoryRepositoryBookings inMemoryRepositoryBookings = new InMemoryRepositoryBookings();
                                 Bookings booking = new Bookings();
-                                IList<Bookings> bookings = inMemoryRepositoryBookings.GetBookings();
+                                IList<Bookings> bookings = viewBookings.GetBookings();
                                 Console.WriteLine($"Booking Date\tNumber of rooms \tBooking Status\tTotal Amount\tCreated by\tCreated at\tUpdated at\tUpdated by\tCustomer Name\tCustomer Address"); //display headers for bookings
                                 foreach (var element in bookings)
                                 {
@@ -175,7 +178,11 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                     case "View Customers":                                                          //view customers chosen from admin menu
                         AnsiConsole.MarkupLine("[green]View Customers selected[/]");
                         //select customer by contact
-
+                        //input for email.....................................................................................
+                        InMemoryRepositoryCustomers viewCustomer = new InMemoryRepositoryCustomers();
+                        Customers customer = new Customers();
+                        customer = viewCustomer.GetCustomersByEmail(Console.ReadLine());
+                        Console.WriteLine($"{customer.FullName} {customer.PhoneNumber} {customer.Email} {customer.PhyAddress}");
                         break;
                     case "Add Admin":                                                           //add admin chosen from admin menu
                        Console.WriteLine(cryptography.HashPassword(admins.AdminPassword));
