@@ -285,5 +285,18 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
             return bookingsInfo;
         }
+
+        public void ChangeBoookingStatus(Bookings bookings)
+        {
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.ChangeBookingStatus", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Connection.Open();
+                command.Parameters.AddWithValue("@BookingId", bookings.BookingId);
+                command.Parameters.AddWithValue("@BookingStatus", bookings.BookingStatus);
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }

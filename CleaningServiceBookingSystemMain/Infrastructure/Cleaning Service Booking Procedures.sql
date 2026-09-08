@@ -209,6 +209,17 @@ BEGIN
 
 END;
 /*booking procedures*/
+GO
+CREATE PROCEDURE ChangeBookingStatus
+@BookingStatus BIT,
+@BookingId VARCHAR(7)
+AS
+BEGIN
+UPDATE Bookings
+SET
+BookingStatus = @BookingStatus 
+WHERE BookingId = @BookingId
+END;
 GO 
 CREATE PROCEDURE GetAllBookings
 AS
