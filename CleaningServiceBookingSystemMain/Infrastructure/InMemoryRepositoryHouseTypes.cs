@@ -27,7 +27,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         HouseTypeId = reader.GetString(reader.GetOrdinal("HouseTypeId")),
                         Name = reader.GetString(reader.GetOrdinal("Name")),
                         BaseRate = reader.GetDecimal(reader.GetOrdinal("BaseRate")),
-                        RatePerRate = reader.GetDecimal(reader.GetOrdinal("RatePerRate")),
+                        RatePerRoom = reader.GetDecimal(reader.GetOrdinal("RatePerRate")),
                         MinRooms = reader.GetInt32(reader.GetOrdinal("MinRooms")),
                         MaxRooms = reader.GetInt32(reader.GetOrdinal("MaxRooms")),
                         IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"))
@@ -51,7 +51,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     houseTypesInfo.HouseTypeId = reader.GetString(reader.GetOrdinal("HouseTypeId"));
                     houseTypesInfo.Name = reader.GetString(reader.GetOrdinal("Name"));
                     houseTypesInfo.BaseRate = reader.GetDecimal(reader.GetOrdinal("BaseRate"));
-                    houseTypesInfo.RatePerRate = reader.GetDecimal(reader.GetOrdinal("RatePerRate"));
+                    houseTypesInfo.RatePerRoom = reader.GetDecimal(reader.GetOrdinal("RatePerRate"));
                     houseTypesInfo.MinRooms = reader.GetInt32(reader.GetOrdinal("MinRooms"));
                     houseTypesInfo.MaxRooms = reader.GetInt32(reader.GetOrdinal("MaxRooms"));
                     houseTypesInfo.IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"));

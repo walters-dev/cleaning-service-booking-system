@@ -9,7 +9,7 @@ namespace CleaningServiceBookingSystemMain.Domain.Models
         public string HouseTypeId { get; set; }
         public string Name { get; set; }
         public decimal BaseRate { get; set; }
-        public decimal RatePerRate { get; set; }
+        public decimal RatePerRoom { get; set; }
         public int MinRooms { get; set; }
         public int MaxRooms { get; set; }
         public bool? IsActive { get; set; }//? because the bool in the database is sometimes null

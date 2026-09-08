@@ -10,6 +10,6 @@ namespace CleaningServiceBookingSystemMain.Domain.Models
         public string BookingId { get; set; }
         public string AddOnId { get; set; }
         public int Quantity { get; set; }
-        public string LineAmount { get; set; }
+        public decimal LineAmount { get; set; }
     }
 }
