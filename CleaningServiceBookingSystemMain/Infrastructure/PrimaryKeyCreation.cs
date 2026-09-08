@@ -17,13 +17,20 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("AdminRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.AdminRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                id = reader.GetInt32("RowsCount");
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
             }
-            return "AT"+id;
+            return "AT" + (id + 1);
         }
 
         public string CustomersRowCount()
@@ -31,39 +38,60 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("CustomersRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.CustomersRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                id = reader.GetInt32("RowsCount");
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
             }
-            return "CT" + id;
+            return "CT" + (id + 1);
         }
         public string HousetypesRowCount()
         {
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("HousetypesRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.HousetypesRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                id = reader.GetInt32("RowsCount");
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
             }
-            return "HT" + id;
+            return "HT" + (id + 1);
         }
         public string ServicetypesRowCount()
         {
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("ServicetypesRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.ServicetypesRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                id = reader.GetInt32("RowsCount");
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
             }
-            return "ST" + id;
+            return "ST" + (id + 1);
         }
 
         public string DiscountRulesRowCount()
@@ -71,13 +99,20 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("DiscountRulesRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.DiscountRulesRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                id = reader.GetInt32("RowsCount");
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
             }
-            return "DR" + id;
+            return "DR" + (id + 1);
         }
 
         public string AddOnsRowCount()
@@ -85,13 +120,20 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("DiscountRulesRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.DiscountRulesRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                id = reader.GetInt32("RowsCount");
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
             }
-            return "AD" + id;
+            return "AD" + (id + 1);
         }
 
         public string BookingsRowCount()
@@ -99,13 +141,20 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("DiscountRulesRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.DiscountRulesRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                id = reader.GetInt32("RowsCount");
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
             }
-            return "BT" + id;
+            return "BT" + (id + 1);
         }
 
         public string BookingAddOnsRowCount()
@@ -113,13 +162,20 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("DiscountRulesRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.DiscountRulesRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                id = reader.GetInt32("RowsCount");
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
             }
-            return "BA" + id;
+            return "BA" + (id + 1);
         }
     }
 }

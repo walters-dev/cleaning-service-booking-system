@@ -9,6 +9,7 @@ using Microsoft.Data.SqlClient;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
+    //private readonly IList<Customers> 
     public class InMemoryRepositoryCustomers : ICustomerRepository
     {
         //methods need to be public or cannot implement interface member
@@ -18,7 +19,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<Customers> customersInfo = new List<Customers>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("GetAllCustomers", connection);
+                SqlCommand command = new SqlCommand("dbo.GetAllCustomers", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -47,7 +48,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             Customers customersInfo = new Customers();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("GetCustomer", connection);
+                SqlCommand command = new SqlCommand("dbo.GetCustomer", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -55,7 +56,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 {
                     customersInfo.CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"));
                     customersInfo.FullName = reader.GetString(reader.GetOrdinal("FullName"));
-                    customersInfo.PhoneNumber = reader.GetString(reader.GetOrdinal("@Phonenumber"));
+                    customersInfo.PhoneNumber = reader.GetString(reader.GetOrdinal("Phonenumber"));
                     customersInfo.Email = reader.GetString(reader.GetOrdinal("Email"));
                     customersInfo.PhyAddress = reader.GetString(reader.GetOrdinal("PhysAddress"));
                     customersInfo.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
@@ -70,7 +71,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("AddCustomer", connection);
+                SqlCommand command = new SqlCommand("dbo.AddCustomer", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 //need to add a thing for id
@@ -81,14 +82,14 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@PhysAddress", customers.PhyAddress);
                 command.Parameters.AddWithValue("@CreatedAt", customers.CreatedAt);
                 command.Parameters.AddWithValue("@CreatedBy", customers.CreatedAt);
-                command.ExecuteNonQuery();
+                command.ExecuteNonQuery();                                          //saves new customer to database
             }
         }
         public void Update(Customers customers)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("UpdateCustomer", connection);
+                SqlCommand command = new SqlCommand("dbo.UpdateCustomer", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 command.Parameters.AddWithValue("@Fullname", customers.FullName);
@@ -104,12 +105,38 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("DeleteCustomer", connection);
+                SqlCommand command = new SqlCommand("dbo.DeleteCustomer", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 command.Parameters.AddWithValue("@CustomerID", customers.CustomerId);
                 command.ExecuteNonQuery();
             }
+        }
+        public Customers GetCustomersByEmail(string email)
+        {
+            Customers customersInfo = new Customers();
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.GetCustomerByEmail", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Connection.Open();
+                command.Parameters.AddWithValue("@Email", email);
+                command.ExecuteNonQuery();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    customersInfo.CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"));
+                    customersInfo.FullName = reader.GetString(reader.GetOrdinal("FullName"));
+                    customersInfo.PhoneNumber = reader.GetString(reader.GetOrdinal("Phonenumber"));
+                    customersInfo.Email = reader.GetString(reader.GetOrdinal("Email"));
+                    customersInfo.PhyAddress = reader.GetString(reader.GetOrdinal("PhysAddress"));
+                    customersInfo.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
+                    customersInfo.CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"));
+                    // customersInfo.UpdatdeBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));          this is breaking everything
+                    //customersInfo.UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt"));
+                }
+            }
+            return customersInfo;
         }
     }
 }

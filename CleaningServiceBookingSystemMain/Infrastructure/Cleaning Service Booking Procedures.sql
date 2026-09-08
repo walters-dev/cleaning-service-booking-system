@@ -1,5 +1,5 @@
 CREATE DATABASE CleaningServiceBooking
-using = CleaningServiceBooking
+use CleaningServiceBooking
 GO
 /*Customer PROCEDURES*/
 /* =================================================================================================================================*/
@@ -10,6 +10,15 @@ BEGIN
      SELECT *
      FROM Customers 
      WHERE CustomerId=@CustomerID;
+END;
+GO
+CREATE PROCEDURE GetCustomerByEmail
+    @Email VARCHAR (7)
+AS
+BEGIN
+     SELECT *
+     FROM Customers 
+     WHERE Email LIKE '%' + @Email + '%';
 END;
 GO
 CREATE PROCEDURE UpdateCustomer
@@ -127,7 +136,20 @@ BEGIN
 END
 GO
 /*SERVICE PROCEDURES ==================================================================================================================================================================================================== */
-
+GO 
+CREATE PROCEDURE GetAllServiceTypes
+AS
+BEGIN
+    SELECT * FROM Servicetypes
+END;
+GO
+CREATE PROCEDURE GetServiceType
+@ServiceId VARCHAR(7)
+AS
+BEGIN
+    SELECT * FROM Servicetypes
+    WHERE ServiceTypeId = @ServiceId
+END;
 GO
 
 CREATE PROCEDURE AddDiscountRule
@@ -185,6 +207,13 @@ BEGIN
         @isActive
     );
 
+END;
+/*booking procedures*/
+GO 
+CREATE PROCEDURE GetAllBookings
+AS
+BEGIN
+SELECT * FROM Bookings
 END;
 GO
 CREATE PROCEDURE AddBooking
@@ -396,7 +425,7 @@ BEGIN
 END;
 GO
 CREATE PROCEDURE CustomerBookingHistory
-    @CustomerId VARCHAR(7)
+    @Email VARCHAR(7)
 AS
 BEGIN
 
@@ -422,7 +451,7 @@ BEGIN
     INNER JOIN Servicetypes s
         ON b.ServiceTypes_id = s.ServiceTypeId
 
-    WHERE c.CustomerId = @CustomerId
+    WHERE c.Email = @Email
 
     ORDER BY b.BookingDate DESC;
 
@@ -502,8 +531,8 @@ BEGIN
     ORDER BY d.DiscountName ASC, b.BookingDate DESC;
 
 END;
-GO
-GO
+go
+go
 /*length procedures*/
 
 GO
@@ -580,11 +609,12 @@ END;
 /*password procedure*/
 GO
 CREATE PROCEDURE GetAdminPassword
-@AdminID VARCHAR(7)
+@Username VARCHAR(7)
 AS
 BEGIN
 SELECT
     AdminTable.Admin_Password
 FROM AdminTable
-WHERE AdminTable.Admin_Id = @AdminID
+WHERE AdminTable.Username = @Username
 END;
+exec GetAdminPassword @Username = 'admin'

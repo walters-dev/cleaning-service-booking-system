@@ -16,7 +16,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<ServiceTypes> serviceTypesInfo = new List<ServiceTypes>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("fghj", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.GetAllServiceTypes", connection);//waiting for sql procedure.......................................................................
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -40,9 +40,11 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             ServiceTypes houseTypesInfo = new ServiceTypes();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("GetCustomer", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.GetServiceType", connection);//waiting for sql procedure.......................................................................
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
+                command.Parameters.AddWithValue("@ServiceTypes_id", Id);
+                command.ExecuteNonQuery();
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
