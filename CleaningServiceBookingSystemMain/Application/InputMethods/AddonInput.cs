@@ -105,7 +105,7 @@ namespace CleaningServiceBookingSystemMain.Application
 
 
                         // Put value into Booking
-                        booking.CarpetedRooms = carpetedRooms;
+                        bookings.CarpetedRooms = carpetedRooms;
 
 
                         // CALL BOOKING VALIDATOR

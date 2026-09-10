@@ -165,10 +165,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             case "View":
                                 Bookings booking = new Bookings();
                                 IList<Bookings> bookings = viewBookings.GetBookings();
-                                Console.WriteLine($"Booking Date\tNumber of rooms \tBooking Status\tTotal Amount\tCreated by\tCreated at\tUpdated at\tUpdated by\tCustomer Name\tCustomer Address"); //display headers for bookings
+                                Console.WriteLine($"Booking Date\tNumber of rooms \tBooking Status\tTotal Amount\tCreated by\tCreated at\tCarpeted Rooms\tFirst Time Booking\tCustomer Name\tCustomer Address"); //display headers for bookings
                                 foreach (var element in bookings)
                                 {
-                                    Console.WriteLine($"{element.BookingDate}\t{element.NumberOfRooms}\t{element.BookingStatus}\t{element.TotalAmount}\t{element.CreatedBy}\t{element.CreatedAt}\t{element.UpdatedAt}\t{element.UpdatedBy} customers name then address"); //displays booking info then repeats till last booking
+                                    Console.WriteLine($"{element.BookingDate}\t{element.NumberOfRooms}\t{element.BookingStatus}\t{element.TotalAmount}\t{element.CreatedBy}\t{element.CreatedAt}\t{element.CarpetedRooms}\t{element.FirstTimeBooking} customers name then address"); //displays booking info then repeats till last booking
                                 }
                                 break;
                             case "Report":

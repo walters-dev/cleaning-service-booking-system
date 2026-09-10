@@ -22,7 +22,10 @@ namespace CleaningServiceBookingSystemMain.Domain.Models
         public string BookingStatus { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public string UpdatedBy { get; set; }
+        //public string UpdatedBy { get; set; }
+        //public string CreatedBy { get; set; }
         public string CreatedBy { get; set; }
+        public bool FirstTimeBooking { get; set; }
+        public int CarpetedRooms { get; set; }
     }
 }

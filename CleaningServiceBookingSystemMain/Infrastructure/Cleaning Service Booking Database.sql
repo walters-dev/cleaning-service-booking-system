@@ -7,7 +7,8 @@ CREATE TABLE AdminTable (
     Admin_Password VARCHAR(90),
     Email VARCHAR(50)
 );
-
+ALTER TABLE Bookings
+DROP COLUMN UpdatedAt
 
 CREATE TABLE Customers (
     CustomerId VARCHAR(7) PRIMARY KEY,

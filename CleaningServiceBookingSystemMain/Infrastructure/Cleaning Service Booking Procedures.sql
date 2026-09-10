@@ -12,7 +12,7 @@ BEGIN
      WHERE CustomerId=@CustomerID;
 END;
 GO
-CREATE PROCEDURE GetCustomerByEmail
+ALTER PROCEDURE GetCustomerByEmail
     @Email VARCHAR (7)
 AS
 BEGIN
@@ -227,7 +227,7 @@ BEGIN
 SELECT * FROM Bookings
 END;
 GO
-CREATE PROCEDURE AddBooking
+ALTER PROCEDURE AddBooking
     @BookingId VARCHAR(7),
     @Customers_id VARCHAR(7),
     @Housetypes_id VARCHAR(7),
@@ -243,7 +243,9 @@ CREATE PROCEDURE AddBooking
     @TotalAmount DECIMAL(10,2),
     @BookingStatus VARCHAR(MAX),
     @CreatedAt DATE,
-    @CreatedBy VARCHAR(MAX)
+    @CreatedBy VARCHAR(MAX),
+    @FirstTimeBooking BIT, 
+    @CarpetedRooms INTEGER
 AS
 BEGIN
 
@@ -264,7 +266,9 @@ BEGIN
         TotalAmount,
         BookingStatus,
         CreatedAt,
-        CreatedBy
+        CreatedBy,
+        FirstTimeBooking,
+        CarpetedRooms
     )
     VALUES
     (
@@ -283,12 +287,14 @@ BEGIN
         @TotalAmount,
         @BookingStatus,
         @CreatedAt,
-        @CreatedBy
+        @CreatedBy,
+        @FirstTimeBooking,
+        @CarpetedRooms
     );
 
 END;
 GO
-CREATE PROCEDURE GetBooking
+ALTER PROCEDURE GetBooking
     @BookingId VARCHAR(7)
 AS
 BEGIN
@@ -309,9 +315,7 @@ BEGIN
         b.TotalAmount,
         b.BookingStatus,
         b.CreatedAt,
-        b.UpdatedAt,
-        b.CreatedBy,
-        b.UpdatedBy
+        b.CreatedBy
 
     FROM Bookings b
 
@@ -333,7 +337,7 @@ BEGIN
 
 END;
 GO
-CREATE PROCEDURE UpdateBooking
+ALTER PROCEDURE UpdateBooking
     @BookingId VARCHAR(7),
     @Customers_id VARCHAR(7),
     @Housetypes_id VARCHAR(7),
@@ -348,8 +352,8 @@ CREATE PROCEDURE UpdateBooking
     @SurchargeAmount DECIMAL(10,2),
     @TotalAmount DECIMAL(10,2),
     @BookingStatus VARCHAR(MAX),
-    @UpdatedAt DATE,
-    @UpdatedBy VARCHAR(MAX)
+    @FirstTimeBooking BIT, 
+    @CarpetedRooms INTEGER
 AS
 BEGIN
 
@@ -368,8 +372,8 @@ BEGIN
         SurchargeAmount = @SurchargeAmount,
         TotalAmount = @TotalAmount,
         BookingStatus = @BookingStatus,
-        UpdatedAt = @UpdatedAt,
-        UpdatedBy = @UpdatedBy
+        FirstTimeBooking = @FirstTimeBooking,
+        CarpetedRooms = @CarpetedRooms
     WHERE BookingId = @BookingId;
 
 END;
