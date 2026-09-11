@@ -1,7 +1,8 @@
-﻿using CleaningServiceBookingSystemMain.Domain.Models;
-using CleaningServiceBookingSystem.Application.Validators;
+﻿using CleaningServiceBookingSystemMain.Application.Validators;
+using CleaningServiceBookingSystemMain.Domain.Models;
+using CleaningServiceBookingSystemMain.Infrastructure;
 
-namespace CleaningServiceBookingSystemMain.Application.InputMethods
+namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class BookingInput
     {
@@ -31,6 +32,9 @@ namespace CleaningServiceBookingSystemMain.Application.InputMethods
                
                 Console.WriteLine();
                 Console.WriteLine("===== BOOKING INFORMATION =====");
+
+                InMemoryRepositoryBookings repositoryBookings = new InMemoryRepositoryBookings();
+                booking.BookingId = repositoryBookings.BookingsRowCount(); 
 
                 HouseTypes houseTypes = new HouseTypes();
                 houseTypes = _houseTypeInput.GetHouseTypeInput();

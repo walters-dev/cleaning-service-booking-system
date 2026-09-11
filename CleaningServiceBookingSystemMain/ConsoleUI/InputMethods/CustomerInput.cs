@@ -1,8 +1,8 @@
 ﻿using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
-using CleaningServiceBookingSystem.Application.Validators;
+using CleaningServiceBookingSystemMain.Application.Validators;
 
-namespace CleaningServiceBookingSystemMain.Application.InputMethods
+namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class CustomerInput
     {
@@ -15,8 +15,8 @@ namespace CleaningServiceBookingSystemMain.Application.InputMethods
 
             Console.WriteLine();
             Console.WriteLine("===== CUSTOMER INFORMATION =====");
-            PrimaryKeyCreation primaryKeyCreation = new PrimaryKeyCreation();
-            customer.CustomerId = primaryKeyCreation.CustomersRowCount();
+            InMemoryRepositoryCustomers repositoryCustomers = new InMemoryRepositoryCustomers();
+            customer.CustomerId = repositoryCustomers.CustomersRowCount();
 
             Console.Write("Enter full name: ");
             customer.FullName = Console.ReadLine() ?? "";

@@ -1,11 +1,11 @@
-﻿using CleaningServiceBookingSystemMain.Application;
-using CleaningServiceBookingSystemMain.Domain.Models;
+﻿using CleaningServiceBookingSystemMain.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using CleaningServiceBookingSystemMain.Application.Interfaces;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
@@ -137,6 +137,26 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 }
             }
             return customersInfo;
+        }
+        public string CustomersRowCount()
+        {
+            int id;
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.CustomersRowCount", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
+            }
+            return "CT" + (id + 1);
         }
     }
 }

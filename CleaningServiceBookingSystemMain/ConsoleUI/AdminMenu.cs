@@ -1,13 +1,12 @@
-﻿using CleaningServiceBookingSystem.Application;
-using CleaningServiceBookingSystemMain;
-using CleaningServiceBookingSystemMain.Application;
+﻿using CleaningServiceBookingSystemMain;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
-using CleaningServiceBookingSystemMain.Application.InputMethods;
 using Spectre.Console;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Linq.Expressions;
+using CleaningServiceBookingSystemMain.ConsoleUI.InputMethods;
+using CleaningServiceBookingSystemMain.Application.Interfaces;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI
 {

@@ -1,7 +1,7 @@
 using System;
 using CleaningServiceBookingSystemMain.Domain.Models;
 
-namespace CleaningServiceBookingSystem.Application
+namespace CleaningServiceBookingSystemMain.Domain.Services
 {
     /* SUMMARY:
      * Calculates the full price breakdown for a booking.

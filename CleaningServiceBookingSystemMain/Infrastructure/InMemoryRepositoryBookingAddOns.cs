@@ -1,4 +1,4 @@
-﻿using CleaningServiceBookingSystemMain.Application;
+﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using Microsoft.Data.SqlClient;
 using System;
@@ -86,6 +86,26 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@LineAmount", bookingAddOns.LineAmount);
                 command.ExecuteNonQuery();
             }
+        }
+        public string BookingAddOnsRowCount()
+        {
+            int id;
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.DiscountRulesRowCount", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
+            }
+            return "BA" + (id + 1);
         }
     }
 }

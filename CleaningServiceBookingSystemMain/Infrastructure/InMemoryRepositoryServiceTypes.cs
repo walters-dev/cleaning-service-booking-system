@@ -1,4 +1,4 @@
-﻿using CleaningServiceBookingSystemMain.Application;
+﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using Microsoft.Data.SqlClient;
 using System;
