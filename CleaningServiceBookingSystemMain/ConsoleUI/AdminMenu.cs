@@ -24,7 +24,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             AdminInput adminInput = new AdminInput();
             Admins admins = new Admins();
             admins = adminInput.GetAdminInput();                 //gets user input
-           // GetAdminPassword getAdminPassword = new GetAdminPassword(admins.Username);
+
+
             InMemoryRepositoryAdmins inMemoryRepositoryAdmins = new InMemoryRepositoryAdmins();
             password =inMemoryRepositoryAdmins.GetAdminPasswordByUsername(admins.Username);
             while (password == null)
@@ -32,15 +33,17 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                 AnsiConsole.MarkupLine("[red]No admin by that username[/]");
                 admins = adminInput.GetAdminInput();
                 password = inMemoryRepositoryAdmins.GetAdminPasswordByUsername(admins.Username);
-            }
-            Encryption cryptography = new Encryption();//creates encryption class
-            IsCorrectPassword = cryptography.VerifyPassword(password, admins.AdminPassword);
-            while (IsCorrectPassword == false)
-            {
-                AnsiConsole.MarkupLine("[red]Incorrect password[/]");
-                admins.AdminPassword = Console.ReadLine();//get new input.....................................................................................................................................................
+                Encryption cryptography = new Encryption();//creates encryption class
                 IsCorrectPassword = cryptography.VerifyPassword(password, admins.AdminPassword);
+                while (IsCorrectPassword == false)
+                {
+                    AnsiConsole.MarkupLine("[red]Incorrect password[/]");
+                    admins = adminInput.GetAdminInput();//get new input.....................................................................................................................................................
+                    IsCorrectPassword = cryptography.VerifyPassword(password, admins.AdminPassword);
+                }
             }
+            
+            
             Console.Clear();
             AnsiConsole.MarkupLine("[green]Signed in[/]");
             IsAdminMenuRunning = true;              //keeps admin menu in loop
@@ -59,11 +62,29 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             .Title("Choose customer:")
                             .AddChoices("Existing customer", "New customer"));
 
-                        if (createBookingChoices == "Existing customer")
+                        if (createBookingChoices == "Existing customer")            //Existing customer chosen from create booking menu
                         {
-                            AnsiConsole.MarkupLine("[green]Existing customer selected[/]");
+                            IsConfirmData = false;
+                            while (IsConfirmData == false)
+                            {
+                                AnsiConsole.MarkupLine("[green]Existing customer selected[/]");
+                                var confirmNewCusChoices = AnsiConsole.Prompt(
+                                        new SelectionPrompt<string>()
+                                        .Title("Is the customer details correct:")
+                                        .AddChoices("Yes", "No"));
+
+                                if (confirmNewCusChoices == "Yes")
+                                {
+                                    IsConfirmData = true;                                             //Confirms the correct customer
+                                }
+                                else
+                                {
+                                    IsConfirmData = false;                                            //loops to get customer input again
+                                }
+                            }
+                                
                         }
-                        else if (createBookingChoices == "New customer")
+                        else if (createBookingChoices == "New customer")            //create new customer chosen from create booking menu
                         {
                             IsConfirmData = false;
                             while (IsConfirmData == false)
@@ -81,21 +102,24 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 if (confirmNewCusChoices == "Yes")
                                 {
                                     IsConfirmData = true;
-                                    //save customer data to sql
                                     InMemoryRepositoryCustomers inMemoryRepositoryCustomers = new InMemoryRepositoryCustomers();
-                                    inMemoryRepositoryCustomers.Add(customers);
+                                    inMemoryRepositoryCustomers.Add(customers);                                                         //saves customer data to sql
                                 }
                                 else
                                 {
-                                    IsConfirmData = false; // loop it
+                                    IsConfirmData = false;                                            // loops to get customer input again
                                 }
                             }
                         }
                         InMemoryRepositoryBookings createBooking = new InMemoryRepositoryBookings();
                         Bookings newBooking = new Bookings();
 
+                        AddOnInput addOnInput = new AddOnInput();
+                        addOnInput.GetAddOnInput(ref newBooking);
+                        //bookingAddOns input
                         BookingInput bookingInput = new BookingInput();
                         newBooking = bookingInput.GetBookingInput();
+
                         /*
                         System displays house types and service types from SQL Server
                         Staff enters number of rooms, booking date, add-ons and recurring option.
@@ -112,16 +136,15 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             if (confirmBookingChoice == "Yes")
                             {
                                 IsConfirmData = true;
-                                //save booking data to sql
-                                createBooking.Add(newBooking);
+                                createBooking.Add(newBooking);                  //save booking data to sql
                             }
                             else
                             {
-                                IsConfirmData = false; // loop it
+                                IsConfirmData = false;                   // loop it
                             }
                         }
                         break;
-                    case "Create New Customer":                                         //create new customer chosen from admin menu
+                    case "Create New Customer":                                 //create new customer chosen from admin menu
 
                         IsConfirmData = false;
                         while (IsConfirmData == false)
@@ -164,10 +187,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             case "View":
                                 Bookings booking = new Bookings();
                                 IList<Bookings> bookings = viewBookings.GetBookings();
-                                Console.WriteLine($"Booking Date\tNumber of rooms \tBooking Status\tTotal Amount\tCreated by\tCreated at\tCarpeted Rooms\tFirst Time Booking\tCustomer Name\tCustomer Address"); //display headers for bookings
+                                Console.WriteLine($"Booking Date\tNumber of rooms \tBooking Status\tTotal Amount\tCreated by\tCreated at\tCarpeted Rooms\tCustomer Name\tCustomer Address"); //display headers for bookings
                                 foreach (var element in bookings)
                                 {
-                                    Console.WriteLine($"{element.BookingDate}\t{element.NumberOfRooms}\t{element.BookingStatus}\t{element.TotalAmount}\t{element.CreatedBy}\t{element.CreatedAt}\t{element.CarpetedRooms}\t{element.FirstTimeBooking} customers name then address"); //displays booking info then repeats till last booking
+                                    Console.WriteLine($"{element.BookingDate}\t{element.NumberOfRooms}\t{element.BookingStatus}\t{element.TotalAmount}\t{element.CreatedBy}\t{element.CreatedAt}\t{element.CarpetedRooms}\t customers name then address"); //displays booking info then repeats till last booking
                                 }
                                 break;
                             case "Report":
@@ -213,6 +236,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                     }
                                 }       
                                 break;
+                            case "Update":
+                                //input Date and Customer
+                                break;
                         }
                         
                         break;
@@ -240,13 +266,14 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                    .AddChoices("Yes", "No"));
                             if (confirmNewAdminChoices == "Yes")
                             {
-                                newAdmin.AdminPassword = cryptography.HashPassword(newAdmin.AdminPassword);
-                                newInMemoryRepositoryAdmins.Add(newAdmin);
+                                Encryption newCryptography = new Encryption();//creates encryption class
+                                newAdmin.AdminPassword = newCryptography.HashPassword(newAdmin.AdminPassword);
+                                newInMemoryRepositoryAdmins.Add(newAdmin);                      //saves customer data to sql
                                 IsConfirmData = true;
                             }
                             else
                             {
-                                IsConfirmData = false;
+                                IsConfirmData = false;                      // loops to get admin input again
                             }
                             
                         }
