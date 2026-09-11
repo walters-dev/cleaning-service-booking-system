@@ -622,12 +622,25 @@ FROM BookingAddOns
 END;
 /*password procedure*/
 GO
-CREATE OR ALTER PROCEDURE GetAdminPassword
+CREATE OR ALTER PROCEDURE GetAdminByUsername
 @Username VARCHAR(7)
 AS
 BEGIN
 SELECT
-    AdminTable.Admin_Password
+    AdminTable.Admin_Password, AdminTable.Username
 FROM AdminTable
 WHERE AdminTable.Username = @Username
 END;
+GO
+CREATE OR ALTER PROCEDURE AddAdmin
+@AdminID Varchar(7),
+@Username Varchar(20) ,
+@AdminPassword Varchar(90),
+@Email Varchar(50)
+AS
+BEGIN
+INSERT INTO AdminTable(Admin_ID, Username, Admin_Password, Email)
+Values (@AdminID, @Username, @AdminPassword, @Email)
+END;
+GO
+
