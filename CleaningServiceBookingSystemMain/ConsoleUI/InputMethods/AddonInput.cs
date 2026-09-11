@@ -19,7 +19,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         //    _addOnsRepository = addOnsRepository;
         //}
 
-        public List<AddOnSelection>? GetAddOnInput()
+        public List<AddOnSelection>? GetAddOnInput(ref Bookings bookings)
         {
             IList<AddOns> addOns =
                 _addOnsRepository.GetAddOns();
