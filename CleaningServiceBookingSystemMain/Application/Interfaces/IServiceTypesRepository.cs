@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CleaningServiceBookingSystemMain.Application
+namespace CleaningServiceBookingSystemMain.Application.Interfaces
 {
     public interface IServiceTypesRepository
     {

@@ -1,4 +1,4 @@
-﻿using CleaningServiceBookingSystemMain.Application;
+﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using Microsoft.Data.SqlClient;
 using System;
@@ -116,5 +116,27 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
             
         }
+
+        public string AdminRowCount()
+        {
+            int id;
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.AdminRowCount", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
+            }
+            return "AT" + (id + 1);
+        }
+
     }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using CleaningServiceBookingSystemMain.Domain.Models;
 
-namespace CleaningServiceBookingSystemMain.Application
+namespace CleaningServiceBookingSystemMain.Application.Validators
 {
     /* SUMMARY:
      * Validates Customer and Booking data before it is priced or saved

@@ -1,8 +1,9 @@
 ﻿using CleaningServiceBookingSystemMain.Domain.Models;
-using CleaningServiceBookingSystem.Application.Validators;
+using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.Infrastructure;
+using CleaningServiceBookingSystemMain.Application.Interfaces;
 
-namespace CleaningServiceBookingSystemMain.Application.InputMethods
+namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class ServiceTypeInput
     {

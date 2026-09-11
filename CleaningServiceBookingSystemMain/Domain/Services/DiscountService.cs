@@ -1,7 +1,7 @@
 //using CleaningServiceBookingSystem.Domain
 using CleaningServiceBookingSystemMain.Domain.Models;
 
-namespace CleaningServiceBookingSystemMain.Application
+namespace CleaningServiceBookingSystemMain.Domain.Services
 {
     /* SUMMARY:
      * Determines which single discount, if any, applies to a booking.

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using CleaningServiceBookingSystemMain.Domain.Models;
-using CleaningServiceBookingSystem.Application.Validators;
+using CleaningServiceBookingSystemMain.Application.Validators;
+using CleaningServiceBookingSystemMain.Application.Interfaces;
 
-namespace CleaningServiceBookingSystemMain.Application
+namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class AddOnInput
     {
@@ -105,7 +106,7 @@ namespace CleaningServiceBookingSystemMain.Application
 
 
                         // Put value into Booking
-                        bookings.CarpetedRooms = carpetedRooms;
+                        bookings.CarpetedRooms = carpetedRooms; //need to get this as a parameter first--------------------------------------------------------------------------
 
 
                         // CALL BOOKING VALIDATOR
@@ -127,7 +128,7 @@ namespace CleaningServiceBookingSystemMain.Application
                 }
 
 
-                AddOnSelection selection =
+                AddOnSelection selection =  //  this already exists in BookingAddOns-----------------------------------------------------------------------------------------------------------
                    new AddOnSelection
                    {
                        AddOn = selectedAddOn,

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using CleaningServiceBookingSystemMain.Domain.Models;
 
-namespace CleaningServiceBookingSystemMain.Application
+namespace CleaningServiceBookingSystemMain.Application.Interfaces
 {
     public interface ICustomerRepository
     {
