@@ -9,26 +9,48 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class AdminInput
     {
+
+        private readonly BookingValidator _bookingValidator;
+
+        public AdminInput(BookingValidator bookingValidator)
+        {
+            _bookingValidator = bookingValidator;
+        }
         public Admins GetAdminInput()
         {
-            Admins admin = new Admins();
+           while (true)
+            {
+                Admins admin = new Admins();
 
-            Console.WriteLine();
-            Console.WriteLine("===== ADMIN INFORMATION =====");
+                Console.WriteLine();
+                Console.WriteLine("===== ADMIN INFORMATION =====");
 
-            InMemoryRepositoryAdmins repositoryAdmins = new InMemoryRepositoryAdmins();
-            admin.AdminId = repositoryAdmins.AdminRowCount();
+                InMemoryRepositoryAdmins repositoryAdmins = new InMemoryRepositoryAdmins();
+                admin.AdminId = repositoryAdmins.AdminRowCount();
 
-            Console.Write("Enter username: ");
-            admin.Username = Console.ReadLine();
+                Console.Write("Enter username: ");
+                admin.Username = Console.ReadLine();
 
-            Console.Write("Enter password: ");
-            admin.AdminPassword = Console.ReadLine();
+                Console.Write("Enter password: ");
+                admin.AdminPassword = Console.ReadLine();
 
-            Console.Write("Enter email: ");
-            admin.Email = Console.ReadLine();
+                Console.Write("Enter email: ");
+                admin.Email = Console.ReadLine();
 
-            return admin;
+                //return admin;
+                string errorMessage;
+
+                bool isValid = _bookingValidator.ValidateAdmin(admin, out errorMessage);
+
+                if (isValid)
+                {
+                    return admin;
+                }
+
+                Console.WriteLine();
+                Console.WriteLine($"Error: {errorMessage}");
+                Console.WriteLine("Please try Again");
+            }
         }
     }
 }
