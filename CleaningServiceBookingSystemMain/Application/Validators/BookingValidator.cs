@@ -75,7 +75,7 @@ namespace CleaningServiceBookingSystemMain.Application
             /* Address is required by the Customers table definition in BRD section 12.1,
              * even though section 15 does not list it explicitly - a booking cannot be useful without a service address.
              */
-            if (string.IsNullOrWhiteSpace(customer.Address))
+            if (string.IsNullOrWhiteSpace(customer.PhyAddress))
             {
                 errorMessage = "Address is required.";
                 return false;
@@ -95,14 +95,14 @@ namespace CleaningServiceBookingSystemMain.Application
             out string errorMessage)
         {
             // A booking cannot be priced without a house type - BaseRate and RatePerRoom both come from HouseTypes.
-            if (string.IsNullOrWhiteSpace(booking.HouseTypeID))
+            if (string.IsNullOrWhiteSpace(booking.HouseTypeId))
             {
                 errorMessage = "A house type must be selected.";
                 return false;
             }
 
             // ServiceType supplies the pricing Multiplier (BRD section 8.2) used by PricingService.
-            if (string.IsNullOrWhiteSpace(booking.ServiceTypeID))
+            if (string.IsNullOrWhiteSpace(booking.ServiceTypeId))
             {
                 errorMessage = "A service type must be selected.";
                 return false;
@@ -127,10 +127,41 @@ namespace CleaningServiceBookingSystemMain.Application
             }
 
             // BRD 15 and section 8.5: Booking date must not be in the past.
-            if (booking.BookingDate.Date < DateTime.Today)
+            if (!booking.BookingDate.HasValue)
             {
                 errorMessage =
-                    "Booking date cannot be in the past.";
+                    "Booking date is required.";
+
+                return false;
+            }
+
+            if (booking.BookingDate.Value.Date < DateTime.Today)
+            {
+                errorMessage = "Booking date cannot be in the past.";
+                return false;
+            }
+
+            // Not explicitly named in section 15, but implied by data
+            // quality (section 10, Non-Functional Requirements) - a
+            // carpet-cleaning add-on (BRD 8.3) is priced per carpeted
+            // room, so a negative count would produce a negative charge.
+            if (booking.CarpetedRooms < 0)
+            {
+                errorMessage =
+                    "Carpeted rooms cannot be negative.";
+
+                return false;
+            }
+
+            // A booking cannot have more carpeted rooms than total rooms
+            // - protects the Carpet Cleaning add-on calculation in
+            // PricingService.CalculateAddOnTotal from producing an
+            // inflated, meaningless total.
+            if (booking.CarpetedRooms >
+                booking.NumberOfRooms)
+            {
+                errorMessage =
+                    "Carpeted rooms cannot exceed total rooms.";
 
                 return false;
             }

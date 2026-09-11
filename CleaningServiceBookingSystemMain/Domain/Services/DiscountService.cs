@@ -1,4 +1,3 @@
-//using CleaningServiceBookingSystem.Domain
 using CleaningServiceBookingSystemMain.Domain.Models;
 
 namespace CleaningServiceBookingSystemMain.Application
@@ -36,33 +35,28 @@ namespace CleaningServiceBookingSystemMain.Application
         /* Works out the single highest discount this booking is eligible for, and returns the amount it's worth against the given subtotal.
          * return => DiscountResult describing which discount (if any) was applied, its percentage, and the resulting monetary amount.
          */
-        public DiscountResults CalculateDiscountAmount(Bookings booking, decimal subtotal, bool isFirstTimeCustomer)
+        public decimal CalculateDiscountAmount(Bookings booking, decimal subtotal)
         {
-            /* Work out eligibility of each discount type independently. Each check below maps out to exactly one row in BRD section 8.4.
-             */
-            bool isEligibleForFirstTime = IsEligibleForFirstTimeDiscount(booking);
-            bool isEligibleForRecurring = IsEligibleForRecurringDiscount(booking);
-            bool isEligibleForLargeBooking = IsEligibleForLargeBookingDiscount(booking);
-
             /* Starts with "No discount" as the default, and only replace it if a higher-percentage eligible discount is found.
              * This avoids stacking two discounts together, as BRD 8.4 states: "the system must apply the single highest discount only."
              */
             string highestDiscountName = "No discount";
             decimal highestPercentage = 0m;
 
-            if (isFirstTimeCustomer && FirstTimeCustomerPercentage > highestPercentage)
+            if (booking.IsFirstTimeCustomer && FirstTimeCustomerPercentage > highestPercentage)
             {
                 highestDiscountName = "First-Time Customer Discount";
                 highestPercentage = FirstTimeCustomerPercentage;
             }
 
-            if (isEligibleForRecurring && RecurringbookingPercentage > highestPercentage)
+            if (booking.IsRecurring && RecurringbookingPercentage > highestPercentage)
             {
                 highestDiscountName = "Recurring Booking Discount";
                 highestPercentage = RecurringbookingPercentage;
             }
-            
-            if (isEligibleForLargeBooking && LargeBookingPercentage > highestPercentage)
+
+            if (booking.NumberOfRooms >= LargeBookingMinimumRooms &&
+                LargeBookingPercentage > highestPercentage)
             {
                 highestDiscountName = "Large Booking Discount";
                 highestPercentage = LargeBookingPercentage;
@@ -73,42 +67,7 @@ namespace CleaningServiceBookingSystemMain.Application
              */
             decimal discountAmount = subtotal * highestPercentage;
 
-            return new DiscountResults
-            {
-                DiscountName = highestDiscountName,
-                Percentage = highestPercentage,
-                Amount = discountAmount
-            };
-        }
-
-        ///* First-Time Customer Discount (10%) - Customer has no previous completed booking. Apply once only.
-        // * 
-        // * Relies on Customer.IsFirstTimeCustomer, which must be set by the caller (BookingService) 
-        // * after checking booking history through the repository. This method does not query the database itself.
-        // */
-        //private bool IsEligibleForFirstTimeDiscount(Bookings booking)
-        //{
-        //    if (booking.Customer == null)
-        //    {  return false; }
-
-        //    return booking.Customer.IsFirstTimeCustomer;
-        //}
-
-        /* Recurring Booking Discount (12%) - Customer chooses weekly or bi-weekly recurring service.
-         * 
-         * Assumes Booking.IsRecurring is a bool set to true whenever the customer selected either a weekly or 
-         * bi-weekly recurrence option at the booking time (BRD FR-04). 
-         */
-        private bool IsEligibleForRecurringDiscount(Bookings booking)
-        {
-            return booking.IsRecurring;
-        }
-
-        /* Large Booking Discount (15%) - Booking has 6 or more rooms.
-         */
-        private bool IsEligibleForLargeBookingDiscount(Bookings booking)
-        {
-            return booking.NumberOfRooms >= LargeBookingMinimumRooms;
+            return discountAmount;
         }
     }
 }
