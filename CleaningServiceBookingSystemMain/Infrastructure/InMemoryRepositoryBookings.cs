@@ -44,7 +44,9 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
                         CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy")),
                         FirstTimeBooking = reader.GetBoolean(reader.GetOrdinal("FirstTimeBooking")),
-                        CarpetedRooms = reader.GetInt32(reader.GetOrdinal("CarpetedRooms"))
+                        CarpetedRooms = reader.GetInt32(reader.GetOrdinal("CarpetedRooms")),
+                        UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt")),
+                        UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"))
                     };
                     bookingsInfo.Add(booking);
                 }
@@ -78,8 +80,8 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     bookingsInfo.BookingStatus = reader.GetString(reader.GetOrdinal("BookingStatus"));
                     bookingsInfo.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
                     bookingsInfo.CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"));
-                    //bookingsInfo.UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));
-                    //bookingsInfo.UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt"));
+                    bookingsInfo.UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));
+                    bookingsInfo.UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt"));
                     bookingsInfo.FirstTimeBooking = reader.GetBoolean(reader.GetOrdinal("FirstTimeBooking"));
                     bookingsInfo.CarpetedRooms = reader.GetInt32(reader.GetOrdinal("CarpetedRooms"));
                 }
@@ -140,8 +142,8 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@BookingStatus", bookings.BookingStatus);
                 command.Parameters.AddWithValue("@FirstTimeBooking", bookings.FirstTimeBooking);
                 command.Parameters.AddWithValue("@CarpetedRooms", bookings.CarpetedRooms);
-                //command.Parameters.AddWithValue("@UpdatedAt", bookings.UpdatedAt);
-                //command.Parameters.AddWithValue("@UpdatedBy", bookings.UpdatedBy);
+                command.Parameters.AddWithValue("@UpdatedAt", bookings.UpdatedAt);
+                command.Parameters.AddWithValue("@UpdatedBy", bookings.UpdatedBy);
                 command.ExecuteNonQuery();
             }
         }
@@ -172,14 +174,14 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 {
                     var booking = new BookingByDate()
                     {
-                        BookingId = reader.GetString(reader.GetOrdinal("b.BookingId")),
-                        Fullname = reader.GetString(reader.GetOrdinal("c.Fullname")),
-                        HouseName = reader.GetString(reader.GetOrdinal("h.HouseName")),
-                        ServiceName = reader.GetString(reader.GetOrdinal("s.ServiceName")),
-                        BookingDate = reader.GetDateTime(reader.GetOrdinal("b.BookingDate")),
-                        NumberOfRooms = reader.GetInt32(reader.GetOrdinal("b.NumberOfRooms")),
-                        TotalAmount = reader.GetDecimal(reader.GetOrdinal("b.TotalAmount")),
-                        BookingStatus = reader.GetString(reader.GetOrdinal("b.BookingStatus"))
+                        BookingId = reader.GetString(reader.GetOrdinal("BookingId")),
+                        Fullname = reader.GetString(reader.GetOrdinal("Fullname")),
+                        HouseName = reader.GetString(reader.GetOrdinal("HouseName")),
+                        ServiceName = reader.GetString(reader.GetOrdinal("ServiceName")),
+                        BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate")),
+                        NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms")),
+                        TotalAmount = reader.GetDecimal(reader.GetOrdinal("TotalAmount")),
+                        BookingStatus = reader.GetString(reader.GetOrdinal("BookingStatus"))
                     };
 
                     bookingsInfo.Add(booking);
@@ -192,24 +194,24 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<CustomerBookingHistory> bookingsInfo = new List<CustomerBookingHistory>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("dbo.BookingListByDateRange", connection);
+                SqlCommand command = new SqlCommand("dbo.CustomerBookingHistory", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 command.Parameters.AddWithValue("@Email", Email);
-                //command.Parameters.AddWithValue("@EndDate", endDate);
+                command.ExecuteNonQuery();
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     var booking = new CustomerBookingHistory()
                     {
-                        BookingId = reader.GetString(reader.GetOrdinal("b.BookingId")),
-                        Fullname = reader.GetString(reader.GetOrdinal("c.Fullname")),
-                        HouseName = reader.GetString(reader.GetOrdinal("h.HouseName")),
-                        ServiceName = reader.GetString(reader.GetOrdinal("s.ServiceName")),
-                        BookingDate = reader.GetDateTime(reader.GetOrdinal("b.BookingDate")),
-                        NumberOfRooms = reader.GetInt32(reader.GetOrdinal("b.NumberOfRooms")),
-                        TotalAmount = reader.GetDecimal(reader.GetOrdinal("b.TotalAmount")),
-                        BookingStatus = reader.GetString(reader.GetOrdinal("b.BookingStatus"))
+                        BookingId = reader.GetString(reader.GetOrdinal("BookingId")),
+                        Fullname = reader.GetString(reader.GetOrdinal("Fullname")),
+                        HouseName = reader.GetString(reader.GetOrdinal("HouseName")),
+                        ServiceName = reader.GetString(reader.GetOrdinal("ServiceName")),
+                        BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate")),
+                        NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms")),
+                        TotalAmount = reader.GetDecimal(reader.GetOrdinal("TotalAmount")),
+                        BookingStatus = reader.GetString(reader.GetOrdinal("BookingStatus"))
                     };
 
                     bookingsInfo.Add(booking);
@@ -222,17 +224,15 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<BookingRevenueSummary> bookingsInfo = new List<BookingRevenueSummary>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("dbo.BookingListByDateRange", connection);
+                SqlCommand command = new SqlCommand("dbo.RevenueSummary", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                //command.Parameters.AddWithValue("@StartDate", startDate);
-                //command.Parameters.AddWithValue("@EndDate", endDate);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     var booking = new BookingRevenueSummary()
                     {
-                        ServiceName = reader.GetString(reader.GetOrdinal("s.ServiceName")),
+                        ServiceName = reader.GetString(reader.GetOrdinal("ServiceName")),
                         BookingCount = reader.GetInt32(reader.GetOrdinal("BookingCount")),
                         TotalRevenue = reader.GetDecimal(reader.GetOrdinal("TotalRevenue"))
                     };
@@ -247,17 +247,15 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<BookingByHouseType> bookingsInfo = new List<BookingByHouseType>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("dbo.BookingListByDateRange", connection);
+                SqlCommand command = new SqlCommand("dbo.BookingsByHouseType", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                //command.Parameters.AddWithValue("@StartDate", startDate);
-                //command.Parameters.AddWithValue("@EndDate", endDate);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     var booking = new BookingByHouseType()
                     {
-                        HouseName = reader.GetString(reader.GetOrdinal("h.HouseName")),
+                        HouseName = reader.GetString(reader.GetOrdinal("HouseName")),
                         BookingCount = reader.GetInt32(reader.GetOrdinal("BookingCount"))
                     };
 
@@ -271,21 +269,19 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<BookingDiscountUsage> bookingsInfo = new List<BookingDiscountUsage>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("dbo.BookingListByDateRange", connection);
+                SqlCommand command = new SqlCommand("dbo.DiscountUsageSummary", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                //command.Parameters.AddWithValue("@StartDate", startDate);
-                //command.Parameters.AddWithValue("@EndDate", endDate);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     var booking = new BookingDiscountUsage()
                     {
-                        DiscountName = reader.GetString(reader.GetOrdinal("d.DiscountName")),
-                        BookingId = reader.GetString(reader.GetOrdinal("b.BookingId")),
-                        Fullname = reader.GetString(reader.GetOrdinal("c.Fullname")),
-                        SubTotal = reader.GetDecimal(reader.GetOrdinal("b.SubTotal")),
-                        DiscountAmount = reader.GetDecimal(reader.GetOrdinal("b.DiscountAmount")),
+                        DiscountName = reader.GetString(reader.GetOrdinal("DiscountName")),
+                        BookingId = reader.GetString(reader.GetOrdinal("BookingId")),
+                        Fullname = reader.GetString(reader.GetOrdinal("Fullname")),
+                        SubTotal = reader.GetDecimal(reader.GetOrdinal("SubTotal")),
+                        DiscountAmount = reader.GetDecimal(reader.GetOrdinal("DiscountAmount")),
                         AmountAfterDiscount = reader.GetDecimal(reader.GetOrdinal("AmountAfterDiscount"))
                     };
 

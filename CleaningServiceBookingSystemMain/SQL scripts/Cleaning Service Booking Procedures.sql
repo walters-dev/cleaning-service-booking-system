@@ -1,9 +1,8 @@
-CREATE DATABASE CleaningServiceBooking
 use CleaningServiceBooking
 GO
 /*Customer PROCEDURES*/
 /* =================================================================================================================================*/
-CREATE PROCEDURE GetCustomer
+CREATE OR ALTER PROCEDURE GetCustomer
     @CustomerID VARCHAR (7)
 AS
 BEGIN
@@ -12,7 +11,7 @@ BEGIN
      WHERE CustomerId=@CustomerID;
 END;
 GO
-ALTER PROCEDURE GetCustomerByEmail
+CREATE OR ALTER PROCEDURE GetCustomerByEmail
     @Email VARCHAR (7)
 AS
 BEGIN
@@ -21,7 +20,7 @@ BEGIN
      WHERE Email LIKE '%' + @Email + '%';
 END;
 GO
-CREATE PROCEDURE UpdateCustomer
+CREATE OR ALTER PROCEDURE UpdateCustomer
     @CustomerID VARCHAR (7),
     @Fullname VARCHAR(MAX),
     @Phonenumber VARCHAR(10),
@@ -43,7 +42,7 @@ BEGIN
       WHERE CustomerId = @CustomerID;
 END;
 GO
-CREATE PROCEDURE AddCustomer
+CREATE OR ALTER PROCEDURE AddCustomer
     @CustomerID VARCHAR (7),
     @Fullname VARCHAR(MAX),
     @Phonenumber VARCHAR(10),
@@ -76,14 +75,14 @@ BEGIN
     );
 END;
 GO
-CREATE PROCEDURE GetAllCustomers
+CREATE OR ALTER PROCEDURE GetAllCustomers
 AS
 BEGIN
     SELECT *
     FROM Customers;
 END;
 GO
-CREATE PROCEDURE DeleteCustomer
+CREATE OR ALTER PROCEDURE DeleteCustomer
  @CustomerID VARCHAR (7)
 AS
 BEGIN
@@ -94,7 +93,7 @@ END;
 GO
 /* Housetype PROCEDURES ===========================================================================================================================================================================*/
 
-CREATE PROCEDURE AddHouseType
+CREATE OR ALTER PROCEDURE AddHouseType
     @HouseTypesid VARCHAR(7),
     @HouseName VARCHAR(MAX),
     @BaseRate DECIMAL(10,2),
@@ -128,7 +127,7 @@ BEGIN
 
 END;
 GO
-CREATE PROCEDURE GetAllHouseTypes
+CREATE OR ALTER PROCEDURE GetAllHouseTypes
 AS
 BEGIN
     SELECT * 
@@ -137,13 +136,13 @@ END
 GO
 /*SERVICE PROCEDURES ==================================================================================================================================================================================================== */
 GO 
-CREATE PROCEDURE GetAllServiceTypes
+CREATE OR ALTER PROCEDURE GetAllServiceTypes
 AS
 BEGIN
     SELECT * FROM Servicetypes
 END;
 GO
-CREATE PROCEDURE GetServiceType
+CREATE OR ALTER PROCEDURE GetServiceType
 @ServiceId VARCHAR(7)
 AS
 BEGIN
@@ -152,7 +151,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE AddDiscountRule
+CREATE OR ALTER PROCEDURE AddDiscountRule
     @DiscountRuleId VARCHAR(7),
     @DiscountName VARCHAR(MAX),
     @CriteriaDescription VARCHAR(MAX),
@@ -181,7 +180,7 @@ BEGIN
 END;
 
 GO
-CREATE PROCEDURE AddAddOn
+CREATE OR ALTER PROCEDURE AddAddOn
     @AddOnId VARCHAR(10),
     @AddOnsName VARCHAR(MAX),
     @Rate DECIMAL(10,2),
@@ -210,7 +209,7 @@ BEGIN
 END;
 /*booking procedures*/
 GO
-CREATE PROCEDURE ChangeBookingStatus
+CREATE OR ALTER PROCEDURE ChangeBookingStatus
 @BookingStatus BIT,
 @BookingId VARCHAR(7)
 AS
@@ -221,13 +220,13 @@ BookingStatus = @BookingStatus
 WHERE BookingId = @BookingId
 END;
 GO 
-CREATE PROCEDURE GetAllBookings
+CREATE OR ALTER PROCEDURE GetAllBookings
 AS
 BEGIN
 SELECT * FROM Bookings
 END;
 GO
-ALTER PROCEDURE AddBooking
+CREATE OR ALTER PROCEDURE AddBooking
     @BookingId VARCHAR(7),
     @Customers_id VARCHAR(7),
     @Housetypes_id VARCHAR(7),
@@ -294,7 +293,7 @@ BEGIN
 
 END;
 GO
-ALTER PROCEDURE GetBooking
+CREATE OR ALTER PROCEDURE GetBooking
     @BookingId VARCHAR(7)
 AS
 BEGIN
@@ -337,7 +336,7 @@ BEGIN
 
 END;
 GO
-ALTER PROCEDURE UpdateBooking
+CREATE OR ALTER PROCEDURE UpdateBooking
     @BookingId VARCHAR(7),
     @Customers_id VARCHAR(7),
     @Housetypes_id VARCHAR(7),
@@ -378,7 +377,7 @@ BEGIN
 
 END;
 GO
-CREATE PROCEDURE AddBookingAddOn
+CREATE OR ALTER PROCEDURE AddBookingAddOn
     @BookingAddOnId VARCHAR(7),
     @Booking_id VARCHAR(7),
     @AddOn_id VARCHAR(10),
@@ -406,7 +405,7 @@ BEGIN
 
 END;
 GO
-CREATE PROCEDURE BookingListByDateRange
+CREATE OR ALTER PROCEDURE BookingListByDateRange
     @StartDate DATE,
     @EndDate DATE
 AS
@@ -439,7 +438,7 @@ BEGIN
 
 END;
 GO
-CREATE PROCEDURE CustomerBookingHistory
+CREATE OR ALTER PROCEDURE CustomerBookingHistory
     @Email VARCHAR(7)
 AS
 BEGIN
@@ -472,7 +471,7 @@ BEGIN
 
 END;
 GO
-CREATE PROCEDURE RevenueSummary
+CREATE OR ALTER PROCEDURE RevenueSummary
 AS
 BEGIN
 
@@ -496,7 +495,7 @@ BEGIN
 
 END;
 GO
-CREATE PROCEDURE BookingsByHouseType
+CREATE OR ALTER PROCEDURE BookingsByHouseType
 AS
 BEGIN
 
@@ -516,7 +515,7 @@ BEGIN
 
 END;
 GO
-CREATE PROCEDURE DiscountUsageSummary
+CREATE OR ALTER PROCEDURE DiscountUsageSummary
 AS
 BEGIN
 
@@ -551,7 +550,7 @@ go
 /*length procedures*/
 
 GO
-CREATE PROCEDURE AdminRowCount
+CREATE OR ALTER PROCEDURE AdminRowCount
 AS
 BEGIN
 SELECT
@@ -560,7 +559,7 @@ FROM AdminTable
 END;
 
 GO
-CREATE PROCEDURE CustomersRowCount
+CREATE OR ALTER PROCEDURE CustomersRowCount
 AS
 BEGIN
 SELECT
@@ -569,7 +568,7 @@ FROM Customers
 END;
 
 GO
-CREATE PROCEDURE HousetypesRowCount
+CREATE OR ALTER PROCEDURE HousetypesRowCount
 AS
 BEGIN
 SELECT
@@ -578,7 +577,7 @@ FROM Housetypes
 END;
 
 GO
-CREATE PROCEDURE ServicetypesRowCount
+CREATE OR ALTER PROCEDURE ServicetypesRowCount
 AS
 BEGIN
 SELECT
@@ -587,7 +586,7 @@ FROM Servicetypes
 END;
 
 GO
-CREATE PROCEDURE DiscountRulesRowCount
+CREATE OR ALTER PROCEDURE DiscountRulesRowCount
 AS
 BEGIN
 SELECT
@@ -596,7 +595,7 @@ FROM DiscountRules
 END;
 
 GO
-CREATE PROCEDURE AddOnsRowCount
+CREATE OR ALTER PROCEDURE AddOnsRowCount
 AS
 BEGIN
 SELECT
@@ -605,7 +604,7 @@ FROM AddOns
 END;
 
 GO
-CREATE PROCEDURE BookingsRowCount
+CREATE OR ALTER PROCEDURE BookingsRowCount
 AS
 BEGIN
 SELECT
@@ -614,7 +613,7 @@ FROM Bookings
 END;
 
 GO
-CREATE PROCEDURE BookingAddOnsRowCount
+CREATE OR ALTER PROCEDURE BookingAddOnsRowCount
 AS
 BEGIN
 SELECT
@@ -623,7 +622,7 @@ FROM BookingAddOns
 END;
 /*password procedure*/
 GO
-CREATE PROCEDURE GetAdminPassword
+CREATE OR ALTER PROCEDURE GetAdminPassword
 @Username VARCHAR(7)
 AS
 BEGIN
@@ -632,4 +631,3 @@ SELECT
 FROM AdminTable
 WHERE AdminTable.Username = @Username
 END;
-exec GetAdminPassword @Username = 'admin'
