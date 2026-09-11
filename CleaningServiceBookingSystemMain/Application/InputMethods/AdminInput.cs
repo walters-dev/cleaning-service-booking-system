@@ -16,7 +16,7 @@ namespace CleaningServiceBookingSystemMain.Application.InputMethods
             Console.WriteLine("===== ADMIN INFORMATION =====");
 
             Console.Write("Enter admin ID: ");
-            admin.AdminId = Console.ReadLine() ?? "";
+            admin.AdminId = Console.ReadLine() ?? "";//call procedure to make id
 
             Console.Write("Enter username: ");
             admin.Username = Console.ReadLine() ?? "";

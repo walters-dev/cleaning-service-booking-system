@@ -28,7 +28,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         BookingId = reader.GetString(reader.GetOrdinal("BookingId")),
                         AddOnId = reader.GetString(reader.GetOrdinal("AddOnId")),
                         Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")),
-                        LineAmount = reader.GetString(reader.GetOrdinal("LineAmount"))
+                        LineAmount = reader.GetDecimal(reader.GetOrdinal("LineAmount"))
                     };
                     bookingAddOnsInfo.Add(bookingAddOns);
                 }
@@ -50,7 +50,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     bookingAddOnsInfo.BookingId = reader.GetString(reader.GetOrdinal("BookingId"));
                     bookingAddOnsInfo.AddOnId = reader.GetString(reader.GetOrdinal("AddOnId"));
                     bookingAddOnsInfo.Quantity = reader.GetInt32(reader.GetOrdinal("Quantity"));
-                    bookingAddOnsInfo.LineAmount = reader.GetString(reader.GetOrdinal("LineAmount"));
+                    bookingAddOnsInfo.LineAmount = reader.GetDecimal(reader.GetOrdinal("LineAmount"));
                 }
             }
             return bookingAddOnsInfo;

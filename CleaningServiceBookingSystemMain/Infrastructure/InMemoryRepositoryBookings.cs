@@ -34,7 +34,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate")),
                         NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms")),
                         //IsRecurring = reader.IsDBNull(active) ? (bool?)null : reader.GetBoolean(active);
-                        //IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring")),//............................................
+                        IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring")),//............................................
                         RecurringBookingType = reader.GetString(reader.GetOrdinal("RecurringBookingType")),
                         SubTotal = reader.GetDecimal(reader.GetOrdinal("SubTotal")),
                         DiscountAmount = reader.GetDecimal(reader.GetOrdinal("DiscountAmount")),
@@ -42,7 +42,9 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         TotalAmount = reader.GetDecimal(reader.GetOrdinal("TotalAmount")),
                         BookingStatus = reader.GetString(reader.GetOrdinal("BookingStatus")),
                         CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
-                        CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"))
+                        CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy")),
+                        FirstTimeBooking = reader.GetBoolean(reader.GetOrdinal("FirstTimeBooking")),
+                        CarpetedRooms = reader.GetInt32(reader.GetOrdinal("CarpetedRooms"))
                     };
                     bookingsInfo.Add(booking);
                 }
@@ -76,8 +78,10 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     bookingsInfo.BookingStatus = reader.GetString(reader.GetOrdinal("BookingStatus"));
                     bookingsInfo.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
                     bookingsInfo.CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"));
-                    bookingsInfo.UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));
-                    bookingsInfo.UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt"));
+                    //bookingsInfo.UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));
+                    //bookingsInfo.UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt"));
+                    bookingsInfo.FirstTimeBooking = reader.GetBoolean(reader.GetOrdinal("FirstTimeBooking"));
+                    bookingsInfo.CarpetedRooms = reader.GetInt32(reader.GetOrdinal("CarpetedRooms"));
                 }
             }
             return bookingsInfo;
@@ -105,7 +109,10 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@TotalAmount", bookings.TotalAmount); 
                 command.Parameters.AddWithValue("@BookingStatus", bookings.BookingStatus); 
                 command.Parameters.AddWithValue("@CreatedAt", bookings.CreatedAt); 
-                command.Parameters.AddWithValue("@CreatedBy", bookings.CreatedBy); 
+                command.Parameters.AddWithValue("@CreatedBy", bookings.CreatedBy);
+                command.Parameters.AddWithValue("@FirstTimeBooking", bookings.FirstTimeBooking);
+                command.Parameters.AddWithValue("@CarpetedRooms", bookings.CarpetedRooms);
+
                 command.ExecuteNonQuery();
             }
         }
@@ -131,8 +138,10 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@SurchargeAmount", bookings.SurchargeAmount);
                 command.Parameters.AddWithValue("@TotalAmount", bookings.TotalAmount);
                 command.Parameters.AddWithValue("@BookingStatus", bookings.BookingStatus);
-                command.Parameters.AddWithValue("@UpdatedAt", bookings.UpdatedAt);
-                command.Parameters.AddWithValue("@UpdatedBy", bookings.UpdatedBy);
+                command.Parameters.AddWithValue("@FirstTimeBooking", bookings.FirstTimeBooking);
+                command.Parameters.AddWithValue("@CarpetedRooms", bookings.CarpetedRooms);
+                //command.Parameters.AddWithValue("@UpdatedAt", bookings.UpdatedAt);
+                //command.Parameters.AddWithValue("@UpdatedBy", bookings.UpdatedBy);
                 command.ExecuteNonQuery();
             }
         }
@@ -284,6 +293,19 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 }
             }
             return bookingsInfo;
+        }
+
+        public void ChangeBoookingStatus(Bookings bookings)
+        {
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.ChangeBookingStatus", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Connection.Open();
+                command.Parameters.AddWithValue("@BookingId", bookings.BookingId);
+                command.Parameters.AddWithValue("@BookingStatus", bookings.BookingStatus);
+                command.ExecuteNonQuery();
+            }
         }
     }
 }

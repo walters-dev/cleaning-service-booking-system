@@ -13,77 +13,131 @@ namespace CleaningServiceBookingSystemMain.Application
         private readonly BookingValidator _validator =
             new BookingValidator();
 
-        public AddOnInput(IAddOnsRepository addOnsRepository)
-        {
-            _addOnsRepository = addOnsRepository;
-        }
+        //public AddOnInput(IAddOnsRepository addOnsRepository)
+        //{
+        //    _addOnsRepository = addOnsRepository;
+        //}
 
-        public AddOns? GetAddOnInput()
+        public List<AddOnSelection>? GetAddOnInput()
         {
             IList<AddOns> addOns =
                 _addOnsRepository.GetAddOns();
-
-            Console.WriteLine();
-            Console.WriteLine("===== ADD-ONS =====");
-            Console.WriteLine("0. No Add-On");
-            int i;
-            for (i = 0; i < addOns.Count; i++)
-            {
-                Console.WriteLine(
-                    $"{i + 1}. " +
-                    $"{addOns[i].AddOnsName} " +
-                    $"- R{addOns[i].Rate}");
-            }
+            List<AddOnSelection> selectedAddOns = new List<AddOnSelection>();
 
             while (true)
             {
-                Console.Write("Choose an add-on: "); //this needs to loop until all addons added or user specifies that they dont want to add more
+                Console.WriteLine();
+                Console.WriteLine("===== ADD-ONS =====");
 
-                if (!int.TryParse(Console.ReadLine(),out int choice) || choice > i)
+                Console.WriteLine("0. Finish selecting add-ons");
+
+                int i;
+                for (i = 0; i < addOns.Count; i++)
                 {
-                    Console.WriteLine("Please enter a valid number."); 
-
-                    continue;
+                    Console.WriteLine(
+                        $"{i + 1}. " +
+                        $"{addOns[i].AddOnsName} " +
+                        $"- R{addOns[i].Rate}");
                 }
-                
-                //bool isValid = _validator.ValidateMenuChoice(choice,0,addOns.Count,"add-on",out string errorMessage);
 
-                //if (!isValid)
-                //{
-                //    Console.WriteLine(errorMessage);
-                //    continue;
-                //}
 
-                //if (choice == 0)
-                //{
-                //    return null;
-                //}
+                Console.Write("Choose an add-on: ");
 
-                return addOns[choice - 1];
-            }
-        }
+                int choice;
 
-        public int GetAddOnQuantity()
-        {
-            while (true)
-            {
-                Console.Write("Enter add-on quantity: ");
 
-                if (!int.TryParse(Console.ReadLine(),out int quantity))
+                if (!int.TryParse(Console.ReadLine(), out choice) || choice > i)
                 {
                     Console.WriteLine("Please enter a valid number.");
                     continue;
                 }
 
-                //bool isValid = _validator.ValidateAddOnQuantity(quantity, out string errorMessage);
 
-                //if (isValid)
-                //{
-                //    return quantity;
-                //}
+                // Finish selecting
+                if (choice == 0)
+                {
+                    break;
+                }
 
-                //Console.WriteLine(errorMessage);
+
+                // Check menu option
+                if (choice < 1 || choice > addOns.Count)
+                {
+                    Console.WriteLine("Please choose an option from the list.");
+                    continue;
+                }
+
+
+                AddOns selectedAddOn = addOns[choice - 1];
+
+
+                // Prevent duplicate add-ons
+                bool alreadySelected = selectedAddOns.Any(x => x.AddOn.AddOnId == selectedAddOn.AddOnId);
+
+
+                if (alreadySelected)
+                {
+                    Console.WriteLine("You already selected this add-on.");
+
+                    continue;
+                }
+
+
+                int quantity = 1;
+
+
+                // AD002 = Carpet Cleaning
+                if (selectedAddOn.AddOnId == "AD002")
+                {
+                    while (true)
+                    {
+                        Console.Write("Enter number of carpeted rooms: ");
+
+                        int carpetedRooms;
+
+
+                        if (!int.TryParse(Console.ReadLine(), out carpetedRooms))
+                        {
+                            Console.WriteLine("Please enter a valid number.");
+
+                            continue;
+                        }
+
+
+                        // Put value into Booking
+                        bookings.CarpetedRooms = carpetedRooms;
+
+
+                        // CALL BOOKING VALIDATOR
+                        string errorMessage;
+
+                        //bool isValid = _bookingValidator.ValidateCarpetedRooms(booking,out errorMessage);
+
+
+                        //if (isValid)
+                        //{
+                        //    quantity = booking.CarpetedRooms;
+
+                        //    break;
+                        //}
+
+
+                        //Console.WriteLine($"Error: {errorMessage}");
+                    }
+                }
+
+
+                AddOnSelection selection =
+                   new AddOnSelection
+                   {
+                       AddOn = selectedAddOn,
+                       Quantity = quantity
+                   };
+
+                selectedAddOns.Add(selection);
+                Console.WriteLine($"{selectedAddOn.AddOnsName} added.");
             }
+            return selectedAddOns;
         }
     }
 }
