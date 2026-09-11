@@ -127,10 +127,41 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
             }
 
             // BRD 15 and section 8.5: Booking date must not be in the past.
-            if (booking.BookingDate < DateTime.Today)
+            if (!booking.BookingDate.HasValue)
             {
                 errorMessage =
-                    "Booking date cannot be in the past.";
+                    "Booking date is required.";
+
+                return false;
+            }
+
+            if (booking.BookingDate.Value.Date < DateTime.Today)
+            {
+                errorMessage = "Booking date cannot be in the past.";
+                return false;
+            }
+
+            // Not explicitly named in section 15, but implied by data
+            // quality (section 10, Non-Functional Requirements) - a
+            // carpet-cleaning add-on (BRD 8.3) is priced per carpeted
+            // room, so a negative count would produce a negative charge.
+            if (booking.CarpetedRooms < 0)
+            {
+                errorMessage =
+                    "Carpeted rooms cannot be negative.";
+
+                return false;
+            }
+
+            // A booking cannot have more carpeted rooms than total rooms
+            // - protects the Carpet Cleaning add-on calculation in
+            // PricingService.CalculateAddOnTotal from producing an
+            // inflated, meaningless total.
+            if (booking.CarpetedRooms >
+                booking.NumberOfRooms)
+            {
+                errorMessage =
+                    "Carpeted rooms cannot exceed total rooms.";
 
                 return false;
             }
