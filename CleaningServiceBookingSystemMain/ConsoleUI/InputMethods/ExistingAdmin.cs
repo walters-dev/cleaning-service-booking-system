@@ -11,10 +11,10 @@ namespace CleaningServiceBookingSystemMain.Application.InputMethods
     {
         private readonly BookingValidator _bookingValidator;
 
-        public ExistingAdmin(BookingValidator bookingValidator)
-        {
-            _bookingValidator = bookingValidator;
-        }
+        //public ExistingAdmin(BookingValidator bookingValidator)
+        //{
+        //    _bookingValidator = bookingValidator;
+        //}
 
         public Admins GetAdminInput() 
         {
@@ -32,9 +32,9 @@ namespace CleaningServiceBookingSystemMain.Application.InputMethods
 
                 string errorMessage;
 
-                bool isValid = _bookingValidator.Validate(admin, out errorMessage);
+               // bool isValid = _bookingValidator.Validate(admin, out errorMessage);
 
-                if (isValid)
+              //  if (isValid)
                 {
                     return admin;
                 }

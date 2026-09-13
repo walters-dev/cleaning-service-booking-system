@@ -1,15 +1,16 @@
-﻿using System;
+﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Application.Validators;
+using CleaningServiceBookingSystemMain.Domain.Models;
+using CleaningServiceBookingSystemMain.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using CleaningServiceBookingSystemMain.Domain.Models;
-using CleaningServiceBookingSystemMain.Application.Validators;
-using CleaningServiceBookingSystemMain.Application.Interfaces;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class AddOnInput
     {
-        private readonly IAddOnsRepository _addOnsRepository;
+        private readonly InMemoryRepositoryAddOns _addOnsRepository = new InMemoryRepositoryAddOns();
 
         private readonly BookingValidator _validator =
             new BookingValidator();

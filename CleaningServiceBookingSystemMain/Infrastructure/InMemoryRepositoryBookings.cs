@@ -323,5 +323,44 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
             return "BT" + (id + 1);
         }
+        public IList<Bookings> GetBookingsCreatedToday()
+        {
+            List<Bookings> bookingsInfo = new List<Bookings>();
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.GetBookingsByCreatedDate", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    var bookings = new Bookings()
+                    {
+                        BookingId = reader.GetString(reader.GetOrdinal("BookingId")),
+                        CustomerId = reader.GetString(reader.GetOrdinal("Customers_id")),
+                        HouseTypeId = reader.GetString(reader.GetOrdinal("Housetypes_id")),
+                        ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypes_id")),
+                        DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id")),
+                        BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate")),
+                        NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms")),
+                        IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring")),//............................................
+                        RecurringBookingType = reader.GetString(reader.GetOrdinal("RecurringBookingType")),
+                        SubTotal = reader.GetDecimal(reader.GetOrdinal("SubTotal")),
+                        DiscountAmount = reader.GetDecimal(reader.GetOrdinal("DiscountAmount")),
+                        SurchargeAmount = reader.GetDecimal(reader.GetOrdinal("SurchargeAmount")),
+                        TotalAmount = reader.GetDecimal(reader.GetOrdinal("TotalAmount")),
+                        BookingStatus = reader.GetString(reader.GetOrdinal("BookingStatus")),
+                        CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
+                        CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy")),
+                        FirstTimeBooking = reader.GetBoolean(reader.GetOrdinal("FirstTimeBooking")),
+                        CarpetedRooms = reader.GetInt32(reader.GetOrdinal("CarpetedRooms")),
+                        UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt")),
+                        UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"))
+                    };
+                    bookingsInfo.Add(bookings);
+                }
+                return bookingsInfo;
+            }
+        }
     }
 }
