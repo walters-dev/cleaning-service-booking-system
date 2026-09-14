@@ -24,13 +24,13 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 {
                     var houseTypes = new HouseTypes()
                     {
-                        HouseTypeId = reader.GetString(reader.GetOrdinal("HouseTypeId")),
-                        Name = reader.GetString(reader.GetOrdinal("Name")),
+                        HouseTypeId = reader.GetString(reader.GetOrdinal("HouseTypesid")),
+                        Name = reader.GetString(reader.GetOrdinal("HouseName")),
                         BaseRate = reader.GetDecimal(reader.GetOrdinal("BaseRate")),
-                        RatePerRoom = reader.GetDecimal(reader.GetOrdinal("RatePerRate")),
+                        RatePerRoom = reader.GetDecimal(reader.GetOrdinal("RatePerRoom")),
                         MinRooms = reader.GetInt32(reader.GetOrdinal("MinRooms")),
                         MaxRooms = reader.GetInt32(reader.GetOrdinal("MaxRooms")),
-                        IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"))
+                        //IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"))
                     };
                     houseTypesInfo.Add(houseTypes);
                 }

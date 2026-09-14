@@ -12,10 +12,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         private readonly BookingValidator _validator =
             new BookingValidator();
 
-        public DiscountInput(IDiscountRulesRepository discountRulesRepository)
-        {
-            _discountRulesRepository = discountRulesRepository;
-        }
+        //public DiscountInput(IDiscountRulesRepository discountRulesRepository)
+        //{
+        //    _discountRulesRepository = discountRulesRepository;
+        //}
 
         public DiscountRules? GetDiscountInput()
         {
