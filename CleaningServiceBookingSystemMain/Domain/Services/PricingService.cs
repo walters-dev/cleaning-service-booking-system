@@ -1,7 +1,7 @@
 using System;
 using CleaningServiceBookingSystemMain.Domain.Models;
 
-namespace CleaningServiceBookingSystemMain.Application
+namespace CleaningServiceBookingSystemMain.Domain.Services
 {
     /* SUMMARY:
      * Calculates the full price breakdown for a booking.
@@ -33,10 +33,10 @@ namespace CleaningServiceBookingSystemMain.Application
          */
         private readonly DiscountService _discountService;
 
-        public PricingService(DiscountService discountService)
-        {
-            _discountService = discountService;
-        }
+        //public PricingService(DiscountService discountService)
+        //{
+        //    _discountService = discountService;
+        //}
 
         /* BaseAmount = HouseType.BaseRate + (NumberOfRooms * HouseType.RatePerRoom)
          * Uses the base and per-room rate for the selected house type
@@ -66,24 +66,20 @@ namespace CleaningServiceBookingSystemMain.Application
          * Any AddOn whose PricingType is neither "Flat" nor "PerRoom" is silently skipped and contributes R0 -
          * this should only happen if bad seed data reaches this class, since section 12.2 requires AddOns to be seeded correctly.
          */
-        public decimal CalculateAddOnTotal(Bookings booking, List<BookingAddOns> bookingAddOns, List<AddOns> addOns)
+        public decimal CalculateAddOnTotal(Bookings booking, List<AddOns> addOns)
         {
             decimal addOnTotal = 0;
 
             foreach (AddOns bookingAddOn in addOns)
             {
 
-                if (bookingAddOn.PricingType == "Flat")
+                if (bookingAddOn.AddOnId == "AD001" || bookingAddOn.AddOnId == "AD003")
                 {
                     addOnTotal += bookingAddOn.Rate;
                 }
-                else if (bookingAddOn.PricingType == "PerRoom")
+                else if (bookingAddOn.AddOnId == "AD002")
                 {
                     addOnTotal += (bookingAddOn.Rate * booking.CarpetedRooms);
-                }
-                else
-                {
-                    // Invalid Pricing Type
                 }
             }
             return addOnTotal;
@@ -92,10 +88,10 @@ namespace CleaningServiceBookingSystemMain.Application
          * This is the pre-discount, pre-surcharge total, and is the figure discount percentages (BRD 8.4) are applied against.
          */
         public decimal CalculateSubtotal(Bookings booking, HouseTypes houseType,
-            ServiceTypes serviceType, List<BookingAddOns> bookingAddOn, List<AddOns> addOn)
+            ServiceTypes serviceType, List<AddOns> addOn)
         {
             decimal serviceAmount = CalculateServiceAmount(booking, houseType, serviceType);
-            decimal addOnTotal = CalculateAddOnTotal(booking, bookingAddOn, addOn);
+            decimal addOnTotal = CalculateAddOnTotal(booking, addOn);
             return serviceAmount + addOnTotal;
         }
 
@@ -156,7 +152,7 @@ namespace CleaningServiceBookingSystemMain.Application
             ServiceTypes serviceType, List<BookingAddOns> bookingAddOn, List<AddOns> addOn)
         {
             // Step 1: Subtotal
-            decimal subtotal = CalculateSubtotal(booking, houseType, serviceType, bookingAddOn, addOn);
+            decimal subtotal = CalculateSubtotal(booking, houseType, serviceType, addOn);
 
             // Step 2: DiscountAmount
             decimal discountAmount = CalculateDiscountAmount(booking, subtotal);

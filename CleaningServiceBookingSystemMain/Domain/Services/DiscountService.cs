@@ -1,6 +1,6 @@
 using CleaningServiceBookingSystemMain.Domain.Models;
 
-namespace CleaningServiceBookingSystemMain.Application
+namespace CleaningServiceBookingSystemMain.Domain.Services
 {
     /* SUMMARY:
      * Determines which single discount, if any, applies to a booking.
@@ -43,7 +43,7 @@ namespace CleaningServiceBookingSystemMain.Application
             string highestDiscountName = "No discount";
             decimal highestPercentage = 0m;
 
-            if (booking.IsFirstTimeCustomer && FirstTimeCustomerPercentage > highestPercentage)
+            if (booking.FirstTimeBooking && FirstTimeCustomerPercentage > highestPercentage)
             {
                 highestDiscountName = "First-Time Customer Discount";
                 highestPercentage = FirstTimeCustomerPercentage;
