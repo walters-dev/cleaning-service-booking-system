@@ -657,4 +657,17 @@ BEGIN
     WHERE CreatedAt = CURRENT_DATE;
 END;
 GO
+CREATE OR ALTER PROCEDURE GetBookingsByCustomerAndDate
+    @CustomerID VARCHAR(7),
+    @BookingDate DATE
+AS
+BEGIN
+    SELECT *
+    FROM Bookings
+    WHERE Customers_id = @CustomerID
+      AND BookingDate = @BookingDate;
+END;
+GO
+
+
 
