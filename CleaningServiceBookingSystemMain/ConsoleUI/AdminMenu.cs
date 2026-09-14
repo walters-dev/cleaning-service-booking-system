@@ -1,12 +1,13 @@
 ﻿using CleaningServiceBookingSystemMain;
+using CleaningServiceBookingSystemMain.Application.InputMethods;
+using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.ConsoleUI.InputMethods;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
-using Spectre.Console;
 using Microsoft.Data.SqlClient;
+using Spectre.Console;
 using System;
 using System.Linq.Expressions;
-using CleaningServiceBookingSystemMain.ConsoleUI.InputMethods;
-using CleaningServiceBookingSystemMain.Application.Interfaces;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI
 {
@@ -21,7 +22,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             bool IsAdminMenuRunning, IsConfirmData, IsCorrectPassword;
             string username, password;
 
-            AdminInput adminInput = new AdminInput();
+            ExistingAdmin adminInput = new ExistingAdmin();
             Admins admins = new Admins();
             admins = adminInput.GetAdminInput();                 //gets user input
 
@@ -185,7 +186,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         switch (viewBookingsChoices)
                         {
                             case "View":
-                                Bookings booking = new Bookings();
+                                //Bookings booking = new Bookings();
                                 IList<Bookings> bookings = viewBookings.GetBookings();
                                 Console.WriteLine($"Booking Date\tNumber of rooms \tBooking Status\tTotal Amount\tCreated by\tCreated at\tCarpeted Rooms\tCustomer Name\tCustomer Address"); //display headers for bookings
                                 foreach (var element in bookings)
