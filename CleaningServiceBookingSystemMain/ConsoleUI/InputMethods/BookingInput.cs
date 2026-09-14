@@ -168,5 +168,32 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Console.WriteLine("Please choose 1, 2 or 3.");
             }
         }
+
+        public DateTime GetSingleBookingDateInput()
+        {
+            while (true)
+            {
+                Console.WriteLine("Enter Booking Date");
+
+               
+
+                string bookingDate = Console.ReadLine();
+
+
+
+
+
+                bool isValid = _validator.Validate(bookingDate, out string errorMessage);
+                if (isValid)
+                {
+                    DateTime BookingDate = DateTime.Parse(bookingDate);
+                    return BookingDate;
+                }
+
+                Console.WriteLine();
+                Console.WriteLine($"Validation error:{errorMessage}");
+                Console.WriteLine("Please enter the booking date again.");
+            }
+        }
     }
 }
