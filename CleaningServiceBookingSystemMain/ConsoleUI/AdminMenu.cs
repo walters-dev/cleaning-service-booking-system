@@ -116,10 +116,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         Bookings newBooking = new Bookings();
 
                         AddOnInput addOnInput = new AddOnInput();
-                        addOnInput.GetAddOnInput(ref newBooking);
+                        addOnInput.GetAddOnInput(out int carpetedRooms);
                         //bookingAddOns input
                         BookingInput bookingInput = new BookingInput();
-                        newBooking = bookingInput.GetBookingInput();
+                        newBooking = bookingInput.GetBookingInput(carpetedRooms);
 
                         /*
                         System displays house types and service types from SQL Server
@@ -238,7 +238,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 }       
                                 break;
                             case "Update":
-                                //input Date and Customer
+                                //input Date and Customer to find the booking needed then display the booking then confirm if correct booking
                                 break;
                         }
                         
