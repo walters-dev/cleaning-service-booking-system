@@ -20,7 +20,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         //    _addOnsRepository = addOnsRepository;
         //}
 
-        public List<AddOnSelection>? GetAddOnInput(ref Bookings bookings)
+        public List<AddOnSelection>? GetAddOnInput(out int carpetedRooms)
         {
             IList<AddOns> addOns =
                 _addOnsRepository.GetAddOns();
@@ -28,6 +28,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
             while (true)
             {
+                carpetedRooms = 0;
                 Console.WriteLine();
                 Console.WriteLine("===== ADD-ONS =====");
 
@@ -95,7 +96,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                     {
                         Console.Write("Enter number of carpeted rooms: ");
 
-                        int carpetedRooms;
+                        //int carpetedRooms;
 
 
                         if (!int.TryParse(Console.ReadLine(), out carpetedRooms))
@@ -105,9 +106,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                             continue;
                         }
 
-
+                        break;
                         // Put value into Booking
-                        bookings.CarpetedRooms = carpetedRooms; //need to get this as a parameter first--------------------------------------------------------------------------
+                        //bookings.CarpetedRooms = carpetedRooms; //need to get this as a parameter first--------------------------------------------------------------------------
 
 
                         // CALL BOOKING VALIDATOR

@@ -17,7 +17,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<AddOns> addOnsInfo = new List<AddOns>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("fghj", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.GetAllAddOns", connection);//waiting for sql procedure.......................................................................
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -29,7 +29,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         AddOnsName = reader.GetString(reader.GetOrdinal("AddOnsName")),
                         Rate = reader.GetDecimal(reader.GetOrdinal("Rate")),
                         PricingType = reader.GetString(reader.GetOrdinal("PricingType")),
-                        IsActive = reader.GetBoolean(reader.GetOrdinal("isActive"))
+                        //IsActive = reader.GetBoolean(reader.GetOrdinal("isActive"))
                     };
                     addOnsInfo.Add(addOns);
                 }

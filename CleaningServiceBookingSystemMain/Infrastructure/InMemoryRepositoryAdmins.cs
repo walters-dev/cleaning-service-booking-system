@@ -16,11 +16,11 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("dbo.AddBooking", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.AddAdmin", connection);//waiting for sql procedure.......................................................................
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 //need to add a thing for id
-                command.Parameters.AddWithValue("@AdminId", admins.AdminId);
+                command.Parameters.AddWithValue("@AdminID", admins.AdminId);
                 command.Parameters.AddWithValue("@Username", admins.Username);
                 command.Parameters.AddWithValue("@AdminPassword", admins.AdminPassword);
                 command.Parameters.AddWithValue("@Email", admins.Email);
