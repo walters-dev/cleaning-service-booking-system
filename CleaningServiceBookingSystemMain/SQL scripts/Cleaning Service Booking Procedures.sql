@@ -643,4 +643,12 @@ INSERT INTO AdminTable(Admin_ID, Username, Admin_Password, Email)
 Values (@AdminID, @Username, @AdminPassword, @Email)
 END;
 GO
+CREATE OR ALTER PROCEDURE GetBookingsByCreatedDate
+AS
+BEGIN
+    SELECT *
+    FROM Bookings
+    WHERE CreatedAt = CURRENT_DATE;
+END;
+GO
 
