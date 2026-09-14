@@ -31,13 +31,31 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         switch (bookingChoices)
                         {
                             case "Customer Booking History":
-                                inMemoryRepositoryBookings.BookingHistory("");//need email input.................................
+                                Console.WriteLine($"Customer name\tHouse type\tService type\tBooking Date\tNumber of rooms\tTotal amount\tBooking status");
+                                IList<CustomerBookingHistory> bookingsHistory = inMemoryRepositoryBookings.BookingHistory("");//need email input.................................
+                                foreach (var booking in bookingsHistory)
+                                {
+                                    Console.WriteLine($"{booking.Fullname}\t{booking.HouseName}\t{booking.ServiceName}\t{booking.BookingDate}\t{booking.NumberOfRooms}\t{booking.TotalAmount}\t{booking.BookingStatus}");
+
+                                }
                                 break;
                             case "Booking List By Range":
-                                inMemoryRepositoryBookings.ListByRange("", "");//need input.................................................
+                                Console.WriteLine($"Customer name\tHouse type\tService type\tBooking Date\tNumber of rooms\tTotal amount\tBooking status");
+                                IList<BookingByDate> bookingsByDate = inMemoryRepositoryBookings.ListByRange(DateTime.Parse(Console.ReadLine()), DateTime.Parse(Console.ReadLine()));//need input.................................................
+                                foreach (var booking in bookingsByDate)
+                                {
+                                    Console.WriteLine($"{booking.Fullname}\t{booking.HouseName}\t{booking.ServiceName}\t{booking.BookingDate}\t{booking.NumberOfRooms}\t{booking.TotalAmount}\t{booking.BookingStatus}");
+                                }
                                 break;
                             case "Bookings Order By House Type":
-                                inMemoryRepositoryBookings.BookingsByHouseType();
+                                var chart = new BarChart();
+                                chart.Label("Bookings Order By House Type");
+                                IList<BookingByHouseType> bookingsByHouses = inMemoryRepositoryBookings.BookingsByHouseType();
+                                foreach (var booking in bookingsByHouses)
+                                {
+                                    chart.AddItem(booking.HouseName, booking.BookingCount);
+                                }
+                                AnsiConsole.Write(chart);
                                 break;
                         }
                         break;
