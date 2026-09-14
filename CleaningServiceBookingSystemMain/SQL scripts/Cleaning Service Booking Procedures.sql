@@ -178,7 +178,13 @@ BEGIN
     );
 
 END;
-
+/*Addons procedures*/
+GO 
+CREATE OR ALTER PROCEDURE GetAllAddOns
+AS
+BEGIN
+    SELECT * FROM AddOns
+END;
 GO
 CREATE OR ALTER PROCEDURE AddAddOn
     @AddOnId VARCHAR(10),
