@@ -19,7 +19,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                     new SelectionPrompt<string>()
                     .Title("Choose menu option:")
                     .AddChoices("Bookings", "Summaries", "Trends", "Change user"));
-                InMemoryRepositoryBookings inMemoryRepositoryBookings = new InMemoryRepositoryBookings();
+                InMemoryRepositoryBookings inMemoryRepositoryBookings = new InMemoryRepositoryBookings();//................................................................................................................................
                 switch (managerChoices)
                 {
                     case "Bookings":

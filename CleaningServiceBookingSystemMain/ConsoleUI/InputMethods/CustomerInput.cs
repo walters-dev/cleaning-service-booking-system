@@ -1,6 +1,8 @@
-﻿using CleaningServiceBookingSystemMain.Domain.Models;
-using CleaningServiceBookingSystemMain.Infrastructure;
+﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Application.Services;
 using CleaningServiceBookingSystemMain.Application.Validators;
+using CleaningServiceBookingSystemMain.Domain.Models;
+using CleaningServiceBookingSystemMain.Infrastructure;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -10,6 +12,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
     {
         private readonly BookingValidator _validator =
            new BookingValidator();
+        private readonly ICustomerRepository _customerRepository = new InMemoryRepositoryCustomers();
 
         public Customers GetCustomerInput(string username)
         {
@@ -19,8 +22,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
                 Console.WriteLine();
                 Console.WriteLine("===== CUSTOMER INFORMATION =====");
-                InMemoryRepositoryCustomers repositoryCustomers = new InMemoryRepositoryCustomers();
-                customer.CustomerId = repositoryCustomers.CustomersRowCount();
+                CustomerService service = new CustomerService(_customerRepository);
+                customer.CustomerId = service.FindCustomerCount();
 
                 Console.Write("Enter full name: ");
                 customer.FullName = Console.ReadLine() ?? "";

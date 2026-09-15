@@ -1,6 +1,8 @@
-﻿using CleaningServiceBookingSystemMain.Application.Validators;
+﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
+using CleaningServiceBookingSystemMain.Application.Services;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
@@ -12,6 +14,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
         private readonly BookingValidator _validator =
             new BookingValidator();
+        private readonly IBookingsRepository _bookingRepository = new InMemoryRepositoryBookings();
 
         //public BookingInput(
         //    HouseTypeInput houseTypeInput,
@@ -23,7 +26,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         //    _discountInput = discountInput;
         //}
 
-        public Bookings GetBookingInput()
+        public Bookings GetBookingInput(int carpetedRooms)
         {
             while (true)
             {
@@ -33,8 +36,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Console.WriteLine();
                 Console.WriteLine("===== BOOKING INFORMATION =====");
 
-                InMemoryRepositoryBookings repositoryBookings = new InMemoryRepositoryBookings();
-                booking.BookingId = repositoryBookings.BookingsRowCount(); 
+                BookingService bookingService = new BookingService(_bookingRepository);
+                booking.BookingId = bookingService.FindBookingCount(); 
 
                 HouseTypes houseTypes = new HouseTypes();
                 houseTypes = _houseTypeInput.GetHouseTypeInput();
@@ -49,9 +52,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Console.Write("Enter number of rooms: ");
                 booking.NumberOfRooms = GetInteger();
 
-                Console.Write("Enter number of carpeted rooms: ");
+                //Console.Write("Enter number of carpeted rooms: ");
 
-                booking.CarpetedRooms = GetInteger();//...............................................................
+                booking.CarpetedRooms = carpetedRooms;//...............................................................
 
                 Console.Write("Enter booking date: ");
                 booking.BookingDate = GetDate();

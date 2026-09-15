@@ -8,6 +8,7 @@ using Microsoft.Data.SqlClient;
 using Spectre.Console;
 using System;
 using System.Linq.Expressions;
+using CleaningServiceBookingSystemMain.Application.Services;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI
 {
@@ -21,19 +22,23 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             //declare and intialize variables
             bool IsAdminMenuRunning, IsConfirmData, IsCorrectPassword;
             string username, password;
+            IAdminRepository adminRepository = new InMemoryRepositoryAdmins();
+            AdminService adminService =new AdminService(adminRepository);
+            ICustomerRepository customerRepository = new InMemoryRepositoryCustomers();
+            CustomerService customerService =new CustomerService(customerRepository);
+            IBookingsRepository bookingsRepository = new InMemoryRepositoryBookings();
+            BookingService bookingService =new BookingService(bookingsRepository);
 
             ExistingAdmin adminInput = new ExistingAdmin();
             Admins admins = new Admins();
             admins = adminInput.GetAdminInput();                 //gets user input
 
-
-            InMemoryRepositoryAdmins inMemoryRepositoryAdmins = new InMemoryRepositoryAdmins();
-            password =inMemoryRepositoryAdmins.GetAdminPasswordByUsername(admins.Username);
+            password = adminService.FindAdminPassword(admins.Username);
             while (password == null)
             {
                 AnsiConsole.MarkupLine("[red]No admin by that username[/]");
                 admins = adminInput.GetAdminInput();
-                password = inMemoryRepositoryAdmins.GetAdminPasswordByUsername(admins.Username);
+                password = adminService.FindAdminPassword(admins.Username);
                 Encryption cryptography = new Encryption();//creates encryption class
                 IsCorrectPassword = cryptography.VerifyPassword(password, admins.AdminPassword);
                 while (IsCorrectPassword == false)
@@ -103,8 +108,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 if (confirmNewCusChoices == "Yes")
                                 {
                                     IsConfirmData = true;
-                                    InMemoryRepositoryCustomers inMemoryRepositoryCustomers = new InMemoryRepositoryCustomers();
-                                    inMemoryRepositoryCustomers.Add(customers);                                                         //saves customer data to sql
+                                    //InMemoryRepositoryCustomers inMemoryRepositoryCustomers = new InMemoryRepositoryCustomers();//....................................................................................................
+                                    customerService.RegisterCustomer(customers);                                                         //saves customer data to sql
                                 }
                                 else
                                 {
@@ -112,7 +117,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 }
                             }
                         }
-                        InMemoryRepositoryBookings createBooking = new InMemoryRepositoryBookings();
+                        //InMemoryRepositoryBookings createBooking = new InMemoryRepositoryBookings();//................................................................................................................................
                         Bookings newBooking = new Bookings();
 
                         AddOnInput addOnInput = new AddOnInput();
@@ -137,7 +142,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             if (confirmBookingChoice == "Yes")
                             {
                                 IsConfirmData = true;
-                                createBooking.Add(newBooking);                  //save booking data to sql
+                                bookingService.RegisterBooking(newBooking);                  //save booking data to sql
                             }
                             else
                             {
@@ -165,8 +170,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             {
                                 IsConfirmData = true;
                                 //save customer data to sql
-                                InMemoryRepositoryCustomers inMemoryRepositoryCustomers = new InMemoryRepositoryCustomers();
-                                inMemoryRepositoryCustomers.Add(customers);
+                                //InMemoryRepositoryCustomers inMemoryRepositoryCustomers = new InMemoryRepositoryCustomers();//................................................................................................................................
+                                customerService.RegisterCustomer(customers);
                                 AnsiConsole.MarkupLine("[green]Customer successfully added[/]");
                             }
                             else
@@ -182,12 +187,12 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 new SelectionPrompt<string>()
                                 .Title("Choose option:")
                                 .AddChoices("View", "Report", "Update", "Change status"));                      //update could be removed?? also report of what................................................................................................................
-                        InMemoryRepositoryBookings viewBookings = new InMemoryRepositoryBookings();
+                        //InMemoryRepositoryBookings viewBookings = new InMemoryRepositoryBookings();//................................................................................................................................
                         switch (viewBookingsChoices)
                         {
                             case "View":
                                 //Bookings booking = new Bookings();
-                                IList<Bookings> bookings = viewBookings.GetBookings();
+                                IList<Bookings> bookings = bookingService.ViewAllBookings();
                                 Console.WriteLine($"Booking Date\tNumber of rooms \tBooking Status\tTotal Amount\tCreated by\tCreated at\tCarpeted Rooms\tCustomer Name\tCustomer Address"); //display headers for bookings
                                 foreach (var element in bookings)
                                 {
@@ -247,9 +252,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         AnsiConsole.MarkupLine("[green]View Customer selected[/]");
                         //select customer by contact
                         //input for email.....................................................................................
-                        InMemoryRepositoryCustomers viewCustomer = new InMemoryRepositoryCustomers();
+                        //InMemoryRepositoryCustomers viewCustomer = new InMemoryRepositoryCustomers();//................................................................................................................................
                         Customers customer = new Customers();
-                        customer = viewCustomer.GetCustomersByEmail(Console.ReadLine());
+                        customer = customerService.FindCustomerWithEmail(Console.ReadLine());
                         Console.WriteLine($"{customer.FullName} {customer.PhoneNumber} {customer.Email} {customer.PhyAddress}");
                         break;
                     case "Add Admin":                                                           //add admin chosen from admin menu
@@ -259,7 +264,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             AdminInput newAdminInput = new AdminInput();
                             Admins newAdmin = new Admins();
                             newAdmin = newAdminInput.GetAdminInput();                 //gets user input
-                            InMemoryRepositoryAdmins newInMemoryRepositoryAdmins = new InMemoryRepositoryAdmins();
+                            //InMemoryRepositoryAdmins newInMemoryRepositoryAdmins = new InMemoryRepositoryAdmins();//................................................................................................................................
 
                             var confirmNewAdminChoices = AnsiConsole.Prompt(
                                    new SelectionPrompt<string>()
@@ -269,7 +274,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             {
                                 Encryption newCryptography = new Encryption();//creates encryption class
                                 newAdmin.AdminPassword = newCryptography.HashPassword(newAdmin.AdminPassword);
-                                newInMemoryRepositoryAdmins.Add(newAdmin);                      //saves customer data to sql
+                                adminService.RegisterAdmin(newAdmin);                      //saves customer data to sql
                                 IsConfirmData = true;
                             }
                             else

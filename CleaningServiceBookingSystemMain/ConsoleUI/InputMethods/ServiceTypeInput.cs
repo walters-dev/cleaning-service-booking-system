@@ -2,13 +2,13 @@
 using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.Infrastructure;
 using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Application.Services;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class ServiceTypeInput
     {
-        private readonly IServiceTypesRepository
-            _serviceTypesRepository;
+        private readonly IServiceTypesRepository _serviceTypesRepository = new InMemoryRepositoryServiceTypes();
 
         private readonly BookingValidator _validator =
             new BookingValidator();
@@ -21,10 +21,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
         public ServiceTypes GetServiceTypeInput()
         {
-            InMemoryRepositoryServiceTypes inMemoryRepositoryServiceTypes = new InMemoryRepositoryServiceTypes();
+            ServiceTypesService serviceTypesService = new ServiceTypesService(_serviceTypesRepository);
 
             IList<ServiceTypes> serviceTypes =
-                inMemoryRepositoryServiceTypes.GetServiceTypes();
+                serviceTypesService.ViewAllServiceTypes();
 
             Console.WriteLine();
             Console.WriteLine("===== SERVICE TYPES =====");
