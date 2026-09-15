@@ -149,7 +149,7 @@ namespace CleaningServiceBookingSystemMain.Domain.Services
          * left to silently recalculate earlier steps for itself. This matters most for discount calculation.
          */
         public void CalculateFinalTotal(Bookings booking, HouseTypes houseType,
-            ServiceTypes serviceType, List<BookingAddOns> bookingAddOn, List<AddOns> addOn)
+            ServiceTypes serviceType, List<AddOns> addOn)
         {
             // Step 1: Subtotal
             decimal subtotal = CalculateSubtotal(booking, houseType, serviceType, addOn);

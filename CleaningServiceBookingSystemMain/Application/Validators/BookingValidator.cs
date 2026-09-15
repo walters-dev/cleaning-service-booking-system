@@ -1,6 +1,7 @@
-using System;
-using System.Text.RegularExpressions;
 using CleaningServiceBookingSystemMain.Domain.Models;
+using System;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace CleaningServiceBookingSystemMain.Application.Validators
 {
@@ -200,6 +201,86 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
             errorMessage = string.Empty;
             return true;
         }
+        public bool ValidateExistingAdmin(Admins admin, out string errorMessage)
+        {
+            if (string.IsNullOrWhiteSpace(admin.Username))
+            {
+                errorMessage = "Admin username is required.";
+                return false;
+            }
 
+            if (string.IsNullOrWhiteSpace(admin.AdminPassword))
+            {
+                errorMessage = "Admin password is required.";
+                return false;
+            }
+
+            errorMessage = string.Empty;
+            return true;
+        }
+        public bool ValidateStartEndDate(DateTime startDate, DateTime endDate, out string errorMessage)
+        {
+            //DateTime startDate = dateRangeInput.GetStartDateInput();
+            //DateTime endDate = dateRangeInput.GetEndDateInput();
+
+            //if (startDate < DateTime.Today)
+            //{
+            //    errorMessage = "Booking date cannot be in the past.";
+            //    return false;
+            //}
+
+            if (endDate < startDate)
+            {
+                errorMessage = "End date cannot be before the start date.";
+                return false;
+            }
+
+            errorMessage = string.Empty;
+            return true;
+        }
+        public bool ValidateSingleDateInput(string bookingDate, out string errorMessage)
+        {
+            string format = "yyyy-MM-dd HH:mm";
+            DateTime.TryParseExact(bookingDate, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime bookingDateResult1);
+
+            if (string.IsNullOrWhiteSpace(bookingDate))
+            {
+                errorMessage = "Booking date cannot be empty.";
+                return false;
+            }
+
+            if (!DateTime.TryParse(bookingDate, out DateTime bookingDateResult))
+            {
+                errorMessage = "Booking date is not a valid date.";
+                return false;
+            }
+
+            if (bookingDateResult1 < DateTime.Today)//......................................................................................................................
+            {
+                errorMessage = "Booking date cannot be in the past.";
+                return false;
+            }
+
+            errorMessage = string.Empty;
+            return true;
+        }
+        public bool ValidateCustomerEmailInput(string email, out string errorMessage)
+        {
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                // Basic format: Some_Word@Something.letters
+                // Domain suffix requires at least 2 letters (i.e. .com OR .co)
+                if (!Regex.IsMatch(
+                    email,
+                    @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                {
+                    errorMessage = "Invalid email format.";
+                    return false;
+                }
+            }
+
+            errorMessage = string.Empty;
+            return true;
+        }
     }
 }

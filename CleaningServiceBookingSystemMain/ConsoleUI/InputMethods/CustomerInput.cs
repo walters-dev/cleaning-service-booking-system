@@ -64,7 +64,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Console.WriteLine("Enter Customer Email");
                 string email = Console.ReadLine();
 
-                bool isValid = _validator.Validate(email, out string errormessage);
+                bool isValid = _validator.ValidateCustomerEmailInput(email, out string errormessage);
                 if (isValid)
                 {
                     return email;

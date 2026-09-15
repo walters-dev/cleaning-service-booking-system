@@ -3,6 +3,7 @@ using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
 using CleaningServiceBookingSystemMain.Application.Services;
+using CleaningServiceBookingSystemMain.Domain.Services;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
@@ -70,9 +71,13 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                     booking.RecurringBookingType = "";
                 }
 
-                DiscountRules discountRules = new DiscountRules();
-                discountRules = _discountInput.GetDiscountInput();
-                booking.DiscountRuleId = discountRules.DiscountRuleId;
+                //DiscountRules discountRules = new DiscountRules();
+                //discountRules = _discountInput.GetDiscountInput();
+                //booking.DiscountRuleId = discountRules.DiscountRuleId;
+                DiscountService discountService = new DiscountService();
+                PricingService pricingService = new PricingService();
+                decimal subtotal = pricingService.CalculateSubtotal(booking, houseTypes, serviceTypes, )
+                discountService.CalculateDiscountAmount(booking, );
 
                 bool isValid =_validator.ValidateBooking(booking, houseTypes, out string errorMessage);
 
@@ -186,7 +191,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
 
 
-                bool isValid = _validator.Validate(bookingDate, out string errorMessage);
+                bool isValid = _validator.ValidateSingleDateInput(bookingDate, out string errorMessage);
                 if (isValid)
                 {
                     DateTime BookingDate = DateTime.Parse(bookingDate);

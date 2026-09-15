@@ -121,7 +121,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         Bookings newBooking = new Bookings();
 
                         AddOnInput addOnInput = new AddOnInput();
-                        addOnInput.GetAddOnInput(out int carpetedRooms);
+                        List<AddOns> addOns= addOnInput.GetAddOnInput(out int carpetedRooms);//this needs to be called in bookinginput
                         //bookingAddOns input
                         BookingInput bookingInput = new BookingInput();
                         newBooking = bookingInput.GetBookingInput(carpetedRooms);

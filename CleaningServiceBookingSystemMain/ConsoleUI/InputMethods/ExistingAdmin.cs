@@ -32,9 +32,9 @@ namespace CleaningServiceBookingSystemMain.Application.InputMethods
 
                 string errorMessage;
 
-               // bool isValid = _bookingValidator.Validate(admin, out errorMessage);
+                bool isValid = _bookingValidator.ValidateExistingAdmin(admin, out errorMessage);
 
-              //  if (isValid)
+                if (isValid)
                 {
                     return admin;
                 }
