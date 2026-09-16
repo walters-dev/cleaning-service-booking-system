@@ -121,10 +121,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         Bookings newBooking = new Bookings();
 
                         AddOnInput addOnInput = new AddOnInput();
-                        List<AddOns> addOns= addOnInput.GetAddOnInput(out int carpetedRooms);//this needs to be called in bookinginput
+                       // List<AddOns> addOns= addOnInput.GetAddOnInput(out int carpetedRooms);//this needs to be called in bookinginput
                         //bookingAddOns input
                         BookingInput bookingInput = new BookingInput();
-                        newBooking = bookingInput.GetBookingInput(carpetedRooms);
+                       // newBooking = bookingInput.GetBookingInput(carpetedRooms);
 
                         /*
                         System displays house types and service types from SQL Server
