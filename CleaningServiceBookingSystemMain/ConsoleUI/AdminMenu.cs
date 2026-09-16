@@ -67,7 +67,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             new SelectionPrompt<string>()
                             .Title("Choose customer:")
                             .AddChoices("Existing customer", "New customer"));
-
+                        Customers customersBooking = new Customers();
                         if (createBookingChoices == "Existing customer")            //Existing customer chosen from create booking menu
                         {
                             IsConfirmData = false;
@@ -98,8 +98,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 AnsiConsole.MarkupLine("[green]New Customer selected[/]");
                                 //new customer proccess
                                 CustomerInput customerInput = new CustomerInput();
-                                Customers customers = new Customers();
-                                customers = customerInput.GetCustomerInput(admins.Username);
+                                customersBooking = customerInput.GetCustomerInput(admins.Username);
                                 var confirmNewCusChoices = AnsiConsole.Prompt(
                                     new SelectionPrompt<string>()
                                     .Title("Is the customer details correct:")
@@ -109,7 +108,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 {
                                     IsConfirmData = true;
                                     //InMemoryRepositoryCustomers inMemoryRepositoryCustomers = new InMemoryRepositoryCustomers();//....................................................................................................
-                                    customerService.RegisterCustomer(customers);                                                         //saves customer data to sql
+                                    customerService.RegisterCustomer(customersBooking);                                                         //saves customer data to sql
                                 }
                                 else
                                 {
@@ -121,10 +120,11 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         Bookings newBooking = new Bookings();
 
                         AddOnInput addOnInput = new AddOnInput();
-                       // List<AddOns> addOns= addOnInput.GetAddOnInput(out int carpetedRooms);//this needs to be called in bookinginput
-                        //bookingAddOns input
+                        IList<AddOnSelection> addOns= addOnInput.GetAddOnInput(out int carpetedRooms);
+                        
+                        //bookingAddOns input...........................................................................................................................................
                         BookingInput bookingInput = new BookingInput();
-                       // newBooking = bookingInput.GetBookingInput(carpetedRooms);
+                        newBooking = bookingInput.GetBookingInput(carpetedRooms, addOns, customersBooking.Email, admins.Username);
 
                         /*
                         System displays house types and service types from SQL Server

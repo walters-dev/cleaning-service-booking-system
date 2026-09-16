@@ -66,20 +66,20 @@ namespace CleaningServiceBookingSystemMain.Domain.Services
          * Any AddOn whose PricingType is neither "Flat" nor "PerRoom" is silently skipped and contributes R0 -
          * this should only happen if bad seed data reaches this class, since section 12.2 requires AddOns to be seeded correctly.
          */
-        public decimal CalculateAddOnTotal(Bookings booking, List<AddOns> addOns)
+        public decimal CalculateAddOnTotal(Bookings booking, IList<AddOnSelection> addOns)
         {
             decimal addOnTotal = 0;
 
-            foreach (AddOns bookingAddOn in addOns)
+            foreach (AddOnSelection bookingAddOn in addOns)
             {
 
-                if (bookingAddOn.AddOnId == "AD001" || bookingAddOn.AddOnId == "AD003")
+                if (bookingAddOn.AddOn.AddOnId == "AD001" || bookingAddOn.AddOn.AddOnId == "AD003")
                 {
-                    addOnTotal += bookingAddOn.Rate;
+                    addOnTotal += bookingAddOn.AddOn.Rate;
                 }
-                else if (bookingAddOn.AddOnId == "AD002")
+                else if (bookingAddOn.AddOn.AddOnId == "AD002")
                 {
-                    addOnTotal += (bookingAddOn.Rate * booking.CarpetedRooms);
+                    addOnTotal += (bookingAddOn.AddOn.Rate * booking.CarpetedRooms);
                 }
             }
             return addOnTotal;
@@ -88,7 +88,7 @@ namespace CleaningServiceBookingSystemMain.Domain.Services
          * This is the pre-discount, pre-surcharge total, and is the figure discount percentages (BRD 8.4) are applied against.
          */
         public decimal CalculateSubtotal(Bookings booking, HouseTypes houseType,
-            ServiceTypes serviceType, List<AddOns> addOn)
+            ServiceTypes serviceType, IList<AddOnSelection> addOn)
         {
             decimal serviceAmount = CalculateServiceAmount(booking, houseType, serviceType);
             decimal addOnTotal = CalculateAddOnTotal(booking, addOn);
@@ -148,8 +148,8 @@ namespace CleaningServiceBookingSystemMain.Domain.Services
          * Each formula step below runs EXACTLY ONCE and its result is passed forward into the next step , rather than each method being
          * left to silently recalculate earlier steps for itself. This matters most for discount calculation.
          */
-        public void CalculateFinalTotal(Bookings booking, HouseTypes houseType,
-            ServiceTypes serviceType, List<AddOns> addOn)
+        public decimal CalculateFinalTotal(Bookings booking, HouseTypes houseType,
+            ServiceTypes serviceType, IList<AddOnSelection> addOn)
         {
             // Step 1: Subtotal
             decimal subtotal = CalculateSubtotal(booking, houseType, serviceType, addOn);
@@ -164,7 +164,7 @@ namespace CleaningServiceBookingSystemMain.Domain.Services
             decimal surcharge = CalculateWeekendSurcharge(booking, amountAfterDiscount);
 
             // Step 5: FinalTotal
-            decimal finalTotal = amountAfterDiscount + surcharge;
+            return amountAfterDiscount + surcharge;
 
             /* Linking this class to the booking class:
              * Persist every intermediate figure onto the booking so the full breakdown can be shown to staff (FR-05)
@@ -173,7 +173,7 @@ namespace CleaningServiceBookingSystemMain.Domain.Services
             booking.SubTotal = subtotal;
             booking.DiscountAmount = discountAmount;
             booking.SurchargeAmount = surcharge;
-            booking.TotalAmount = finalTotal;
+            //booking.TotalAmount = finalTotal;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         //    _discountInput = discountInput;
         //}
 
-        public Bookings GetBookingInput(int carpetedRooms)
+        public Bookings GetBookingInput(int carpetedRooms, IList<AddOnSelection> addOns, string email, string username)
         {
             while (true)
             {
@@ -76,9 +76,24 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 //booking.DiscountRuleId = discountRules.DiscountRuleId;
                 DiscountService discountService = new DiscountService();
                 PricingService pricingService = new PricingService();
-                decimal subtotal = pricingService.CalculateSubtotal(booking, houseTypes, serviceTypes, )
-                discountService.CalculateDiscountAmount(booking, );
-
+                if (bookingService.FindCustomerBookingHistory(email) == null)
+                {
+                    booking.FirstTimeBooking = true;
+                }
+                else
+                {
+                    booking.FirstTimeBooking = false;
+                }
+                booking.SubTotal = pricingService.CalculateSubtotal(booking, houseTypes, serviceTypes, addOns);
+                booking.DiscountAmount = discountService.CalculateDiscountAmount(booking, booking.SubTotal);
+                booking.SurchargeAmount = pricingService.CalculateWeekendSurcharge(booking, (booking.SubTotal - booking.DiscountAmount));
+                booking.TotalAmount = pricingService.CalculateFinalTotal(booking, houseTypes, serviceTypes, addOns);
+                booking.BookingStatus = "Pending";
+                booking.CreatedAt = DateTime.Today;
+                booking.CreatedBy = username;
+                booking.UpdatedAt = DateTime.Today;
+                booking.UpdatedBy = username;
+                
                 bool isValid =_validator.ValidateBooking(booking, houseTypes, out string errorMessage);
 
                 if (isValid)
