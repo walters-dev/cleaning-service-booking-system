@@ -43,13 +43,13 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             bool IsCorrectAdmin;
             admins = adminLogInInput.GetAdminInput();
             adminInDataSource = adminService.FindAdminPassword(admins.Username);
-            if (adminInDataSource == null)
+            if (adminInDataSource.Username != admins.Username)
             {
                 IsCorrectAdmin = false;
             }
             else 
             {
-                IsCorrectPassword = cryptography.VerifyPassword(adminInDataSource.AdminPassword, admins.AdminPassword);
+                IsCorrectPassword = cryptography.VerifyPassword(adminInDataSource.AdminPassword, admins.AdminPassword); //returns bool true if password is correct
                 if (IsCorrectPassword == false)
                 {
                     IsCorrectAdmin = false;
@@ -61,20 +61,25 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             }
             while (IsCorrectAdmin == false)
             {
-                if (adminInDataSource == null)
+                if (adminInDataSource.Username != admins.Username)          //checks if username exists
                 {
                     AnsiConsole.MarkupLine("[red]No admin by that username[/]");
                     admins = adminLogInInput.GetAdminInput();
                     adminInDataSource = adminService.FindAdminPassword(admins.Username);
-                    break;
+                    IsCorrectAdmin = false;
+                    continue;
                 }
                 //creates encryption class
-                IsCorrectPassword = cryptography.VerifyPassword(adminInDataSource.AdminPassword, admins.AdminPassword);
+                IsCorrectPassword = cryptography.VerifyPassword(adminInDataSource.AdminPassword, admins.AdminPassword);//returns bool true if password is correct
                 if (IsCorrectPassword == false)
                 {
                     AnsiConsole.MarkupLine("[red]Incorrect password[/]");
                     admins = adminLogInInput.GetAdminInput();                               //gets new admin log in input
-                    IsCorrectPassword = cryptography.VerifyPassword(adminInDataSource.AdminPassword, admins.AdminPassword);
+                    IsCorrectAdmin = false;
+                }
+                else
+                {
+                    IsCorrectAdmin = true;
                 }
             }
 
