@@ -362,5 +362,29 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 return bookingsInfo;
             }
         }
+        public Bookings GetBookingsByEmailAndDate()
+        {
+            Bookings booking = new Bookings();
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.GetBookingsByEmailAndDate", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    booking.BookingDate = reader.GetDateTime(reader.GetOrdinal(""));
+                    booking.NumberOfRooms = reader.GetInt32(reader.GetOrdinal(""));
+                    booking.IsRecurring = reader.GetDateTime(reader.GetOrdinal(""));
+                    booking.RecurringBookingType = reader.GetDateTime(reader.GetOrdinal(""));
+                    booking.SubTotal = reader.GetDateTime(reader.GetOrdinal(""));
+                    booking.DiscountAmount = reader.GetDateTime(reader.GetOrdinal(""));
+                    booking.SurchargeAmount = reader.GetDateTime(reader.GetOrdinal(""));
+                    booking.TotalAmount = reader.GetDateTime(reader.GetOrdinal(""));
+                    booking.BookingDate = reader.GetDateTime(reader.GetOrdinal(""));
+                    booking.BookingDate = reader.GetDateTime(reader.GetOrdinal(""));
+                }
+            }
+        }
     }
 }

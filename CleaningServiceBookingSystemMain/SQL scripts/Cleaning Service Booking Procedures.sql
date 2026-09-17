@@ -683,7 +683,7 @@ AS
 BEGIN
     SELECT *
     FROM Bookings
-    WHERE CreatedAt = CURRENT_DATE;
+    WHERE CreatedAt = convert(date, getdate());
 END;
 
 GO
