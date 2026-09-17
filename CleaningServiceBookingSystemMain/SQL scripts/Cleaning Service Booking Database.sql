@@ -7,7 +7,7 @@ CREATE TABLE AdminTable (
     Admin_Password VARCHAR(90),
     Email VARCHAR(50)
 );
-
+select * from AdminTable;
 CREATE TABLE Customers (
     CustomerId VARCHAR(7) PRIMARY KEY,
     Fullname VARCHAR(MAX),
@@ -60,8 +60,6 @@ CREATE TABLE AddOns (
     PricingType VARCHAR(MAX),
     isActive BIT
 );
-
-
 
 
 CREATE TABLE Bookings (

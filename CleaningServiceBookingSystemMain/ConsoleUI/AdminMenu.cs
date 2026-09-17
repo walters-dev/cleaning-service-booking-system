@@ -75,6 +75,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                 {
                     AnsiConsole.MarkupLine("[red]Incorrect password[/]");
                     admins = adminLogInInput.GetAdminInput();                               //gets new admin log in input
+                    adminInDataSource = adminService.FindAdminPassword(admins.Username);
                     IsCorrectAdmin = false;
                 }
                 else
@@ -310,7 +311,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             if (confirmNewAdminChoices == "Yes")
                             {
 
-                                //newAdmin.AdminPassword = cryptography.HashPassword(newAdmin.AdminPassword);
+                                newAdmin.AdminPassword = cryptography.HashPassword(newAdmin.AdminPassword);
                                 adminService.RegisterAdmin(newAdmin);                      //saves customer data to sql
                                 IsConfirmData = true;
                             }

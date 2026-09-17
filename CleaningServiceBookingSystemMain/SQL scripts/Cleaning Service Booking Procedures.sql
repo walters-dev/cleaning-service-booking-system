@@ -12,12 +12,12 @@ BEGIN
 END;
 GO
 CREATE OR ALTER PROCEDURE GetCustomerByEmail
-    @Email VARCHAR (7)
+    @Email VARCHAR (50)
 AS
 BEGIN
      SELECT *
      FROM Customers 
-     WHERE Email LIKE '%' + @Email + '%';
+     WHERE Email = @Email;
 END;
 GO
 CREATE OR ALTER PROCEDURE UpdateCustomer
@@ -658,7 +658,7 @@ END;
 /*password procedure*/
 GO
 CREATE OR ALTER PROCEDURE GetAdminByUsername
-@Username VARCHAR(7)
+@Username VARCHAR(20)
 AS
 BEGIN
 SELECT
