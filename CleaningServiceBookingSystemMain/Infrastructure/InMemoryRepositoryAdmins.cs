@@ -47,7 +47,9 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 }
                 else
                 {
-                    return null;
+                    admin.AdminPassword = "";
+                    admin.Username = "";
+                    return admin;
                 }
             }
             
