@@ -1,13 +1,15 @@
-﻿using CleaningServiceBookingSystemMain.Domain.Models;
+﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Application.Services;
 using CleaningServiceBookingSystemMain.Application.Validators;
-using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Domain.Models;
+using CleaningServiceBookingSystemMain.Infrastructure;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class DiscountInput
     {
         private readonly IDiscountRulesRepository
-            _discountRulesRepository;
+            _discountRulesRepository = new InMemoryRepositoryDiscountRules();
 
         private readonly BookingValidator _validator =
             new BookingValidator();
@@ -19,7 +21,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
         public DiscountRules? GetDiscountInput()
         {
-            IList<DiscountRules> discountRules = _discountRulesRepository.GetDiscountRules();
+            DiscountRulesService service = new DiscountRulesService(_discountRulesRepository);
+            IList<DiscountRules> discountRules = service.ViewAllDiscountRules();
 
             Console.WriteLine();
             Console.WriteLine("===== DISCOUNT RULES =====");
