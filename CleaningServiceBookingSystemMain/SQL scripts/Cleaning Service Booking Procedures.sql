@@ -551,11 +551,40 @@ BEGIN
     ORDER BY d.DiscountName ASC, b.BookingDate DESC;
 
 END;
-go
-go
+GO
+CREATE OR ALTER PROCEDURE GetBookingsByEmailAndDate
+    @Email VARCHAR(255),
+    @BookingDate DATE
+AS
+BEGIN
+
+ SELECT
+        b.BookingId,
+        b.Customers_id,
+        b.Housetypes_id,
+        b.ServiceTypes_id,
+        b.DiscountRule_id,
+        b.BookingDate,
+        b.NumberOfRooms,
+        b.IsRecurring,
+        b.RecurringBookingType,
+        b.SubTotal,
+        b.DiscountAmount,
+        b.SurchargeAmount,
+        b.TotalAmount,
+        b.BookingStatus,
+        c.Fullname,
+        c.Email
+    FROM Bookings AS b
+    INNER JOIN Customers AS c
+        ON b.Customers_id = c.CustomerId
+    WHERE c.Email = @Email
+      AND b.BookingDate = @BookingDate;
+    END;
+GO
 /*length procedures*/
 
-GO
+
 CREATE OR ALTER PROCEDURE AdminRowCount
 AS
 BEGIN
@@ -656,17 +685,7 @@ BEGIN
     FROM Bookings
     WHERE CreatedAt = CURRENT_DATE;
 END;
-GO
-CREATE OR ALTER PROCEDURE GetBookingsByCustomerAndDate
-    @Email VARCHAR(7),
-    @BookingDate DATE
-AS
-BEGIN
-    SELECT *
-    FROM Bookings
-    WHERE Customers_id = @CustomerID
-      AND BookingDate = @BookingDate;
-END;
+
 GO
 
 
