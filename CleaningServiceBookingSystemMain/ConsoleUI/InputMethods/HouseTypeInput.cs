@@ -2,12 +2,13 @@
 using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.Infrastructure;
 using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Application.Services;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class HouseTypeInput
     {
-        private readonly IHouseTypesRepository _houseTypesRepository;
+        private readonly IHouseTypesRepository _houseTypesRepository = new InMemoryRepositoryHouseTypes();
 
         private readonly BookingValidator _validator =
             new BookingValidator();
@@ -19,9 +20,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
         public HouseTypes GetHouseTypeInput()
         {
-            InMemoryRepositoryHouseTypes inMemoryRepositoryHouseTypes = new InMemoryRepositoryHouseTypes();
+            HouseTypeService service = new HouseTypeService(_houseTypesRepository);
 
-            IList<HouseTypes> houseTypes = inMemoryRepositoryHouseTypes.GetHouseTypes();
+            IList<HouseTypes> houseTypes = service.ViewAllHouseTypes();
 
             Console.WriteLine();
             Console.WriteLine("===== HOUSE TYPES =====");

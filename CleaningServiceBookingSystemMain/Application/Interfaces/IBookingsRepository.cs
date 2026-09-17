@@ -17,5 +17,8 @@ namespace CleaningServiceBookingSystemMain.Application.Interfaces
         IList<BookingRevenueSummary> RevenueSummary();                              //gets list of all bookings that have not been cancelled from storage
         IList<BookingByHouseType> BookingsByHouseType();                            //gets list of all bookings of a specific house type from storage
         IList<BookingDiscountUsage> DiscountUsage();                                //gets list of all Discount Usage from storage
+        void ChangeBoookingStatus(Bookings bookings);
+        string BookingsRowCount();
+        IList<Bookings> GetBookingsCreatedToday();
     }
 }

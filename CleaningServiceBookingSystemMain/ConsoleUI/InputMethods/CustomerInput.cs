@@ -1,6 +1,8 @@
-﻿using CleaningServiceBookingSystemMain.Domain.Models;
-using CleaningServiceBookingSystemMain.Infrastructure;
+﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Application.Services;
 using CleaningServiceBookingSystemMain.Application.Validators;
+using CleaningServiceBookingSystemMain.Domain.Models;
+using CleaningServiceBookingSystemMain.Infrastructure;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -10,6 +12,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
     {
         private readonly BookingValidator _validator =
            new BookingValidator();
+        private readonly ICustomerRepository _customerRepository = new InMemoryRepositoryCustomers();
 
         public Customers GetCustomerInput(string username)
         {
@@ -19,20 +22,20 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
                 Console.WriteLine();
                 Console.WriteLine("===== CUSTOMER INFORMATION =====");
-                InMemoryRepositoryCustomers repositoryCustomers = new InMemoryRepositoryCustomers();
-                customer.CustomerId = repositoryCustomers.CustomersRowCount();
+                CustomerService service = new CustomerService(_customerRepository);
+                customer.CustomerId = service.FindCustomerCount();
 
                 Console.Write("Enter full name: ");
-                customer.FullName = Console.ReadLine() ?? "";
+                customer.FullName = Console.ReadLine();
 
                 Console.Write("Enter phone number: ");
-                customer.PhoneNumber = Console.ReadLine() ?? "";
+                customer.PhoneNumber = Console.ReadLine();
 
                 Console.Write("Enter email address: ");
-                customer.Email = Console.ReadLine() ?? "";
+                customer.Email = Console.ReadLine();
 
                 Console.Write("Enter address: ");
-                customer.PhyAddress = Console.ReadLine() ?? "";
+                customer.PhyAddress = Console.ReadLine();
 
                 customer.CreatedAt = DateTime.Today;
                 customer.CreatedBy = username;
@@ -54,14 +57,14 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
         }
 
-        public string GetEmail(string Email)
+        public string GetEmail()
         {
             while (true)
             {
                 Console.WriteLine("Enter Customer Email");
                 string email = Console.ReadLine();
 
-                bool isValid = _validator.Validate(email, out string errormessage);
+                bool isValid = _validator.ValidateCustomerEmailInput(email, out string errormessage);
                 if (isValid)
                 {
                     return email;

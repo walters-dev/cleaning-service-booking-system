@@ -31,7 +31,7 @@ namespace CleaningServiceBookingSystemMain.Application
 
                 string errorMessage;
 
-                bool isValid = _validator.Validate(startDate, endDate, out errorMessage);
+                bool isValid = _validator.ValidateStartEndDate(startDate, endDate, out errorMessage);
 
                 if (isValid)
                 {

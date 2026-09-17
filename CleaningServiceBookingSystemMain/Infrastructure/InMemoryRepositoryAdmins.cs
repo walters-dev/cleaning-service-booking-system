@@ -28,19 +28,22 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
         }
 
-        public string GetAdminPasswordByUsername(string userName)
+        public Admins GetAdminPasswordByUsername(string userName)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("dbo.GetAdminPassword", connection);
+                Admins admin = new Admins();
+                SqlCommand command = new SqlCommand("dbo.GetAdminByUsername", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 command.Parameters.AddWithValue("@Username", userName);
-                command.ExecuteNonQuery();
+                //command.ExecuteNonQuery();
                 using SqlDataReader reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    return reader.GetString(reader.GetOrdinal("Admin_Password"));
+                    admin.AdminPassword = reader.GetString(reader.GetOrdinal("Admin_Password"));
+                    admin.Username = reader.GetString(reader.GetOrdinal("Username"));
+                    return admin;
                 }
                 else
                 {

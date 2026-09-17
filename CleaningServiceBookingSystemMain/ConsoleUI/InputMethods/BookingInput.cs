@@ -1,6 +1,9 @@
-﻿using CleaningServiceBookingSystemMain.Application.Validators;
+﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
+using CleaningServiceBookingSystemMain.Application.Services;
+using CleaningServiceBookingSystemMain.Domain.Services;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
@@ -12,6 +15,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
         private readonly BookingValidator _validator =
             new BookingValidator();
+        private readonly IBookingsRepository _bookingRepository = new InMemoryRepositoryBookings();
 
         //public BookingInput(
         //    HouseTypeInput houseTypeInput,
@@ -23,7 +27,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         //    _discountInput = discountInput;
         //}
 
-        public Bookings GetBookingInput()
+        public Bookings GetBookingInput(int carpetedRooms, IList<AddOnSelection> addOns, string email, string username)
         {
             while (true)
             {
@@ -33,8 +37,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Console.WriteLine();
                 Console.WriteLine("===== BOOKING INFORMATION =====");
 
-                InMemoryRepositoryBookings repositoryBookings = new InMemoryRepositoryBookings();
-                booking.BookingId = repositoryBookings.BookingsRowCount(); 
+                BookingService bookingService = new BookingService(_bookingRepository);
+                booking.BookingId = bookingService.FindBookingCount(); 
 
                 HouseTypes houseTypes = new HouseTypes();
                 houseTypes = _houseTypeInput.GetHouseTypeInput();
@@ -49,9 +53,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Console.Write("Enter number of rooms: ");
                 booking.NumberOfRooms = GetInteger();
 
-                Console.Write("Enter number of carpeted rooms: ");
+                //Console.Write("Enter number of carpeted rooms: ");
 
-                booking.CarpetedRooms = GetInteger();//...............................................................
+                booking.CarpetedRooms = carpetedRooms;//...............................................................
 
                 Console.Write("Enter booking date: ");
                 booking.BookingDate = GetDate();
@@ -67,10 +71,29 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                     booking.RecurringBookingType = "";
                 }
 
-                DiscountRules discountRules = new DiscountRules();
-                discountRules = _discountInput.GetDiscountInput();
-                booking.DiscountRuleId = discountRules.DiscountRuleId;
-
+                //DiscountRules discountRules = new DiscountRules();
+                //discountRules = _discountInput.GetDiscountInput();
+                //booking.DiscountRuleId = discountRules.DiscountRuleId;
+                DiscountService discountService = new DiscountService();
+                PricingService pricingService = new PricingService();
+                if (bookingService.FindCustomerBookingHistory(email) == null)
+                {
+                    booking.FirstTimeBooking = true;
+                }
+                else
+                {
+                    booking.FirstTimeBooking = false;
+                }
+                booking.SubTotal = pricingService.CalculateSubtotal(booking, houseTypes, serviceTypes, addOns);
+                booking.DiscountAmount = discountService.CalculateDiscountAmount(booking, booking.SubTotal);
+                booking.SurchargeAmount = pricingService.CalculateWeekendSurcharge(booking, (booking.SubTotal - booking.DiscountAmount));
+                booking.TotalAmount = pricingService.CalculateFinalTotal(booking, houseTypes, serviceTypes, addOns);
+                booking.BookingStatus = "Pending";
+                booking.CreatedAt = DateTime.Today;
+                booking.CreatedBy = username;
+                booking.UpdatedAt = DateTime.Today;
+                booking.UpdatedBy = username;
+                
                 bool isValid =_validator.ValidateBooking(booking, houseTypes, out string errorMessage);
 
                 if (isValid)
@@ -183,7 +206,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
 
 
-                bool isValid = _validator.Validate(bookingDate, out string errorMessage);
+                bool isValid = _validator.ValidateSingleDateInput(bookingDate, out string errorMessage);
                 if (isValid)
                 {
                     DateTime BookingDate = DateTime.Parse(bookingDate);

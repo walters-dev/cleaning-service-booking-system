@@ -1,4 +1,6 @@
-﻿using CleaningServiceBookingSystemMain.Application.Validators;
+﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Application.Services;
+using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
 using System;
@@ -11,7 +13,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
     {
 
         private readonly BookingValidator _bookingValidator;
-
+        private readonly IAdminRepository _adminRepository = new InMemoryRepositoryAdmins();
         //public AdminInput(BookingValidator bookingValidator)
         //{
         //    _bookingValidator = bookingValidator;
@@ -25,8 +27,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Console.WriteLine();
                 Console.WriteLine("===== ADMIN INFORMATION =====");
 
-                InMemoryRepositoryAdmins repositoryAdmins = new InMemoryRepositoryAdmins();
-                admin.AdminId = repositoryAdmins.AdminRowCount();
+                AdminService service = new AdminService(_adminRepository);
+                admin.AdminId = service.FindAdminCount();
 
                 Console.Write("Enter username: ");
                 admin.Username = Console.ReadLine();

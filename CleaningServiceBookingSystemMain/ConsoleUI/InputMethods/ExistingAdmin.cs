@@ -9,7 +9,7 @@ namespace CleaningServiceBookingSystemMain.Application.InputMethods
 {
     public class ExistingAdmin
     {
-        private readonly BookingValidator _bookingValidator;
+        private readonly BookingValidator _bookingValidator = new BookingValidator();
 
         //public ExistingAdmin(BookingValidator bookingValidator)
         //{
@@ -30,11 +30,9 @@ namespace CleaningServiceBookingSystemMain.Application.InputMethods
                 Console.Write("Password: ");
                 admin.AdminPassword = Console.ReadLine();
 
-                string errorMessage;
+                bool isValid = _bookingValidator.ValidateExistingAdmin(admin, out string errorMessage);
 
-               // bool isValid = _bookingValidator.Validate(admin, out errorMessage);
-
-              //  if (isValid)
+                if (isValid)
                 {
                     return admin;
                 }

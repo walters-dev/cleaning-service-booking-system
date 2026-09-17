@@ -658,7 +658,7 @@ BEGIN
 END;
 GO
 CREATE OR ALTER PROCEDURE GetBookingsByCustomerAndDate
-    @CustomerID VARCHAR(7),
+    @Email VARCHAR(7),
     @BookingDate DATE
 AS
 BEGIN

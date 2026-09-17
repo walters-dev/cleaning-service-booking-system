@@ -11,5 +11,6 @@ namespace CleaningServiceBookingSystemMain.Application.Interfaces
         DiscountRules GetDiscountRulesById(string? Id);//gets a specific Discount Rule from storage
         void Add(DiscountRules discountRules);      //Adds a Discount Rule to storage.......................removable
         //add update and delete if have time
+        string DiscountRulesRowCount();
     }
 }

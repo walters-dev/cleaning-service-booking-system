@@ -2,6 +2,7 @@
 using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
+using CleaningServiceBookingSystemMain.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,22 +11,20 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class AddOnInput
     {
-        private readonly InMemoryRepositoryAddOns _addOnsRepository = new InMemoryRepositoryAddOns();
+        private readonly IAddOnsRepository _addOnsRepository = new InMemoryRepositoryAddOns();
 
-        private readonly BookingValidator _validator =
-            new BookingValidator();
+        private readonly BookingValidator _validator;
 
         //public AddOnInput(IAddOnsRepository addOnsRepository)
         //{
         //    _addOnsRepository = addOnsRepository;
         //}
 
-        public List<AddOnSelection>? GetAddOnInput(out int carpetedRooms)
+        public IList<AddOnSelection>? GetAddOnInput(out int carpetedRooms)
         {
-            IList<AddOns> addOns =
-                _addOnsRepository.GetAddOns();
+            AddOnsService service = new AddOnsService(_addOnsRepository);
+            IList<AddOns> addOns = service.ViewAllAddOns();
             List<AddOnSelection> selectedAddOns = new List<AddOnSelection>();
-
             while (true)
             {
                 carpetedRooms = 0;
@@ -106,7 +105,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                             continue;
                         }
 
-                        break;
+                        //break;
                         // Put value into Booking
                         //bookings.CarpetedRooms = carpetedRooms; //need to get this as a parameter first--------------------------------------------------------------------------
 
@@ -114,7 +113,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                         // CALL BOOKING VALIDATOR
                         string errorMessage;
 
-                        //bool isValid = _bookingValidator.ValidateCarpetedRooms(booking,out errorMessage);
+                       // bool isValid = _validator.ValidateCarpetedRooms(booking,out errorMessage);
 
 
                         //if (isValid)
@@ -130,7 +129,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 }
 
 
-                AddOnSelection selection =  //  this already exists in BookingAddOns-----------------------------------------------------------------------------------------------------------
+                AddOnSelection selection =  
                    new AddOnSelection
                    {
                        AddOn = selectedAddOn,
