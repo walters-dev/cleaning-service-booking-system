@@ -18,7 +18,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                 var managerChoices = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                     .Title("Choose menu option:")
-                    .AddChoices("Bookings", "Summaries", "Trends", "Change user"));
+                    .AddChoices("Bookings", "Summaries", "Trends", "Return to Main Menu"));
                 InMemoryRepositoryBookings inMemoryRepositoryBookings = new InMemoryRepositoryBookings();//................................................................................................................................
                 switch (managerChoices)
                 {
@@ -67,7 +67,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         AnsiConsole.MarkupLine("[green]Trends selected[/]");
                         inMemoryRepositoryBookings.DiscountUsage();
                         break;
-                    case "Change user":
+                    case "Return to Main Menu":
                         IsManagerRunning = false;
                         break;
                 }

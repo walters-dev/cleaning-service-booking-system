@@ -129,7 +129,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 }
 
 
-                AddOnSelection selection =  //  this already exists in BookingAddOns-----------------------------------------------------------------------------------------------------------
+                AddOnSelection selection =  
                    new AddOnSelection
                    {
                        AddOn = selectedAddOn,

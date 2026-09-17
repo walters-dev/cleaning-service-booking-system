@@ -26,16 +26,16 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 customer.CustomerId = service.FindCustomerCount();
 
                 Console.Write("Enter full name: ");
-                customer.FullName = Console.ReadLine() ?? "";
+                customer.FullName = Console.ReadLine();
 
                 Console.Write("Enter phone number: ");
-                customer.PhoneNumber = Console.ReadLine() ?? "";
+                customer.PhoneNumber = Console.ReadLine();
 
                 Console.Write("Enter email address: ");
-                customer.Email = Console.ReadLine() ?? "";
+                customer.Email = Console.ReadLine();
 
                 Console.Write("Enter address: ");
-                customer.PhyAddress = Console.ReadLine() ?? "";
+                customer.PhyAddress = Console.ReadLine();
 
                 customer.CreatedAt = DateTime.Today;
                 customer.CreatedBy = username;
@@ -57,7 +57,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
         }
 
-        public string GetEmail(string Email)
+        public string GetEmail()
         {
             while (true)
             {

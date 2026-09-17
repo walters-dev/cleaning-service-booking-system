@@ -17,7 +17,7 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         {
             _adminRepository.Add(admin);
         }
-        public string FindAdminPassword(string? userName)
+        public Admins FindAdminPassword(string? userName)
         {
             return _adminRepository.GetAdminPasswordByUsername(userName);
         }

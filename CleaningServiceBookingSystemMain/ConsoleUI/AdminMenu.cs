@@ -21,35 +21,65 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
 
             //declare and intialize variables
             bool IsAdminMenuRunning, IsConfirmData, IsCorrectPassword;
-            string username, password;
+            string username, password, email;
+            //creation of classes and services
+            AddOnInput addOnInput = new AddOnInput();
             IAdminRepository adminRepository = new InMemoryRepositoryAdmins();
-            AdminService adminService =new AdminService(adminRepository);
+            AdminService adminService = new AdminService(adminRepository);
             ICustomerRepository customerRepository = new InMemoryRepositoryCustomers();
-            CustomerService customerService =new CustomerService(customerRepository);
+            CustomerService customerService = new CustomerService(customerRepository);
             IBookingsRepository bookingsRepository = new InMemoryRepositoryBookings();
-            BookingService bookingService =new BookingService(bookingsRepository);
+            BookingService bookingService = new BookingService(bookingsRepository);
+            CustomerInput customerEmailInput = new CustomerInput();
 
-            ExistingAdmin adminInput = new ExistingAdmin();
+            ExistingAdmin adminLogInInput = new ExistingAdmin();
             Admins admins = new Admins();
-            admins = adminInput.GetAdminInput();                 //gets user input
-
-            password = adminService.FindAdminPassword(admins.Username);
-            while (password == null)
+            Bookings singleBooking = new Bookings();
+            BookingInput bookingInput = new BookingInput();
+            //gets user input
+            /*===========================validation=================================*/
+            Admins adminInDataSource = new Admins();
+            Encryption cryptography = new Encryption();
+            bool IsCorrectAdmin;
+            admins = adminLogInInput.GetAdminInput();
+            adminInDataSource = adminService.FindAdminPassword(admins.Username);
+            if (adminInDataSource == null)
             {
-                AnsiConsole.MarkupLine("[red]No admin by that username[/]");
-                admins = adminInput.GetAdminInput();
-                password = adminService.FindAdminPassword(admins.Username);
-                Encryption cryptography = new Encryption();//creates encryption class
-                IsCorrectPassword = cryptography.VerifyPassword(password, admins.AdminPassword);
-                while (IsCorrectPassword == false)
+                IsCorrectAdmin = false;
+            }
+            else 
+            {
+                IsCorrectPassword = cryptography.VerifyPassword(adminInDataSource.AdminPassword, admins.AdminPassword);
+                if (IsCorrectPassword == false)
                 {
-                    AnsiConsole.MarkupLine("[red]Incorrect password[/]");
-                    admins = adminInput.GetAdminInput();//get new input.....................................................................................................................................................
-                    IsCorrectPassword = cryptography.VerifyPassword(password, admins.AdminPassword);
+                    IsCorrectAdmin = false;
+                }
+                else
+                {
+                    IsCorrectAdmin = true;
                 }
             }
-            
-            
+            while (IsCorrectAdmin == false)
+            {
+                if (adminInDataSource == null)
+                {
+                    AnsiConsole.MarkupLine("[red]No admin by that username[/]");
+                    admins = adminLogInInput.GetAdminInput();
+                    adminInDataSource = adminService.FindAdminPassword(admins.Username);
+                    break;
+                }
+                //creates encryption class
+                IsCorrectPassword = cryptography.VerifyPassword(adminInDataSource.AdminPassword, admins.AdminPassword);
+                if (IsCorrectPassword == false)
+                {
+                    AnsiConsole.MarkupLine("[red]Incorrect password[/]");
+                    admins = adminLogInInput.GetAdminInput();                               //gets new admin log in input
+                    IsCorrectPassword = cryptography.VerifyPassword(adminInDataSource.AdminPassword, admins.AdminPassword);
+                }
+            }
+
+            /*===========================end validation=================================*/
+
             Console.Clear();
             AnsiConsole.MarkupLine("[green]Signed in[/]");
             IsAdminMenuRunning = true;              //keeps admin menu in loop
@@ -58,7 +88,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                 var adminChoices = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                     .Title("Choose menu option")
-                    .AddChoices("Create Booking", "Create New Customer", "View Bookings", "View Customer", "Change user", "Add Admin")); // display admin menu options
+                    .AddChoices("Create Booking", "Create New Customer", "View Bookings", "View Customer", "Add Admin", "Return to Main Menu")); // display admin menu options
                 switch (adminChoices)
                 {
                     case "Create Booking":                                                  //create booking chosen from admin menu
@@ -74,21 +104,24 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             while (IsConfirmData == false)
                             {
                                 AnsiConsole.MarkupLine("[green]Existing customer selected[/]");
+
+                                email = customerEmailInput.GetEmail();
+                                customersBooking = customerService.FindCustomerWithEmail(email);//validation that it exists is needed........................................................................................
                                 var confirmNewCusChoices = AnsiConsole.Prompt(
                                         new SelectionPrompt<string>()
                                         .Title("Is the customer details correct:")
-                                        .AddChoices("Yes", "No"));
+                                        .AddChoices("Yes", "No"));                      // display confirmation options to see if it is the correct customer
 
                                 if (confirmNewCusChoices == "Yes")
                                 {
-                                    IsConfirmData = true;                                             //Confirms the correct customer
+                                    IsConfirmData = true;                     //Confirms the correct customer
                                 }
                                 else
                                 {
-                                    IsConfirmData = false;                                            //loops to get customer input again
+                                    IsConfirmData = false;                     //loops to get customer input again
                                 }
                             }
-                                
+
                         }
                         else if (createBookingChoices == "New customer")            //create new customer chosen from create booking menu
                         {
@@ -102,13 +135,12 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 var confirmNewCusChoices = AnsiConsole.Prompt(
                                     new SelectionPrompt<string>()
                                     .Title("Is the customer details correct:")
-                                    .AddChoices("Yes", "No"));
+                                    .AddChoices("Yes", "No"));                          // display confirmation options to see if it is the correct customer information
 
                                 if (confirmNewCusChoices == "Yes")
                                 {
                                     IsConfirmData = true;
-                                    //InMemoryRepositoryCustomers inMemoryRepositoryCustomers = new InMemoryRepositoryCustomers();//....................................................................................................
-                                    customerService.RegisterCustomer(customersBooking);                                                         //saves customer data to sql
+                                    customerService.RegisterCustomer(customersBooking);                                 //saves customer data to sql
                                 }
                                 else
                                 {
@@ -116,15 +148,12 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 }
                             }
                         }
-                        //InMemoryRepositoryBookings createBooking = new InMemoryRepositoryBookings();//................................................................................................................................
-                        Bookings newBooking = new Bookings();
 
-                        AddOnInput addOnInput = new AddOnInput();
-                        IList<AddOnSelection> addOns= addOnInput.GetAddOnInput(out int carpetedRooms);
-                        
+                        IList<AddOnSelection> addOns = addOnInput.GetAddOnInput(out int carpetedRooms);
+
                         //bookingAddOns input...........................................................................................................................................
-                        BookingInput bookingInput = new BookingInput();
-                        newBooking = bookingInput.GetBookingInput(carpetedRooms, addOns, customersBooking.Email, admins.Username);
+
+                        singleBooking = bookingInput.GetBookingInput(carpetedRooms, addOns, customersBooking.Email, admins.Username);
 
                         /*
                         System displays house types and service types from SQL Server
@@ -137,16 +166,16 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             var confirmBookingChoice = AnsiConsole.Prompt(
                                     new SelectionPrompt<string>()
                                     .Title("Is the booking details correct:")
-                                    .AddChoices("Yes", "No"));
+                                    .AddChoices("Yes", "No"));                  // display confirmation options to see if it is the correct booking information
 
                             if (confirmBookingChoice == "Yes")
                             {
                                 IsConfirmData = true;
-                                bookingService.RegisterBooking(newBooking);                  //save booking data to sql
+                                bookingService.RegisterBooking(singleBooking);                  //save booking data to sql
                             }
                             else
                             {
-                                IsConfirmData = false;                   // loop it
+                                IsConfirmData = false;                   // loops to get bookings input again
                             }
                         }
                         break;
@@ -164,19 +193,18 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             var confirmNewCusChoices = AnsiConsole.Prompt(
                                new SelectionPrompt<string>()
                                .Title("Is the customer details correct:")
-                               .AddChoices("Yes", "No"));
+                               .AddChoices("Yes", "No"));               // display confirmation options to see if it is the correct customer information
 
                             if (confirmNewCusChoices == "Yes")
                             {
                                 IsConfirmData = true;
                                 //save customer data to sql
-                                //InMemoryRepositoryCustomers inMemoryRepositoryCustomers = new InMemoryRepositoryCustomers();//................................................................................................................................
                                 customerService.RegisterCustomer(customers);
                                 AnsiConsole.MarkupLine("[green]Customer successfully added[/]");
                             }
                             else
                             {
-                                IsConfirmData = false; // loop it
+                                IsConfirmData = false;                  // loops to get customer input again
                             }
                         }
                         break;
@@ -186,12 +214,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         var viewBookingsChoices = AnsiConsole.Prompt(
                                 new SelectionPrompt<string>()
                                 .Title("Choose option:")
-                                .AddChoices("View", "Report", "Update", "Change status"));                      //update could be removed?? also report of what................................................................................................................
-                        //InMemoryRepositoryBookings viewBookings = new InMemoryRepositoryBookings();//................................................................................................................................
+                                .AddChoices("View", "Report", "Update", "Change status"));         // display view booking menu options
                         switch (viewBookingsChoices)
                         {
                             case "View":
-                                //Bookings booking = new Bookings();
                                 IList<Bookings> bookings = bookingService.ViewAllBookings();
                                 Console.WriteLine($"Booking Date\tNumber of rooms \tBooking Status\tTotal Amount\tCreated by\tCreated at\tCarpeted Rooms\tCustomer Name\tCustomer Address"); //display headers for bookings
                                 foreach (var element in bookings)
@@ -205,6 +231,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             case "Change status":
                                 //get booking by customer/date
                                 //show booking? then confirmation
+                                email = customerEmailInput.GetEmail();//validation that it exists is needed...........................................................................................
+                                bookingInput.GetSingleBookingDateInput();
+                                //singleBooking = bookingService.FindCustomerBookingHistory(email);//validation that it exists is needed............................................................................
+                                //procdure to find booking from id and date needed and validation that it exists is needed
                                 IsConfirmData = false;
                                 while (IsConfirmData == false)
                                 {
@@ -223,16 +253,20 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                             switch (changeStatusChoices)
                                             {
                                                 case "Pending":
-
+                                                    singleBooking.BookingStatus = "Pending";
+                                                    bookingService.AmendBookingStatus(singleBooking);
                                                     break;
                                                 case "Confirmed":
-
+                                                    singleBooking.BookingStatus = "Confirmed";
+                                                    bookingService.AmendBookingStatus(singleBooking);
                                                     break;
                                                 case "Completed":
-
+                                                    singleBooking.BookingStatus = "Completed";
+                                                    bookingService.AmendBookingStatus(singleBooking);
                                                     break;
                                                 case "Cancelled":
-
+                                                    singleBooking.BookingStatus = "Cancelled";
+                                                    bookingService.AmendBookingStatus(singleBooking);
                                                     break;
                                             }
                                             break;
@@ -240,21 +274,20 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
 
                                             break;
                                     }
-                                }       
+                                }
                                 break;
                             case "Update":
                                 //input Date and Customer to find the booking needed then display the booking then confirm if correct booking
                                 break;
                         }
-                        
+
                         break;
                     case "View Customer":                                                          //view customers chosen from admin menu
                         AnsiConsole.MarkupLine("[green]View Customer selected[/]");
-                        //select customer by contact
                         //input for email.....................................................................................
-                        //InMemoryRepositoryCustomers viewCustomer = new InMemoryRepositoryCustomers();//................................................................................................................................
                         Customers customer = new Customers();
-                        customer = customerService.FindCustomerWithEmail(Console.ReadLine());
+                        email = customerEmailInput.GetEmail();
+                        customer = customerService.FindCustomerWithEmail(email);
                         Console.WriteLine($"{customer.FullName} {customer.PhoneNumber} {customer.Email} {customer.PhyAddress}");
                         break;
                     case "Add Admin":                                                           //add admin chosen from admin menu
@@ -264,7 +297,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             AdminInput newAdminInput = new AdminInput();
                             Admins newAdmin = new Admins();
                             newAdmin = newAdminInput.GetAdminInput();                 //gets user input
-                            //InMemoryRepositoryAdmins newInMemoryRepositoryAdmins = new InMemoryRepositoryAdmins();//................................................................................................................................
 
                             var confirmNewAdminChoices = AnsiConsole.Prompt(
                                    new SelectionPrompt<string>()
@@ -272,8 +304,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                    .AddChoices("Yes", "No"));
                             if (confirmNewAdminChoices == "Yes")
                             {
-                                Encryption newCryptography = new Encryption();//creates encryption class
-                                newAdmin.AdminPassword = newCryptography.HashPassword(newAdmin.AdminPassword);
+
+                                //newAdmin.AdminPassword = cryptography.HashPassword(newAdmin.AdminPassword);
                                 adminService.RegisterAdmin(newAdmin);                      //saves customer data to sql
                                 IsConfirmData = true;
                             }
@@ -281,13 +313,13 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             {
                                 IsConfirmData = false;                      // loops to get admin input again
                             }
-                            
+
                         }
                         break;
-                    case "Change user":                                                           //add change user chosen from admin menu
+                    case "Return to Main Menu":                                                           //add change user chosen from admin menu
                         IsAdminMenuRunning = false;                                               //this will exit the admin menu loop
                         break;
-                    
+
                 }
             }
 

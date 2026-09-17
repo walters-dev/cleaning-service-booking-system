@@ -8,7 +8,7 @@ namespace CleaningServiceBookingSystemMain.Application.Interfaces
     public interface IAdminRepository
     {
         void Add(Admins admins);        //Adds an admin to storage
-        public string GetAdminPasswordByUsername(string userName); //Gets an admin from stoarge where Username matches
+        public Admins GetAdminPasswordByUsername(string userName); //Gets an admin from stoarge where Username matches
         public string AdminRowCount();
     }
 }
