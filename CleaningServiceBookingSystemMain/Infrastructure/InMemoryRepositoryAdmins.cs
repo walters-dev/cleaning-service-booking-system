@@ -37,7 +37,6 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 command.Parameters.AddWithValue("@Username", userName);
-                //command.ExecuteNonQuery();
                 using SqlDataReader reader = command.ExecuteReader();
                 if (reader.Read())
                 {

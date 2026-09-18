@@ -37,9 +37,9 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         {
             return _bookingRepository.ListByRange(startDate, endDate);
         }
-        public IList<CustomerBookingHistory> FindCustomerBookingHistory(string email)
+        public IList<CustomerBookingHistory> FindCustomerBookingHistory(string phonenumber)
         {
-            return _bookingRepository.BookingHistory(email);
+            return _bookingRepository.BookingHistory(phonenumber);
         }
         public IList<BookingRevenueSummary> ViewRevenueSummary()
         {
@@ -64,6 +64,10 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         public IList<Bookings> ViewBookingsCreatedToday()
         {
             return _bookingRepository.GetBookingsCreatedToday();
+        }
+        public Bookings FindBookingsByPhoneNumberAndDate(string phonenumber, DateTime date)
+        {
+            return _bookingRepository.GetBookingsByPhoneNumberAndDate(phonenumber, date);
         }
     }
 }

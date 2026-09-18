@@ -9,9 +9,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class BookingInput
     {
-        private readonly HouseTypeInput _houseTypeInput;
-        private readonly ServiceTypeInput _serviceTypeInput;
-        private readonly DiscountInput _discountInput;
+        private readonly HouseTypeInput _houseTypeInput = new HouseTypeInput();
+        private readonly ServiceTypeInput _serviceTypeInput = new ServiceTypeInput();
+        private readonly DiscountInput _discountInput = new DiscountInput();
 
         private readonly BookingValidator _validator =
             new BookingValidator();
@@ -27,7 +27,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         //    _discountInput = discountInput;
         //}
 
-        public Bookings GetBookingInput(int carpetedRooms, IList<AddOnSelection> addOns, string email, string username)
+        public Bookings GetBookingInput(int carpetedRooms, IList<AddOnSelection> addOns, string phonenumber, string username, string customerId)
         {
             while (true)
             {
@@ -76,7 +76,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 //booking.DiscountRuleId = discountRules.DiscountRuleId;
                 DiscountService discountService = new DiscountService();
                 PricingService pricingService = new PricingService();
-                if (bookingService.FindCustomerBookingHistory(email) == null)
+                if (bookingService.FindCustomerBookingHistory(phonenumber) == null)
                 {
                     booking.FirstTimeBooking = true;
                 }
@@ -84,6 +84,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 {
                     booking.FirstTimeBooking = false;
                 }
+                booking.CustomerId = customerId;
                 booking.SubTotal = pricingService.CalculateSubtotal(booking, houseTypes, serviceTypes, addOns);
                 booking.DiscountAmount = discountService.CalculateDiscountAmount(booking, booking.SubTotal);
                 booking.SurchargeAmount = pricingService.CalculateWeekendSurcharge(booking, (booking.SubTotal - booking.DiscountAmount));
@@ -218,5 +219,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Console.WriteLine("Please enter the booking date again.");
             }
         }
+        
     }
 }

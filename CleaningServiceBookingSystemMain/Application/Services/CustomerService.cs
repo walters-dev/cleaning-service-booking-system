@@ -33,9 +33,9 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         {
             _customerRepository.Delete(customer);
         }
-        public Customers FindCustomerWithEmail(string email)
+        public Customers FindCustomerWithPhoneNumber(string phonenumber)
         {
-            return _customerRepository.GetCustomersByEmail(email);
+            return _customerRepository.GetCustomersByPhoneNumber(phonenumber);
         }
         public string FindCustomerCount()
         {

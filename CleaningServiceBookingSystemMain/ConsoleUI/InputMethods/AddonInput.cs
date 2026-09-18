@@ -105,7 +105,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                             continue;
                         }
 
-                        //break;
+                        break;
                         // Put value into Booking
                         //bookings.CarpetedRooms = carpetedRooms; //need to get this as a parameter first--------------------------------------------------------------------------
 
