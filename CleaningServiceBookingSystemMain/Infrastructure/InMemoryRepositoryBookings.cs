@@ -100,7 +100,14 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@Customers_id", bookings.CustomerId);
                 command.Parameters.AddWithValue("@Housetypes_id", bookings.HouseTypeId);
                 command.Parameters.AddWithValue("@ServiceTypes_id", bookings.ServiceTypeId);
-                command.Parameters.AddWithValue("@DiscountRule_id", bookings.DiscountRuleId);
+                if (bookings.DiscountRuleId != null)
+                {
+                    command.Parameters.AddWithValue("@DiscountRule_id", bookings.DiscountRuleId);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@DiscountRule_id", null);
+                }
                 command.Parameters.AddWithValue("@BookingDate", bookings.BookingDate);
                 command.Parameters.AddWithValue("@NumberOfRooms", bookings.NumberOfRooms);
                 command.Parameters.AddWithValue("@IsRecurring", bookings.IsRecurring);//............................................ 
@@ -168,7 +175,6 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 connection.Open();
                 command.Parameters.AddWithValue("@StartDate", startDate);
                 command.Parameters.AddWithValue("@EndDate", endDate);
-                command.ExecuteNonQuery();
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
@@ -189,7 +195,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
             return bookingsInfo;
         }
-        public IList<CustomerBookingHistory> BookingHistory(string Email)
+        public IList<CustomerBookingHistory> BookingHistory(string phonenumber)
         {
             List<CustomerBookingHistory> bookingsInfo = new List<CustomerBookingHistory>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
@@ -197,15 +203,14 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlCommand command = new SqlCommand("dbo.CustomerBookingHistory", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                command.Parameters.AddWithValue("@Email", Email);
-                command.ExecuteNonQuery();
+                command.Parameters.AddWithValue("@PhoneNumber", phonenumber);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     var booking = new CustomerBookingHistory()
                     {
                         BookingId = reader.GetString(reader.GetOrdinal("BookingId")),
-                        Fullname = reader.GetString(reader.GetOrdinal("Fullname")),
+                        Fullname = reader.GetString(reader.GetOrdinal("CustomerName")),
                         HouseName = reader.GetString(reader.GetOrdinal("HouseName")),
                         ServiceName = reader.GetString(reader.GetOrdinal("ServiceName")),
                         BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate")),
@@ -360,6 +365,38 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     bookingsInfo.Add(bookings);
                 }
                 return bookingsInfo;
+            }
+        }
+        public Bookings GetBookingsByPhoneNumberAndDate(string phonenumber, DateTime date)
+        {
+            Bookings booking = new Bookings();
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.GetBookingsByPhoneNumberAndDate", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                command.Parameters.AddWithValue("@PhoneNumber", phonenumber);
+                command.Parameters.AddWithValue("@BookingDate", date);
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    booking.BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate"));
+                    booking.NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms"));
+                    booking.IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring"));
+                    booking.RecurringBookingType = reader.GetString(reader.GetOrdinal("RecurringBookingType"));
+                    booking.SubTotal = reader.GetDecimal(reader.GetOrdinal("SubTotal"));
+                    booking.DiscountAmount = reader.GetDecimal(reader.GetOrdinal("DiscountAmount"));
+                    booking.SurchargeAmount = reader.GetDecimal(reader.GetOrdinal("SurchargeAmount"));
+                    booking.TotalAmount = reader.GetDecimal(reader.GetOrdinal("TotalAmount"));
+                    booking.BookingStatus = reader.GetString(reader.GetOrdinal("BookingStatus"));
+                    booking.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
+                    booking.CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"));
+                    booking.FirstTimeBooking = reader.GetBoolean(reader.GetOrdinal("FirstTimeBooking"));
+                    booking.CarpetedRooms = reader.GetInt32(reader.GetOrdinal("CarpetedRooms"));
+                    booking.UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt"));
+                    booking.UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));
+                }
+                return booking;
             }
         }
     }

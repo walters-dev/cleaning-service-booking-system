@@ -11,13 +11,13 @@ BEGIN
      WHERE CustomerId=@CustomerID;
 END;
 GO
-CREATE OR ALTER PROCEDURE GetCustomerByEmail
-    @Email VARCHAR (7)
+CREATE OR ALTER PROCEDURE GetCustomerByPhoneNumber
+    @PhoneNumber VARCHAR (10)
 AS
 BEGIN
      SELECT *
      FROM Customers 
-     WHERE Email LIKE '%' + @Email + '%';
+     WHERE Phonenumber = @PhoneNumber;
 END;
 GO
 CREATE OR ALTER PROCEDURE UpdateCustomer
@@ -237,7 +237,7 @@ CREATE OR ALTER PROCEDURE AddBooking
     @Customers_id VARCHAR(7),
     @Housetypes_id VARCHAR(7),
     @ServiceTypes_id VARCHAR(7),
-    @DiscountRule_id VARCHAR(7),
+    @DiscountRule_id VARCHAR(7) = NULL,
     @BookingDate DATE,
     @NumberOfRooms INT,
     @IsRecurring BIT,
@@ -445,7 +445,7 @@ BEGIN
 END;
 GO
 CREATE OR ALTER PROCEDURE CustomerBookingHistory
-    @Email VARCHAR(7)
+    @PhoneNumber VARCHAR(10)
 AS
 BEGIN
 
@@ -471,7 +471,7 @@ BEGIN
     INNER JOIN Servicetypes s
         ON b.ServiceTypes_id = s.ServiceTypeId
 
-    WHERE c.Email = @Email
+    WHERE c.Phonenumber = @PhoneNumber
 
     ORDER BY b.BookingDate DESC;
 
@@ -552,8 +552,8 @@ BEGIN
 
 END;
 GO
-CREATE OR ALTER PROCEDURE GetBookingsByEmailAndDate
-    @Email VARCHAR(255),
+CREATE OR ALTER PROCEDURE GetBookingsByPhoneNumberAndDate
+    @PhoneNumber VARCHAR(10),
     @BookingDate DATE
 AS
 BEGIN
@@ -578,7 +578,7 @@ BEGIN
     FROM Bookings AS b
     INNER JOIN Customers AS c
         ON b.Customers_id = c.CustomerId
-    WHERE c.Email = @Email
+    WHERE c.Phonenumber = @PhoneNumber
       AND b.BookingDate = @BookingDate;
     END;
 GO
@@ -655,10 +655,10 @@ SELECT
     COUNT(BookingAddOns.BookingAddOnId) AS RowsCount
 FROM BookingAddOns
 END;
-/*password procedure*/
+/*admin procedures*/
 GO
 CREATE OR ALTER PROCEDURE GetAdminByUsername
-@Username VARCHAR(7)
+@Username VARCHAR(20)
 AS
 BEGIN
 SELECT
@@ -671,7 +671,7 @@ CREATE OR ALTER PROCEDURE AddAdmin
 @AdminID Varchar(7),
 @Username Varchar(20) ,
 @AdminPassword Varchar(90),
-@Email Varchar(50)
+@Email Varchar(255)
 AS
 BEGIN
 INSERT INTO AdminTable(Admin_ID, Username, Admin_Password, Email)
@@ -683,10 +683,10 @@ AS
 BEGIN
     SELECT *
     FROM Bookings
-    WHERE CreatedAt = CURRENT_DATE;
+    WHERE CreatedAt = convert(date, getdate());
 END;
 
 GO
-
-
-
+select * from Customers
+select * from Bookings
+select * from BookingAddOns

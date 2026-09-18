@@ -9,6 +9,7 @@ using Spectre.Console;
 using System;
 using System.Linq.Expressions;
 using CleaningServiceBookingSystemMain.Application.Services;
+using CleaningServiceBookingSystemMain.Domain.Services;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI
 {
@@ -21,7 +22,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
 
             //declare and intialize variables
             bool IsAdminMenuRunning, IsConfirmData, IsCorrectPassword;
-            string username, password, email;
+            string username, password, email, phonenumber;
             //creation of classes and services
             AddOnInput addOnInput = new AddOnInput();
             IAdminRepository adminRepository = new InMemoryRepositoryAdmins();
@@ -30,7 +31,11 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             CustomerService customerService = new CustomerService(customerRepository);
             IBookingsRepository bookingsRepository = new InMemoryRepositoryBookings();
             BookingService bookingService = new BookingService(bookingsRepository);
-            CustomerInput customerEmailInput = new CustomerInput();
+            IBookingAddOnsRepository bookingAddOnsRepository = new InMemoryRepositoryBookingAddOns();
+            BookingAddOnService bookingAddOnService = new BookingAddOnService(bookingAddOnsRepository);
+            CustomerInput customerInput = new CustomerInput();
+            BookingAddOns bookingAddOns = new BookingAddOns();
+            PricingService pricingService = new PricingService();
 
             ExistingAdmin adminLogInInput = new ExistingAdmin();
             Admins admins = new Admins();
@@ -75,6 +80,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                 {
                     AnsiConsole.MarkupLine("[red]Incorrect password[/]");
                     admins = adminLogInInput.GetAdminInput();                               //gets new admin log in input
+                    adminInDataSource = adminService.FindAdminPassword(admins.Username);
                     IsCorrectAdmin = false;
                 }
                 else
@@ -110,8 +116,14 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             {
                                 AnsiConsole.MarkupLine("[green]Existing customer selected[/]");
 
-                                email = customerEmailInput.GetEmail();
-                                customersBooking = customerService.FindCustomerWithEmail(email);//validation that it exists is needed........................................................................................
+                                phonenumber = customerInput.GetPhoneNumber();
+                                customersBooking = customerService.FindCustomerWithPhoneNumber(phonenumber);//validation that it exists is needed........................................................................................
+                                if (customersBooking.PhoneNumber == null)
+                                {
+                                    Console.WriteLine("customer doesnt exist");
+                                    
+                                }
+
                                 var confirmNewCusChoices = AnsiConsole.Prompt(
                                         new SelectionPrompt<string>()
                                         .Title("Is the customer details correct:")
@@ -135,7 +147,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             {
                                 AnsiConsole.MarkupLine("[green]New Customer selected[/]");
                                 //new customer proccess
-                                CustomerInput customerInput = new CustomerInput();
                                 customersBooking = customerInput.GetCustomerInput(admins.Username);
                                 var confirmNewCusChoices = AnsiConsole.Prompt(
                                     new SelectionPrompt<string>()
@@ -157,8 +168,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         IList<AddOnSelection> addOns = addOnInput.GetAddOnInput(out int carpetedRooms);
 
                         //bookingAddOns input...........................................................................................................................................
-
-                        singleBooking = bookingInput.GetBookingInput(carpetedRooms, addOns, customersBooking.Email, admins.Username);
+                        bookingAddOns.Quantity = addOns.Count;
+                        bookingAddOns.LineAmount = pricingService.CalculateAddOnTotal(singleBooking, addOns);
+                        singleBooking = bookingInput.GetBookingInput(carpetedRooms, addOns, customersBooking.PhoneNumber, admins.Username, customersBooking.CustomerId);
 
                         /*
                         System displays house types and service types from SQL Server
@@ -176,7 +188,17 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             if (confirmBookingChoice == "Yes")
                             {
                                 IsConfirmData = true;
-                                bookingService.RegisterBooking(singleBooking);                  //save booking data to sql
+                                bookingService.RegisterBooking(singleBooking);
+                                //save booking data to sql
+                                if (addOns.Count == 0)
+                                foreach (var addOn in addOns)
+                                {
+                                    bookingAddOns.AddOnId = addOn.AddOn.AddOnId;
+                                    bookingAddOns.BookingId = bookingAddOns.BookingId;
+                                    bookingAddOns.BookingAddOnId = bookingAddOnService.FindBookingAddOnCount();
+                                    bookingAddOnService.RegisterBookingAddOn(bookingAddOns);
+                                }
+                                
                             }
                             else
                             {
@@ -191,7 +213,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         {
                             AnsiConsole.MarkupLine("[green]New Customer selected[/]");
                             //new customer proccess 
-                            CustomerInput customerInput = new CustomerInput();
+                            //CustomerInput customerInput = new CustomerInput();
                             Customers customers = new Customers();
                             customers = customerInput.GetCustomerInput(admins.Username);
 
@@ -236,10 +258,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             case "Change status":
                                 //get booking by customer/date
                                 //show booking? then confirmation
-                                email = customerEmailInput.GetEmail();//validation that it exists is needed...........................................................................................
+                                phonenumber = customerInput.GetPhoneNumber();//validation that it exists is needed...........................................................................................
                                 bookingInput.GetSingleBookingDateInput();
-                                //singleBooking = bookingService.FindCustomerBookingHistory(email);//validation that it exists is needed............................................................................
-                                //procdure to find booking from id and date needed and validation that it exists is needed
+                                //singleBooking = bookingService.FindCustomerBookingHistory(phonenumber);//validation that it exists is needed............................................................................
+                                //procdure to find booking from email and date needed and validation that it exists is needed
                                 IsConfirmData = false;
                                 while (IsConfirmData == false)
                                 {
@@ -291,8 +313,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         AnsiConsole.MarkupLine("[green]View Customer selected[/]");
                         //input for email.....................................................................................
                         Customers customer = new Customers();
-                        email = customerEmailInput.GetEmail();
-                        customer = customerService.FindCustomerWithEmail(email);
+                        phonenumber = customerInput.GetEmail();
+                        customer = customerService.FindCustomerWithPhoneNumber(phonenumber);
                         Console.WriteLine($"{customer.FullName} {customer.PhoneNumber} {customer.Email} {customer.PhyAddress}");
                         break;
                     case "Add Admin":                                                           //add admin chosen from admin menu
@@ -310,7 +332,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             if (confirmNewAdminChoices == "Yes")
                             {
 
-                                //newAdmin.AdminPassword = cryptography.HashPassword(newAdmin.AdminPassword);
+                                newAdmin.AdminPassword = cryptography.HashPassword(newAdmin.AdminPassword);
                                 adminService.RegisterAdmin(newAdmin);                      //saves customer data to sql
                                 IsConfirmData = true;
                             }

@@ -31,7 +31,7 @@ namespace CleaningServiceBookingSystemMain.Domain.Services
          * one specific construction of DiscountService, which also makes it possible to substitute a test
          * double for DiscountService when unit testing this class.
          */
-        private readonly DiscountService _discountService;
+        private readonly DiscountService _discountService = new DiscountService();
 
         //public PricingService(DiscountService discountService)
         //{

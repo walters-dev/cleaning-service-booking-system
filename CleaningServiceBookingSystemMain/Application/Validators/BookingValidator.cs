@@ -282,5 +282,15 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
             errorMessage = string.Empty;
             return true;
         }
+        public bool ValidateCustomerPhoneNumberInput(string phoneNumber, out string errorMessage)
+        {
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                errorMessage = "Phone number is required.";
+                return false;
+            }
+            errorMessage = string.Empty;
+            return true;
+        }
     }
 }

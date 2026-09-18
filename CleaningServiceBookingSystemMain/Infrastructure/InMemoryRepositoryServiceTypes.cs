@@ -28,7 +28,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         ServiceName = reader.GetString(reader.GetOrdinal("ServiceName")),
                         Multiplier = reader.GetDecimal(reader.GetOrdinal("Multiplier")),
                         ServiceDescription = reader.GetString(reader.GetOrdinal("ServiceDescription")),
-                        IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"))
+                        //IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"))
                     };
                     serviceTypesInfo.Add(serviceTypes);
                 }
@@ -44,7 +44,6 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 command.Parameters.AddWithValue("@ServiceTypes_id", Id);
-                command.ExecuteNonQuery();
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
