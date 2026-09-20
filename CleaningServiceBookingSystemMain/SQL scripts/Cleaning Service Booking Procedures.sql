@@ -216,12 +216,14 @@ END;
 /*booking procedures*/
 GO
 CREATE OR ALTER PROCEDURE ChangeBookingStatus
-@BookingStatus BIT,
-@BookingId VARCHAR(7)
+@BookingStatus VARCHAR(MAX),
+@BookingId VARCHAR(7),
+@Updatedby VARCHAR(MAX)
 AS
 BEGIN
 UPDATE Bookings
 SET
+UpdatedBy = @Updatedby,
 BookingStatus = @BookingStatus 
 WHERE BookingId = @BookingId
 END;
