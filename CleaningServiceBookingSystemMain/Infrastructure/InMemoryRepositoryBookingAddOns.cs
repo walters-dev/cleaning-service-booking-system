@@ -93,7 +93,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             int id;
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("dbo.DiscountRulesRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.BookingAddOnsRowCount", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();

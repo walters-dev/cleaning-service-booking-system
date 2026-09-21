@@ -255,11 +255,11 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 return false;
             }
 
-            if (bookingDateResult1 < DateTime.Today)//......................................................................................................................
-            {
-                errorMessage = "Booking date cannot be in the past.";
-                return false;
-            }
+            //if (bookingDateResult1 < DateTime.Today)//......................................................................................................................
+            //{
+            //    errorMessage = "Booking date cannot be in the past.";
+            //    return false;
+            //}
 
             errorMessage = string.Empty;
             return true;

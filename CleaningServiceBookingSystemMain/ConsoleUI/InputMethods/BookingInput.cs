@@ -76,7 +76,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 //booking.DiscountRuleId = discountRules.DiscountRuleId;
                 DiscountService discountService = new DiscountService();
                 PricingService pricingService = new PricingService();
-                if (bookingService.FindCustomerBookingHistory(phonenumber) == null)
+                var hi = bookingService.FindCustomerBookingHistory(phonenumber);
+                if (bookingService.FindCustomerBookingHistory(phonenumber).Count == 0)
                 {
                     booking.FirstTimeBooking = true;
                 }

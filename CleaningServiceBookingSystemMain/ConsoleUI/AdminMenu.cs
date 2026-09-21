@@ -36,6 +36,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             CustomerInput customerInput = new CustomerInput();
             BookingAddOns bookingAddOns = new BookingAddOns();
             PricingService pricingService = new PricingService();
+            
 
             ExistingAdmin adminLogInInput = new ExistingAdmin();
             Admins admins = new Admins();
@@ -164,22 +165,23 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 }
                             }
                         }
-
-                        IList<AddOnSelection> addOns = addOnInput.GetAddOnInput(out int carpetedRooms);
-
-                        //bookingAddOns input...........................................................................................................................................
-                        bookingAddOns.Quantity = addOns.Count;
-                        bookingAddOns.LineAmount = pricingService.CalculateAddOnTotal(singleBooking, addOns);
-                        singleBooking = bookingInput.GetBookingInput(carpetedRooms, addOns, customersBooking.PhoneNumber, admins.Username, customersBooking.CustomerId);
-
-                        /*
-                        System displays house types and service types from SQL Server
-                        Staff enters number of rooms, booking date, add-ons and recurring option.
-                        System validates all inputs and calculates subtotal, discount, surcharge and final total
-                        */
+                        
                         IsConfirmData = false;
                         while (IsConfirmData == false)
                         {
+                            int carpetedRooms = 0;
+                            IList<AddOnSelection> addOns = addOnInput.GetAddOnInput(ref carpetedRooms);
+
+                            //bookingAddOns input...........................................................................................................................................
+                            bookingAddOns.Quantity = addOns.Count;
+                            bookingAddOns.LineAmount = pricingService.CalculateAddOnTotal(singleBooking, addOns);
+                            singleBooking = bookingInput.GetBookingInput(carpetedRooms, addOns, customersBooking.PhoneNumber, admins.Username, customersBooking.CustomerId);
+
+                            /*
+                            System displays house types and service types from SQL Server
+                            Staff enters number of rooms, booking date, add-ons and recurring option.
+                            System validates all inputs and calculates subtotal, discount, surcharge and final total
+                            */
                             var confirmBookingChoice = AnsiConsole.Prompt(
                                     new SelectionPrompt<string>()
                                     .Title("Is the booking details correct:")
@@ -190,11 +192,11 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 IsConfirmData = true;
                                 bookingService.RegisterBooking(singleBooking);
                                 //save booking data to sql
-                                if (addOns.Count == 0)
+                                if (addOns.Count != 0)
                                 foreach (var addOn in addOns)
                                 {
                                     bookingAddOns.AddOnId = addOn.AddOn.AddOnId;
-                                    bookingAddOns.BookingId = bookingAddOns.BookingId;
+                                    bookingAddOns.BookingId = singleBooking.BookingId;
                                     bookingAddOns.BookingAddOnId = bookingAddOnService.FindBookingAddOnCount();
                                     bookingAddOnService.RegisterBookingAddOn(bookingAddOns);
                                 }
@@ -258,13 +260,16 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             case "Change status":
                                 //get booking by customer/date
                                 //show booking? then confirmation
-                                phonenumber = customerInput.GetPhoneNumber();//validation that it exists is needed...........................................................................................
-                                bookingInput.GetSingleBookingDateInput();
+                                //phonenumber = customerInput.GetPhoneNumber();//validation that it exists is needed...........................................................................................
+                                //bookingInput.GetSingleBookingDateInput();
                                 //singleBooking = bookingService.FindCustomerBookingHistory(phonenumber);//validation that it exists is needed............................................................................
                                 //procdure to find booking from email and date needed and validation that it exists is needed
+                                //FindBookingsByPhoneNumberAndDate
+                                
                                 IsConfirmData = false;
                                 while (IsConfirmData == false)
                                 {
+                                    singleBooking = bookingService.FindBookingsByPhoneNumberAndDate(customerInput.GetPhoneNumber(), bookingInput.GetSingleBookingDateInput());      //get booking by customer/date
                                     var confirmSelectedBookingChoices = AnsiConsole.Prompt(
                                         new SelectionPrompt<string>()
                                         .Title("Is the booking details correct:")

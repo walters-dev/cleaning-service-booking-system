@@ -81,7 +81,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@Email", customers.Email);
                 command.Parameters.AddWithValue("@PhysAddress", customers.PhyAddress);
                 command.Parameters.AddWithValue("@CreatedAt", customers.CreatedAt);
-                command.Parameters.AddWithValue("@CreatedBy", customers.CreatedAt);
+                command.Parameters.AddWithValue("@CreatedBy", customers.CreatedBy);
                 command.ExecuteNonQuery();                                          //saves new customer to database
             }
         }
