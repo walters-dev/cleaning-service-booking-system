@@ -4,6 +4,7 @@ using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
 using CleaningServiceBookingSystemMain.Application.Services;
 using CleaningServiceBookingSystemMain.Domain.Services;
+using Spectre.Console;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
@@ -85,9 +86,25 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 {
                     booking.FirstTimeBooking = false;
                 }
+                string discountName;
                 booking.CustomerId = customerId;
                 booking.SubTotal = pricingService.CalculateSubtotal(booking, houseTypes, serviceTypes, addOns);
-                booking.DiscountAmount = discountService.CalculateDiscountAmount(booking, booking.SubTotal);
+                booking.DiscountAmount = discountService.CalculateDiscountAmount(booking, booking.SubTotal, out discountName);
+                switch (discountName)
+                {
+                    case "First-Time Customer Discount":
+                        booking.DiscountRuleId = "DR001";
+                        break;
+                    case "Recurring Booking Discount":
+                        booking.DiscountRuleId = "DR002";
+                        break;
+                    case "Large Booking Discount":
+                        booking.DiscountRuleId = "DR003";
+                        break;
+                    default:
+                        booking.DiscountRuleId = null;
+                        break;
+                }
                 booking.SurchargeAmount = pricingService.CalculateWeekendSurcharge(booking, (booking.SubTotal - booking.DiscountAmount));
                 booking.TotalAmount = pricingService.CalculateFinalTotal(booking, houseTypes, serviceTypes, addOns);
                 booking.BookingStatus = "Pending";
