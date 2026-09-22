@@ -192,14 +192,17 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 IsConfirmData = true;
                                 bookingService.RegisterBooking(singleBooking);
                                 //save booking data to sql
-                                if (addOns.Count != 0)
-                                foreach (var addOn in addOns)
+                                if (addOns.Count != 0) //checks if there was any addOns selected
                                 {
-                                    bookingAddOns.AddOnId = addOn.AddOn.AddOnId;
-                                    bookingAddOns.BookingId = singleBooking.BookingId;
-                                    bookingAddOns.BookingAddOnId = bookingAddOnService.FindBookingAddOnCount();
-                                    bookingAddOnService.RegisterBookingAddOn(bookingAddOns);
+                                    foreach (var addOn in addOns)//goes through each addOn selected and adds them to BookingAddOns to storage
+                                    {
+                                        bookingAddOns.AddOnId = addOn.AddOn.AddOnId;
+                                        bookingAddOns.BookingId = singleBooking.BookingId;
+                                        bookingAddOns.BookingAddOnId = bookingAddOnService.FindBookingAddOnCount();
+                                        bookingAddOnService.RegisterBookingAddOn(bookingAddOns);
+                                    }
                                 }
+                                
                                 
                             }
                             else
@@ -310,6 +313,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 break;
                             case "Update":
                                 //input Date and Customer to find the booking needed then display the booking then confirm if correct booking
+                                //change date, updatedby, updatedat, recalc, addons which means delete booking addons where  addonid = addonid, num of rooms carpeted rooms
                                 break;
                         }
 

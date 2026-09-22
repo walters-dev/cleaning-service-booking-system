@@ -110,4 +110,3 @@ CREATE TABLE BookingAddOns (
     FOREIGN KEY (AddOn_id)
         REFERENCES AddOns(AddOnId)
 );
-
