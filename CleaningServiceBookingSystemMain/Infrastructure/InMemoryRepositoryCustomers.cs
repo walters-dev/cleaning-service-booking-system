@@ -81,7 +81,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@Email", customers.Email);
                 command.Parameters.AddWithValue("@PhysAddress", customers.PhyAddress);
                 command.Parameters.AddWithValue("@CreatedAt", customers.CreatedAt);
-                command.Parameters.AddWithValue("@CreatedBy", customers.CreatedAt);
+                command.Parameters.AddWithValue("@CreatedBy", customers.CreatedBy);
                 command.ExecuteNonQuery();                                          //saves new customer to database
             }
         }
@@ -112,16 +112,15 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.ExecuteNonQuery();
             }
         }
-        public Customers GetCustomersByEmail(string email)
+        public Customers GetCustomersByPhoneNumber(string phonenumber)
         {
             Customers customersInfo = new Customers();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("dbo.GetCustomerByEmail", connection);
+                SqlCommand command = new SqlCommand("dbo.GetCustomerByPhoneNumber", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
-                command.Parameters.AddWithValue("@Email", email);
-                command.ExecuteNonQuery();
+                command.Parameters.AddWithValue("@PhoneNumber", phonenumber);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {

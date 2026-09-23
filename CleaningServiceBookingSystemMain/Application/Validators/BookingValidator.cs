@@ -255,11 +255,11 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 return false;
             }
 
-            if (bookingDateResult1 < DateTime.Today)//......................................................................................................................
-            {
-                errorMessage = "Booking date cannot be in the past.";
-                return false;
-            }
+            //if (bookingDateResult1 < DateTime.Today)//......................................................................................................................
+            //{
+            //    errorMessage = "Booking date cannot be in the past.";
+            //    return false;
+            //}
 
             errorMessage = string.Empty;
             return true;
@@ -279,6 +279,16 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 }
             }
 
+            errorMessage = string.Empty;
+            return true;
+        }
+        public bool ValidateCustomerPhoneNumberInput(string phoneNumber, out string errorMessage)
+        {
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                errorMessage = "Phone number is required.";
+                return false;
+            }
             errorMessage = string.Empty;
             return true;
         }

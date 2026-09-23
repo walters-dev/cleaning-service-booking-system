@@ -4,14 +4,15 @@ using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
 using CleaningServiceBookingSystemMain.Application.Services;
 using CleaningServiceBookingSystemMain.Domain.Services;
+using Spectre.Console;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class BookingInput
     {
-        private readonly HouseTypeInput _houseTypeInput;
-        private readonly ServiceTypeInput _serviceTypeInput;
-        private readonly DiscountInput _discountInput;
+        private readonly HouseTypeInput _houseTypeInput = new HouseTypeInput();
+        private readonly ServiceTypeInput _serviceTypeInput = new ServiceTypeInput();
+        private readonly DiscountInput _discountInput = new DiscountInput();
 
         private readonly BookingValidator _validator =
             new BookingValidator();
@@ -27,7 +28,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         //    _discountInput = discountInput;
         //}
 
-        public Bookings GetBookingInput(int carpetedRooms, IList<AddOnSelection> addOns, string email, string username)
+        public Bookings GetBookingInput(int carpetedRooms, IList<AddOnSelection> addOns, string phonenumber, string username, string customerId)
         {
             while (true)
             {
@@ -76,7 +77,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 //booking.DiscountRuleId = discountRules.DiscountRuleId;
                 DiscountService discountService = new DiscountService();
                 PricingService pricingService = new PricingService();
-                if (bookingService.FindCustomerBookingHistory(email) == null)
+                var hi = bookingService.FindCustomerBookingHistory(phonenumber);
+                if (bookingService.FindCustomerBookingHistory(phonenumber).Count == 0)
                 {
                     booking.FirstTimeBooking = true;
                 }
@@ -84,8 +86,25 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 {
                     booking.FirstTimeBooking = false;
                 }
+                string discountName;
+                booking.CustomerId = customerId;
                 booking.SubTotal = pricingService.CalculateSubtotal(booking, houseTypes, serviceTypes, addOns);
-                booking.DiscountAmount = discountService.CalculateDiscountAmount(booking, booking.SubTotal);
+                booking.DiscountAmount = discountService.CalculateDiscountAmount(booking, booking.SubTotal, out discountName);
+                switch (discountName)
+                {
+                    case "First-Time Customer Discount":
+                        booking.DiscountRuleId = "DR001";
+                        break;
+                    case "Recurring Booking Discount":
+                        booking.DiscountRuleId = "DR002";
+                        break;
+                    case "Large Booking Discount":
+                        booking.DiscountRuleId = "DR003";
+                        break;
+                    default:
+                        booking.DiscountRuleId = null;
+                        break;
+                }
                 booking.SurchargeAmount = pricingService.CalculateWeekendSurcharge(booking, (booking.SubTotal - booking.DiscountAmount));
                 booking.TotalAmount = pricingService.CalculateFinalTotal(booking, houseTypes, serviceTypes, addOns);
                 booking.BookingStatus = "Pending";
@@ -218,5 +237,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Console.WriteLine("Please enter the booking date again.");
             }
         }
+        
     }
 }

@@ -9,7 +9,7 @@ namespace CleaningServiceBookingSystemMain.Application
     {
         //private readonly StartDateInput _startDateInput;
         //private readonly EndDateInput _endDateInput;
-        BookingValidator _validator;
+        BookingValidator _validator = new BookingValidator();
 
         //public DateRangeInput(StartDateInput startDateInput, 
         //                      EndDateInput endDateInput,

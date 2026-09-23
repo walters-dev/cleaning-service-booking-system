@@ -1,18 +1,18 @@
 CREATE DATABASE CleaningServiceBooking
-using = CleaningServiceBooking
+use CleaningServiceBooking
 
 CREATE TABLE AdminTable (
     Admin_Id VARCHAR(7) PRIMARY KEY,
     Username VARCHAR(20) UNIQUE,
     Admin_Password VARCHAR(90),
-    Email VARCHAR(50)
+    Email VARCHAR(255)
 );
-
+select * from AdminTable;
 CREATE TABLE Customers (
     CustomerId VARCHAR(7) PRIMARY KEY,
     Fullname VARCHAR(MAX),
-    Phonenumber VARCHAR(10),
-    Email VARCHAR(255) UNIQUE,
+    Phonenumber VARCHAR(10) UNIQUE,
+    Email VARCHAR(255),
     PhysAddress VARCHAR(255),
     CreatedAt DATE,
     UpdatedAt DATE,
@@ -62,8 +62,6 @@ CREATE TABLE AddOns (
 );
 
 
-
-
 CREATE TABLE Bookings (
     BookingId VARCHAR(7) PRIMARY KEY,
     Customers_id VARCHAR(7),
@@ -99,13 +97,12 @@ CREATE TABLE Bookings (
         REFERENCES DiscountRules(DiscountRuleId)
 );
 
-
 CREATE TABLE BookingAddOns (
     BookingAddOnId VARCHAR(7) PRIMARY KEY,
     Booking_id VARCHAR(7),
     AddOn_id VARCHAR(10),
     Quantity INT,
-    LineAmount decimal,
+    LineAmount decimal(10,2),
 
     FOREIGN KEY (Booking_id)
         REFERENCES Bookings(BookingId),
@@ -113,4 +110,3 @@ CREATE TABLE BookingAddOns (
     FOREIGN KEY (AddOn_id)
         REFERENCES AddOns(AddOnId)
 );
-

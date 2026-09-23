@@ -61,13 +61,31 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         {
             while (true)
             {
-                Console.WriteLine("Enter Customer Email");
+                Console.WriteLine("Enter Email");
                 string email = Console.ReadLine();
 
                 bool isValid = _validator.ValidateCustomerEmailInput(email, out string errormessage);
                 if (isValid)
                 {
                     return email;
+                }
+
+                Console.WriteLine();
+                Console.WriteLine($"Validation error: {errormessage}");
+                Console.WriteLine("Please Enter the email again");
+            }
+        }
+        public string GetPhoneNumber()
+        {
+            while (true)
+            {
+                Console.WriteLine("Enter phone number");
+                string phonenumber = Console.ReadLine();
+
+                bool isValid = _validator.ValidateCustomerPhoneNumberInput(phonenumber, out string errormessage);
+                if (isValid)
+                {
+                    return phonenumber;
                 }
 
                 Console.WriteLine();

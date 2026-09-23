@@ -12,7 +12,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
     public class AdminInput
     {
 
-        private readonly BookingValidator _bookingValidator;
+        private readonly BookingValidator _bookingValidator = new BookingValidator();
         private readonly IAdminRepository _adminRepository = new InMemoryRepositoryAdmins();
         //public AdminInput(BookingValidator bookingValidator)
         //{

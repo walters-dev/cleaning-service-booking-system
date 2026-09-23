@@ -20,14 +20,14 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         //    _addOnsRepository = addOnsRepository;
         //}
 
-        public IList<AddOnSelection>? GetAddOnInput(out int carpetedRooms)
+        public IList<AddOnSelection>? GetAddOnInput(ref int carpetedRooms)
         {
             AddOnsService service = new AddOnsService(_addOnsRepository);
             IList<AddOns> addOns = service.ViewAllAddOns();
             List<AddOnSelection> selectedAddOns = new List<AddOnSelection>();
             while (true)
             {
-                carpetedRooms = 0;
+                //carpetedRooms = 0;
                 Console.WriteLine();
                 Console.WriteLine("===== ADD-ONS =====");
 
@@ -105,7 +105,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                             continue;
                         }
 
-                        //break;
+                        break;
                         // Put value into Booking
                         //bookings.CarpetedRooms = carpetedRooms; //need to get this as a parameter first--------------------------------------------------------------------------
 
