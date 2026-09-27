@@ -12,8 +12,12 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
     {
         private readonly BookingValidator _validator =
            new BookingValidator();
-        private readonly ICustomerRepository _customerRepository = new InMemoryRepositoryCustomers();
+        private readonly ICustomerRepository _customerRepository;
 
+        public CustomerInput(ICustomerRepository customerRepository) 
+        {
+            _customerRepository = customerRepository;
+        }
         public Customers GetCustomerInput(string username)
         {
            while (true)

@@ -31,12 +31,12 @@ namespace CleaningServiceBookingSystemMain.Domain.Services
          * one specific construction of DiscountService, which also makes it possible to substitute a test
          * double for DiscountService when unit testing this class.
          */
-        private readonly DiscountService _discountService = new DiscountService();
+        private readonly DiscountService _discountService;
 
-        //public PricingService(DiscountService discountService)
-        //{
-        //    _discountService = discountService;
-        //}
+        public PricingService(DiscountService discountService)
+        {
+            _discountService = discountService;
+        }
 
         /* BaseAmount = HouseType.BaseRate + (NumberOfRooms * HouseType.RatePerRoom)
          * Uses the base and per-room rate for the selected house type
@@ -104,7 +104,7 @@ namespace CleaningServiceBookingSystemMain.Domain.Services
          */
         public decimal CalculateDiscountAmount(Bookings booking, decimal subtotal)
         {
-            decimal discount = _discountService.CalculateDiscountAmount(booking, subtotal);
+            decimal discount = _discountService.CalculateDiscountAmount(booking, subtotal, out string discountName);
             return discount;
         }
 

@@ -24,7 +24,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             bool IsAdminMenuRunning, IsConfirmData, IsCorrectPassword;
             string username, password, email, phonenumber;
             //creation of classes and services
-            AddOnInput addOnInput = new AddOnInput();
+            IAddOnsRepository addOnsRepository = new InMemoryRepositoryAddOns();
             IAdminRepository adminRepository = new InMemoryRepositoryAdmins();
             AdminService adminService = new AdminService(adminRepository);
             ICustomerRepository customerRepository = new InMemoryRepositoryCustomers();
@@ -32,16 +32,17 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             IBookingsRepository bookingsRepository = new InMemoryRepositoryBookings();
             BookingService bookingService = new BookingService(bookingsRepository);
             IBookingAddOnsRepository bookingAddOnsRepository = new InMemoryRepositoryBookingAddOns();
-            BookingAddOnService bookingAddOnService = new BookingAddOnService(bookingAddOnsRepository);
-            CustomerInput customerInput = new CustomerInput();
+            BookingAddOnService bookingAddOnService = new BookingAddOnService(bookingAddOnsRepository);   
             BookingAddOns bookingAddOns = new BookingAddOns();
-            PricingService pricingService = new PricingService();
-            
+            DiscountService discountService = new DiscountService();
+            PricingService pricingService = new PricingService(discountService);
+            AddOnInput addOnInput = new AddOnInput(addOnsRepository);
+            CustomerInput customerInput = new CustomerInput(customerRepository);
 
             ExistingAdmin adminLogInInput = new ExistingAdmin();
             Admins admins = new Admins();
             Bookings singleBooking = new Bookings();
-            BookingInput bookingInput = new BookingInput();
+            BookingInput bookingInput = new BookingInput(bookingsRepository);
             //gets user input
             /*===========================validation=================================*/
             Admins adminInDataSource = new Admins();
@@ -330,7 +331,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         IsConfirmData = false;
                         while (IsConfirmData == false)
                         {
-                            AdminInput newAdminInput = new AdminInput();
+                            AdminInput newAdminInput = new AdminInput(adminRepository);
                             Admins newAdmin = new Admins();
                             newAdmin = newAdminInput.GetAdminInput();                 //gets user input
 

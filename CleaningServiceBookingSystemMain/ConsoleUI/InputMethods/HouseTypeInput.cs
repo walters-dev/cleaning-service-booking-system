@@ -10,10 +10,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
     {
         private readonly IHouseTypesRepository _houseTypesRepository = new InMemoryRepositoryHouseTypes();
 
-        private readonly BookingValidator _validator =
-            new BookingValidator();
-
-        //public HouseTypeInput(IHouseTypesRepository houseTypesRepository)
+        //public HouseTypeInput(IHouseTypesRepository houseTypesRepository)   bcs its in bookinginput it wont work
         //{
         //    _houseTypesRepository = houseTypesRepository;
         //}
