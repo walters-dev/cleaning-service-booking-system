@@ -22,7 +22,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             BookingService bookingService = new BookingService(bookingsRepository);
             CustomerInput customerInput = new CustomerInput(customerRepository);
             DateRangeInput dateRangeInput = new DateRangeInput();
-            //BookingRevenueSummary summary = new BookingRevenueSummary();
+            //Customers customer = new Customers();
+            string phoneNumber;
             while (IsManagerRunning == true)
             {
                 var managerChoices = AnsiConsole.Prompt(
@@ -33,6 +34,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                 switch (managerChoices)
                 {
                     case "Bookings":
+                        Console.Clear();
                         AnsiConsole.MarkupLine("[green]Booking selected[/]");
                         var bookingChoices = AnsiConsole.Prompt(
                             new SelectionPrompt<string>()
@@ -41,9 +43,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         switch (bookingChoices)
                         {
                             case "Customer Booking History":
-                                customerInput.GetEmail();
-                                //Console.WriteLine($"Customer name\tHouse type\tService type\tBooking Date\tNumber of rooms\tTotal amount\tBooking status");
-                                IList<CustomerBookingHistory> bookingsHistory = bookingService.FindCustomerBookingHistory("");//need phone number input.................................
+                                phoneNumber = customerInput.GetPhoneNumber();
+                                IList<CustomerBookingHistory> bookingsHistory = bookingService.FindCustomerBookingHistory(phoneNumber);
                                 if (bookingsHistory.Count == 0)
                                 {
                                     AnsiConsole.MarkupLine("[red]Customer does not exist[/]");
@@ -53,7 +54,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 tableHistory.DoubleBorder();
                                 tableHistory.ShowRowSeparators();
                                 tableHistory.BorderColor(Color.Blue);
-                                tableHistory.Title($"{bookingsHistory[1].Fullname}'s booking history:");
+                                tableHistory.Title($"{bookingsHistory[0].Fullname}'s booking history:");
                                 //tableHistory.AddColumn("Customer name"); they know who the customer is 
                                 tableHistory.AddColumn("House Type");
                                 tableHistory.AddColumn("Service Type");
@@ -63,15 +64,15 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 tableHistory.AddColumn("Booking status");
                                 foreach (var booking in bookingsHistory)
                                 {
-                                    //Console.WriteLine($"{booking.Fullname}\t{booking.HouseName}\t{booking.ServiceName}\t{booking.BookingDate}\t{booking.NumberOfRooms}\t{booking.TotalAmount}\t{booking.BookingStatus}");
                                     tableHistory.AddRow(booking.HouseName, booking.ServiceName, booking.BookingDate.Date.ToString("dd MMM yyyy"), booking.NumberOfRooms.ToString(), booking.TotalAmount.ToString("C"), booking.BookingStatus);
                                 }
+                                var centered = Align.Center(tableHistory);
+                                AnsiConsole.Write(centered);
                                 break;
                             case "Booking List By Range":
-                                var date = dateRangeInput.GetDateRangeInput();
-                                IList<BookingByDate> bookingsByDate = bookingService.FindAllBookingsInDateRange(date.startDate, date.endDate);//need input.................................................
+                                var dateRange = dateRangeInput.GetDateRangeInput();
+                                IList<BookingByDate> bookingsByDate = bookingService.FindAllBookingsInDateRange(dateRange.startDate, dateRange.endDate);
                                 var tableRange = new Table();
-                                //table.RoundedBorder();
                                 tableRange.DoubleBorder();
                                 tableRange.ShowRowSeparators();
                                 tableRange.AddColumn("Customer name");
@@ -85,7 +86,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 foreach (var booking in bookingsByDate)
                                 {
                                     tableRange.AddRow(booking.Fullname, booking.HouseName, booking.ServiceName, booking.BookingDate.Date.ToString("dd MMM yyyy"), booking.NumberOfRooms.ToString(), booking.TotalAmount.ToString("C"), booking.BookingStatus.ToString());
-                                    //Console.WriteLine($"{booking.Fullname}\t{booking.HouseName}\t{booking.ServiceName}\t{booking.BookingDate}\t{booking.NumberOfRooms}\t{booking.TotalAmount}\t{booking.BookingStatus}");
                                 }
                                 AnsiConsole.Write(tableRange);
                                 break;
@@ -95,7 +95,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 IList<BookingByHouseType> bookingsByHouses = bookingService.ViewBookingsByHouse();
                                 foreach (var booking in bookingsByHouses)
                                 {
-                                    if (bookingsByHouses.Count % 2 == 0)        //alternates bar colours used
+                                    if (bookingsByHouses.Count % 2 == 0)        //alternates 2 different bar colours used
                                     {
                                         chart.AddItem(booking.HouseName, booking.BookingCount, Color.Aqua);
                                     }
@@ -109,19 +109,37 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         }
                         break;
                     case "Summaries":
+                        Console.Clear();
                         AnsiConsole.MarkupLine("[green]Summaries selected[/]");
                         var chartMoney = new BreakdownChart();
                         //var chart = new BarChart();
                         IList < BookingRevenueSummary > summary = bookingService.ViewRevenueSummary();
                         chartMoney.ShowPercentage();
-                        chartMoney.UseValueFormatter((value, culture) => $"R {value:N}");
+                        chartMoney.UseValueFormatter((value, culture) => $"R {value:N}");       //formats the items to currrency
                         foreach (var booking in summary)
                         {
-                            chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.Aqua);
+                            if (summary.Count % 4 == 0) //alternates 4 different bar colours used
+                            {
+                                chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.Aqua);
+                            }
+                            else if(summary.Count % 4 == 1)
+                            {
+                                chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.Green);
+                            }
+                            else if (summary.Count % 4 == 2)
+                            {
+                                chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.Magenta1);
+                            }
+                            else
+                            {
+                                chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.Yellow);
+                            }
+                            
                         }
                         AnsiConsole.Write(chartMoney);
                         break;
                     case "Trends":
+                        Console.Clear();
                         AnsiConsole.MarkupLine("[green]Trends selected[/]");
                         IList <BookingDiscountUsage> bookingsDiscounts = bookingService.ViewDiscountUsage();
                         var discountTable = new Table();
@@ -139,6 +157,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         AnsiConsole.Write(discountTable);
                         break;
                     case "Return to Main Menu":
+                        Console.Clear();
                         IsManagerRunning = false;
                         break;
                 }
