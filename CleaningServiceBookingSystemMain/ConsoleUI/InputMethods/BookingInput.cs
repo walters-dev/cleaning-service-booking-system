@@ -16,8 +16,12 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
         private readonly BookingValidator _validator =
             new BookingValidator();
-        private readonly IBookingsRepository _bookingRepository = new InMemoryRepositoryBookings();
+        private readonly IBookingsRepository _bookingRepository;
 
+        public BookingInput(IBookingsRepository bookingRepository)
+        {
+            _bookingRepository = bookingRepository;
+        }
         //public BookingInput(
         //    HouseTypeInput houseTypeInput,
         //    ServiceTypeInput serviceTypeInput,
@@ -76,7 +80,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 //discountRules = _discountInput.GetDiscountInput();
                 //booking.DiscountRuleId = discountRules.DiscountRuleId;
                 DiscountService discountService = new DiscountService();
-                PricingService pricingService = new PricingService();
+                PricingService pricingService = new PricingService(discountService);
                 var hi = bookingService.FindCustomerBookingHistory(phonenumber);
                 if (bookingService.FindCustomerBookingHistory(phonenumber).Count == 0)
                 {
@@ -96,10 +100,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                         booking.DiscountRuleId = "DR001";
                         break;
                     case "Recurring Booking Discount":
-                        booking.DiscountRuleId = "DR002";
+                        booking.DiscountRuleId = "DR003";
                         break;
                     case "Large Booking Discount":
-                        booking.DiscountRuleId = "DR003";
+                        booking.DiscountRuleId = "DR002";
                         break;
                     default:
                         booking.DiscountRuleId = null;

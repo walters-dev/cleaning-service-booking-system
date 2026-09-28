@@ -11,11 +11,11 @@ namespace CleaningServiceBookingSystemMain.Application
         //private readonly EndDateInput _endDateInput;
         BookingValidator _validator = new BookingValidator();
 
-        //public DateRangeInput(StartDateInput startDateInput, 
+        //public DateRangeInput(StartDateInput startDateInput,
         //                      EndDateInput endDateInput,
         //                      BookingValidator validator)
         //{
-        //    _startDateInput = startDateInput;
+        //    _startDateInput = startDateInput;           you're using DI for a method that is in this class
         //    _endDateInput = endDateInput;
         //    _validator = validator;
         //}

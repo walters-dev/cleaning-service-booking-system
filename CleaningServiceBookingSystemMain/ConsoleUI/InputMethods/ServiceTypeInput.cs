@@ -10,9 +10,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
     {
         private readonly IServiceTypesRepository _serviceTypesRepository = new InMemoryRepositoryServiceTypes();
 
-        private readonly BookingValidator _validator =
-            new BookingValidator();
-
         //public ServiceTypeInput(IServiceTypesRepository serviceTypesRepository)
         //{
         //    _serviceTypesRepository =
