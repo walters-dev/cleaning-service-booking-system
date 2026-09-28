@@ -38,6 +38,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             PricingService pricingService = new PricingService(discountService);
             AddOnInput addOnInput = new AddOnInput(addOnsRepository);
             CustomerInput customerInput = new CustomerInput(customerRepository);
+            HouseTypeInput houseTypeInput = new HouseTypeInput();
+            ServiceTypeInput serviceTypeInput = new ServiceTypeInput();
 
             ExistingAdmin adminLogInInput = new ExistingAdmin();
             Admins admins = new Admins();
@@ -360,6 +362,48 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             case "Update":
                                 //input Date and Customer to find the booking needed then display the booking then confirm if correct booking
                                 // updatedby, updatedat, recalc, addons which means delete booking addons where  addonid = addonid, change date, num of rooms carpeted rooms, number of rooms, house type, service type, isreccuring, recurring type
+                                IsConfirmData = false;
+                                while (IsConfirmData == false)
+                                {
+                                    singleBooking = bookingService.FindBookingsByPhoneNumberAndDate(customerInput.GetPhoneNumber(), bookingInput.GetSingleBookingDateInput());
+                                    //confirm exists
+                                    //show booking
+                                    var confirmCorrectUpdateBookingChoices = AnsiConsole.Prompt(
+                                        new SelectionPrompt<string>()
+                                        .Title("Is the booking details correct:")
+                                        .AddChoices("Yes", "No"));
+                                    switch (confirmCorrectUpdateBookingChoices)
+                                    {
+                                        case "Yes":
+                                            IsConfirmData = true;
+                                            break;
+                                        case "No":
+                                            Console.Clear();
+                                            break;
+                                    }
+                                }
+                                
+                                IsConfirmData = false;
+                                while (IsConfirmData == false)
+                                {
+                                    UpdateInput updateInput = new UpdateInput(houseTypeInput, serviceTypeInput);
+                                    singleBooking = updateInput.GetUpdateInput(singleBooking);
+                                    var confirmSelectedUpdateChoices = AnsiConsole.Prompt(
+                                        new SelectionPrompt<string>()
+                                        .Title("Is the booking details correct:")
+                                        .AddChoices("Yes", "No"));
+
+                                    switch (confirmSelectedUpdateChoices)
+                                    {
+                                        case "Yes":
+                                            //save to sql
+                                            IsConfirmData = true;
+                                            break;
+                                        case "No":
+
+                                            break;
+                                    }
+                                }
                                 break;
                         }
 

@@ -4,6 +4,9 @@ using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Infrastructure;
+using CleaningServiceBookingSystemMain.Application.Services;
 
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
@@ -21,10 +24,13 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
             _serviceTypeInput = serviceTypeInput;
         }
 
-        public Bookings GetUpdateInput(Bookings singleBooking, HouseTypes currentHouseType)
+        public Bookings GetUpdateInput(Bookings singleBooking)
         {
             while (true)
             {
+                HouseTypes selectedHouseType = new HouseTypes();
+                IHouseTypesRepository houseTypesRepository = new InMemoryRepositoryHouseTypes();
+                HouseTypeService houseTypeService = new HouseTypeService(houseTypesRepository);
                 var UpdateChoices = AnsiConsole.Prompt
                     (new MultiSelectionPrompt<string>()
                     .Title("Choose what you want to update: ")
@@ -63,9 +69,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 // HOUSE TYPES
                 if (UpdateChoices.Contains("House Type"))
                 {
-                    HouseTypes selectedHouseType = _houseTypeInput.GetHouseTypeInput();
+                    selectedHouseType = _houseTypeInput.GetHouseTypeInput();
                     singleBooking.HouseTypeId = selectedHouseType.HouseTypeId;
-                    currentHouseType = selectedHouseType;
+                    //currentHouseType = selectedHouseType;
                 }
 
                 // SERVICE TYPE
@@ -115,9 +121,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                         Console.WriteLine("Recurring type cannot be changed because this booking is not recurring.");
                     }
                 }
-
+                selectedHouseType = houseTypeService.FindHouseType(singleBooking.HouseTypeId);
                 // VALIDATES ALL THE CHANGES MADE 
-                bool isValid = _validator.ValidateBooking(singleBooking, currentHouseType, out string errorMessage);
+                bool isValid = _validator.ValidateBooking(singleBooking, selectedHouseType,  out string errorMessage);
                 
                 if (isValid)
                 {
