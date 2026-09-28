@@ -11,14 +11,12 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class AddOnInput
     {
-        private readonly IAddOnsRepository _addOnsRepository = new InMemoryRepositoryAddOns();
+        private readonly IAddOnsRepository _addOnsRepository;
 
-        private readonly BookingValidator _validator;
-
-        //public AddOnInput(IAddOnsRepository addOnsRepository)
-        //{
-        //    _addOnsRepository = addOnsRepository;
-        //}
+        public AddOnInput(IAddOnsRepository addOnsRepository)
+        {
+            this._addOnsRepository = addOnsRepository;
+        }
 
         public IList<AddOnSelection>? GetAddOnInput(ref int carpetedRooms)
         {
