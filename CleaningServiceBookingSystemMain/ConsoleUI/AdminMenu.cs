@@ -387,7 +387,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 while (IsConfirmData == false)
                                 {
                                     UpdateInput updateInput = new UpdateInput(houseTypeInput, serviceTypeInput);
-                                    singleBooking = updateInput.GetUpdateInput(singleBooking);
+                                    IList<AddOnSelection>? addOnSelections;
+                                    singleBooking = updateInput.GetUpdateInput(singleBooking, out addOnSelections);
                                     var confirmSelectedUpdateChoices = AnsiConsole.Prompt(
                                         new SelectionPrompt<string>()
                                         .Title("Is the booking details correct:")
@@ -396,6 +397,15 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                     switch (confirmSelectedUpdateChoices)
                                     {
                                         case "Yes":
+                                            bookingService.AmendBooking(singleBooking);
+                                            if (addOnSelections != null)
+                                            {
+                                                bookingAddOnService.RemoveBookingAddOnsByBookingId(singleBooking.BookingId);
+                                                foreach (var addOnSelection in addOnSelections)
+                                                {
+                                                    bookingAddOnService.RegisterBookingAddOn();//need to recreate the primary key creation
+                                                }
+                                            }
                                             //save to sql
                                             IsConfirmData = true;
                                             break;

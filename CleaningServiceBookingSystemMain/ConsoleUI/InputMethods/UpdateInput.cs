@@ -24,13 +24,15 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
             _serviceTypeInput = serviceTypeInput;
         }
 
-        public Bookings GetUpdateInput(Bookings singleBooking)
+        public Bookings GetUpdateInput(Bookings singleBooking, out IList<AddOnSelection>? addOnSelections)
         {
             while (true)
             {
                 HouseTypes selectedHouseType = new HouseTypes();
                 IHouseTypesRepository houseTypesRepository = new InMemoryRepositoryHouseTypes();
                 HouseTypeService houseTypeService = new HouseTypeService(houseTypesRepository);
+                IAddOnsRepository addOnsRepository = new InMemoryRepositoryAddOns();
+                AddOnsService addOnsService = new AddOnsService(addOnsRepository);
                 var UpdateChoices = AnsiConsole.Prompt
                     (new MultiSelectionPrompt<string>()
                     .Title("Choose what you want to update: ")
@@ -41,7 +43,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                                 "House Type",
                                 "ServiceType",
                                 "Is Recurring",
-                                "Recurring Type"
+                                "Recurring Type",
+                                "Add Ons"
                                 )
                     );
 
@@ -121,6 +124,20 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                         Console.WriteLine("Recurring type cannot be changed because this booking is not recurring.");
                     }
                 }
+
+                //ADD ONS
+                if (UpdateChoices.Contains("Add Ons"))
+                {
+                    AddOnInput addOnInput = new AddOnInput(addOnsRepository);
+                    int carpetedRooms =0;
+                    addOnSelections = addOnInput.GetAddOnInput(ref carpetedRooms);
+                    singleBooking.CarpetedRooms = carpetedRooms;
+                }
+                else
+                {
+                    addOnSelections = null;
+                }
+                
                 selectedHouseType = houseTypeService.FindHouseType(singleBooking.HouseTypeId);
                 // VALIDATES ALL THE CHANGES MADE 
                 bool isValid = _validator.ValidateBooking(singleBooking, selectedHouseType,  out string errorMessage);

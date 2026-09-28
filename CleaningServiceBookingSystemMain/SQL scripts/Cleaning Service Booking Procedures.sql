@@ -413,6 +413,13 @@ BEGIN
 
 END;
 GO
+CREATE OR ALTER PROCEDURE DeleteBookingAddOnByAddOnId
+@BookingId VARCHAR(7)
+AS
+BEGIN
+    DELETE FROM BookingAddOns WHERE Booking_id = @BookingId;
+END;
+GO
 CREATE OR ALTER PROCEDURE BookingListByDateRange
     @StartDate DATE,
     @EndDate DATE

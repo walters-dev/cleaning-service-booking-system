@@ -108,5 +108,16 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
             return "BA" + (id + 1);
         }
+        public void DeleteBookingAddOnByBookingId(string Id)
+        {
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.DeleteBookingAddOnByAddOnId", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Connection.Open();
+                command.Parameters.AddWithValue("@BookingId", Id);
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }
