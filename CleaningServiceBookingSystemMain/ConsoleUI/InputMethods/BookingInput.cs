@@ -50,6 +50,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
                 Console.Write("Enter booking date: ");
                 booking.BookingDate = GetDate();
+
                 //checks if a booking with the same date has been made with the cutomer
                 while (bookingService.FindBookingsByPhoneNumberAndDate(phonenumber, booking.BookingDate.Value).BookingId != null)
                 {

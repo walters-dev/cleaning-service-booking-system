@@ -191,7 +191,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             int carpetedRooms = 0;
                             IList<AddOnSelection> addOns = addOnInput.GetAddOnInput(ref carpetedRooms);
                             singleBooking.CarpetedRooms = carpetedRooms;
-                            //bookingAddOns input...........................................................................................................................................
                             bookingAddOns.Quantity = addOns.Count;
                             bookingAddOns.LineAmount = pricingService.CalculateAddOnTotal(singleBooking, addOns);
                             singleBooking = bookingInput.GetBookingInput(carpetedRooms, addOns, customersBooking.PhoneNumber, admins.Username, customersBooking.CustomerId);
@@ -236,8 +235,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         while (IsConfirmData == false)
                         {
                             AnsiConsole.MarkupLine("[green]New Customer selected[/]");
-                            //new customer proccess 
-                            //CustomerInput customerInput = new CustomerInput();
                             Customers customers = new Customers();
                             customers = customerInput.GetCustomerInput(admins.Username);
 
@@ -479,7 +476,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         viewCustomerPanel.Header("Customer Information");
                         AnsiConsole.Write(viewCustomerPanel);
                         break;
-                    case "Add Admin":                                                           //add admin chosen from admin menu
+                    case "Add Admin":                     //add admin chosen from admin menu
                         IsConfirmData = false;
                         while (IsConfirmData == false)
                         {
