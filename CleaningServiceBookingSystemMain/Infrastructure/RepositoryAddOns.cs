@@ -9,7 +9,7 @@ using CleaningServiceBookingSystemMain.Application.Interfaces;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
-    public class InMemoryRepositoryAddOns : IAddOnsRepository
+    public class RepositoryAddOns : IAddOnsRepository
     {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         public IList<AddOns> GetAddOns()

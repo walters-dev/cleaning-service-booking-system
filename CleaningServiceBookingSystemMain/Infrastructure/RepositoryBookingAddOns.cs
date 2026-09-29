@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
-    public class InMemoryRepositoryBookingAddOns : IBookingAddOnsRepository
+    public class RepositoryBookingAddOns : IBookingAddOnsRepository
     {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         public IList<BookingAddOns> GetBookingAddOns()
@@ -107,6 +107,37 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 }
             }
             return "BA" + (id + 1);
+        }
+        public void DeleteBookingAddOnByBookingId(string Id)
+        {
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.DeleteBookingAddOnByAddOnId", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Connection.Open();
+                command.Parameters.AddWithValue("@BookingId", Id);
+                command.ExecuteNonQuery();
+            }
+        }
+        public int GetLastRowAddOnBookings()
+        {
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                char[] removeChars = { 'B', 'A' };//list of characters to remove
+                SqlCommand command = new SqlCommand("dbo.GetLastRowAddOnBookings", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    //removes letters and returns the integer left over 
+                    return Int32.Parse(reader.GetString(reader.GetOrdinal("BookingAddOnId")).Trim(removeChars));
+                }
+                else
+                {
+                    return 0;
+                }
+            }
         }
     }
 }

@@ -134,6 +134,14 @@ BEGIN
     FROM Housetypes;
 END
 GO
+CREATE OR ALTER PROCEDURE GetHouseType
+@HouseTypeId VARCHAR(7)
+AS
+BEGIN
+    SELECT * FROM Housetypes
+    WHERE HouseTypesid = @HouseTypeId
+END;
+GO
 /*SERVICE PROCEDURES ==================================================================================================================================================================================================== */
 GO 
 CREATE OR ALTER PROCEDURE GetAllServiceTypes
@@ -251,6 +259,8 @@ CREATE OR ALTER PROCEDURE AddBooking
     @BookingStatus VARCHAR(MAX),
     @CreatedAt DATE,
     @CreatedBy VARCHAR(MAX),
+    @UpdatedAt DATE,
+    @UpdatedBy VARCHAR(MAX),
     @FirstTimeBooking BIT, 
     @CarpetedRooms INTEGER
 AS
@@ -274,6 +284,8 @@ BEGIN
         BookingStatus,
         CreatedAt,
         CreatedBy,
+        UpdatedAt,
+        UpdatedBy,
         FirstTimeBooking,
         CarpetedRooms
     )
@@ -295,6 +307,8 @@ BEGIN
         @BookingStatus,
         @CreatedAt,
         @CreatedBy,
+        @UpdatedAt,
+        @UpdatedBy,
         @FirstTimeBooking,
         @CarpetedRooms
     );
@@ -349,7 +363,7 @@ CREATE OR ALTER PROCEDURE UpdateBooking
     @Customers_id VARCHAR(7),
     @Housetypes_id VARCHAR(7),
     @ServiceTypes_id VARCHAR(7),
-    @DiscountRule_id VARCHAR(7),
+    @DiscountRule_id VARCHAR(7) = NULL,
     @BookingDate DATE,
     @NumberOfRooms INT,
     @IsRecurring BIT,
@@ -360,10 +374,11 @@ CREATE OR ALTER PROCEDURE UpdateBooking
     @TotalAmount DECIMAL(10,2),
     @BookingStatus VARCHAR(MAX),
     @FirstTimeBooking BIT, 
-    @CarpetedRooms INTEGER
+    @CarpetedRooms INTEGER,
+    @UpdatedAt DATE,
+    @UpdatedBy VARCHAR(MAX)
 AS
 BEGIN
-
     UPDATE Bookings
     SET
         Customers_id = @Customers_id,
@@ -380,7 +395,9 @@ BEGIN
         TotalAmount = @TotalAmount,
         BookingStatus = @BookingStatus,
         FirstTimeBooking = @FirstTimeBooking,
-        CarpetedRooms = @CarpetedRooms
+        CarpetedRooms = @CarpetedRooms,
+        UpdatedAt = @UpdatedAt,
+        UpdatedBy = @UpdatedBy
     WHERE BookingId = @BookingId;
 
 END;
@@ -411,6 +428,20 @@ BEGIN
         @LineAmount
     );
 
+END;
+GO 
+CREATE OR ALTER PROCEDURE GetLastRowAddOnBookings
+AS
+BEGIN
+    SELECT TOP 1 * FROM BookingAddOns 
+    ORDER BY BookingAddOnId DESC;
+END;
+GO
+CREATE OR ALTER PROCEDURE DeleteBookingAddOnByAddOnId
+@BookingId VARCHAR(7)
+AS
+BEGIN
+    DELETE FROM BookingAddOns WHERE Booking_id = @BookingId;
 END;
 GO
 CREATE OR ALTER PROCEDURE BookingListByDateRange
@@ -575,6 +606,10 @@ BEGIN
         b.SurchargeAmount,
         b.TotalAmount,
         b.BookingStatus,
+        b.UpdatedBy,
+        b.UpdatedAt,
+        b.FirstTimeBooking,
+        b.CarpetedRooms,
         c.Fullname,
         c.Email
     FROM Bookings AS b
@@ -695,3 +730,6 @@ select * from BookingAddOns
 select * from DiscountRules
 select * from AddOns
 select * from Housetypes
+SELECT * FROM Servicetypes
+INSERT INTO Bookings(BookingId, Customers_id, Housetypes_id, ServiceTypes_id, BookingDate, NumberOfRooms, IsRecurring, RecurringBookingType, SubTotal, DiscountAmount, SurchargeAmount, TotalAmount, BookingStatus, CreatedAt, CreatedBy, CarpetedRooms, FirstTimeBooking, UpdatedAt, UpdatedBy) 
+VALUES('BT1', 'CT1', 'HT003', 'ST003', '2025-10-01', 7, 0, '', 1999, 300, 50, 1749, 'Completed', '2025-09-01', 'Admin', 0,1, '2025-09-01', 'Admin')

@@ -1,8 +1,9 @@
 ﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Application.Services;
 using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
-using CleaningServiceBookingSystemMain.Application.Services;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,7 +18,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         {
             this._addOnsRepository = addOnsRepository;
         }
-
+        private const int MaxRoomNumber = 12;
         public IList<AddOnSelection>? GetAddOnInput(ref int carpetedRooms)
         {
             AddOnsService service = new AddOnsService(_addOnsRepository);
@@ -48,7 +49,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
                 if (!int.TryParse(Console.ReadLine(), out choice) || choice > i)
                 {
-                    Console.WriteLine("Please enter a valid number.");
+                    AnsiConsole.MarkupLine("[red]Please enter a valid number.[/]");
                     continue;
                 }
 
@@ -77,7 +78,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
                 if (alreadySelected)
                 {
-                    Console.WriteLine("You already selected this add-on.");
+                    AnsiConsole.MarkupLine("[red]You already selected this add-on.[/]");
 
                     continue;
                 }
@@ -98,7 +99,13 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
                         if (!int.TryParse(Console.ReadLine(), out carpetedRooms))
                         {
-                            Console.WriteLine("Please enter a valid number.");
+                            AnsiConsole.MarkupLine("[red]Please enter a valid number.[/]");
+
+                            continue;
+                        }
+                        if (carpetedRooms > MaxRoomNumber)
+                        {
+                            AnsiConsole.MarkupLine("[red]Carpeted rooms cannot exceed 12.[/]");
 
                             continue;
                         }

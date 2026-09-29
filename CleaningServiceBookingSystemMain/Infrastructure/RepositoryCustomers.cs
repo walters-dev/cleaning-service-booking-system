@@ -10,7 +10,7 @@ using CleaningServiceBookingSystemMain.Application.Interfaces;
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
     //private readonly IList<Customers> 
-    public class InMemoryRepositoryCustomers : ICustomerRepository
+    public class RepositoryCustomers : ICustomerRepository
     {
         //methods need to be public or cannot implement interface member
         DatabaseConnection databaseConnection = new DatabaseConnection();

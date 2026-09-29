@@ -52,9 +52,9 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 return false;
             }
             //checks if a customer is already using this phone number
-            ICustomerRepository customerRepository = new InMemoryRepositoryCustomers();
+            ICustomerRepository customerRepository = new RepositoryCustomers();
             CustomerService customerService = new CustomerService(customerRepository);
-            if (customerService.FindCustomerWithPhoneNumber(customer.PhoneNumber).FullName == null)
+            if (customerService.FindCustomerWithPhoneNumber(customer.PhoneNumber).FullName != null)
             {
                 errorMessage = "Phone number already in use for another customer.";
                 return false;
@@ -166,7 +166,7 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 errorMessage = "Booking date cannot be in the past.";
                 return false;
             }
-
+            
             // Not explicitly named in section 15, but implied by data
             // quality (section 10, Non-Functional Requirements) - a
             // carpet-cleaning add-on (BRD 8.3) is priced per carpeted
@@ -209,9 +209,9 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 return false;
             }
             //checks if the admin user name already exists
-            IAdminRepository adminRepository = new InMemoryRepositoryAdmins();
+            IAdminRepository adminRepository = new RepositoryAdmins();
             AdminService adminService = new AdminService(adminRepository);
-            if (adminService.FindAdminPassword(admin.Username).AdminPassword == null)
+            if (adminService.FindAdminPassword(admin.Username).AdminPassword != null)
             {
                 errorMessage = "Admin username already exists.";
                 return false;

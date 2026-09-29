@@ -3,6 +3,7 @@ using CleaningServiceBookingSystemMain.Application.Services;
 using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
+using Spectre.Console;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -53,7 +54,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 else
                 {
                     Console.WriteLine();
-                    Console.WriteLine($"Validation error: {errorMessage}");
+                    AnsiConsole.MarkupLine($"[red]Validation error: {errorMessage}[/]");
                     Console.WriteLine("Please enter the customer information again.");
                 }
            }
@@ -75,7 +76,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 }
 
                 Console.WriteLine();
-                Console.WriteLine($"Validation error: {errormessage}");
+                AnsiConsole.MarkupLine($"Validation error: {errormessage}");
                 Console.WriteLine("Please Enter the email again");
             }
         }
@@ -93,7 +94,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 }
 
                 Console.WriteLine();
-                Console.WriteLine($"Validation error: {errormessage}");
+                AnsiConsole.MarkupLine($"Validation error: {errormessage}");
                 Console.WriteLine("Please Enter the email again");
             }
         }

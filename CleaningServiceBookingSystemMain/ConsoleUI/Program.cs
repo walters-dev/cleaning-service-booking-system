@@ -33,6 +33,12 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         break;
                     case "Terminate application":
                         Console.WriteLine("Application is terminated");
+                        var font = FigletFont.Load("C:\\Users\\RPS3\\Documents\\Projects\\CleaningServiceBookingSystem\\CleaningServiceBookingSystemMain\\figlet-fonts-main\\DOS Rebel.flf");
+                        var centerAligned = new FigletText(font, "BYE")
+                        {
+                            Justification = Justify.Center
+                        };
+                        AnsiConsole.Write(centerAligned);
                         IsUserSelected = true;                          //stops menu loop
                         break;
                 }

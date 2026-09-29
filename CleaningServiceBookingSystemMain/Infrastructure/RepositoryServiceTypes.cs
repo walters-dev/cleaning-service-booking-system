@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
-    public class InMemoryRepositoryServiceTypes : IServiceTypesRepository
+    public class RepositoryServiceTypes : IServiceTypesRepository
     {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         public IList<ServiceTypes> GetServiceTypes()
@@ -43,7 +43,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlCommand command = new SqlCommand("dbo.GetServiceType", connection);//waiting for sql procedure.......................................................................
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
-                command.Parameters.AddWithValue("@ServiceTypes_id", Id);
+                command.Parameters.AddWithValue("@ServiceId", Id);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
@@ -51,7 +51,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     houseTypesInfo.ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceName"));
                     houseTypesInfo.Multiplier = reader.GetDecimal(reader.GetOrdinal("Multiplier"));
                     houseTypesInfo.ServiceDescription = reader.GetString(reader.GetOrdinal("ServiceDescription"));
-                    houseTypesInfo.IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"));
+                    //houseTypesInfo.IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"));
                 }
             }
             return houseTypesInfo;

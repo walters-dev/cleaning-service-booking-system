@@ -12,5 +12,7 @@ namespace CleaningServiceBookingSystemMain.Application.Interfaces
         void Add(BookingAddOns bookingAddOns);      //Adds an Booking Add On to storage
         void Update(BookingAddOns bookingAddOns);   //edits an already existing Booking Add On record to storage
         string BookingAddOnsRowCount();
+        void DeleteBookingAddOnByBookingId(string Id);
+        int GetLastRowAddOnBookings();
     }
 }
