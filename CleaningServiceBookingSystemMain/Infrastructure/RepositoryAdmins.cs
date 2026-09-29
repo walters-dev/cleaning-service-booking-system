@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
-    public class InMemoryRepositoryAdmins : IAdminRepository
+    public class RepositoryAdmins : IAdminRepository
     {
         DatabaseConnection databaseConnection = new DatabaseConnection();
 

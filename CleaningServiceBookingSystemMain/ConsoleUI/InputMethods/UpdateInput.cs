@@ -1,12 +1,13 @@
-﻿using CleaningServiceBookingSystemMain.Domain.Models;
+﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Application.Services;
 using CleaningServiceBookingSystemMain.Application.Validators;
+using CleaningServiceBookingSystemMain.Domain.Models;
+using CleaningServiceBookingSystemMain.Domain.Services;
+using CleaningServiceBookingSystemMain.Infrastructure;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using CleaningServiceBookingSystemMain.Application.Interfaces;
-using CleaningServiceBookingSystemMain.Infrastructure;
-using CleaningServiceBookingSystemMain.Application.Services;
 
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
@@ -16,27 +17,37 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
       private readonly HouseTypeInput _houseTypeInput;
       private readonly ServiceTypeInput _serviceTypeInput;
 
-      private readonly BookingValidator _validator = new BookingValidator();
+        private readonly BookingValidator _validator = new BookingValidator();
+        private readonly HouseTypeService _houseTypeService;
+        private readonly ServiceTypesService _serviceTypesService;
+        private readonly AddOnsService _addOnsService;
 
-        public UpdateInput(HouseTypeInput houseTypeInput, ServiceTypeInput serviceTypeInput)
+        public UpdateInput(HouseTypeInput houseTypeInput, ServiceTypeInput serviceTypeInput, HouseTypeService houseTypeService, ServiceTypesService serviceTypesService, AddOnsService addOnsService)
         {
             _houseTypeInput = houseTypeInput;
             _serviceTypeInput = serviceTypeInput;
+            _houseTypeService = houseTypeService;
+            _serviceTypesService = serviceTypesService;
+            _addOnsService = addOnsService;
         }
 
-        public Bookings GetUpdateInput(Bookings singleBooking, out IList<AddOnSelection>? addOnSelections)
+        public Bookings GetUpdateInput(Bookings singleBooking, out IList<AddOnSelection>? addOnSelections, string username)
         {
             while (true)
             {
                 HouseTypes selectedHouseType = new HouseTypes();
-                IHouseTypesRepository houseTypesRepository = new InMemoryRepositoryHouseTypes();
-                HouseTypeService houseTypeService = new HouseTypeService(houseTypesRepository);
-                IAddOnsRepository addOnsRepository = new InMemoryRepositoryAddOns();
-                AddOnsService addOnsService = new AddOnsService(addOnsRepository);
+                ServiceTypes selectedServiceType = new ServiceTypes();
+                IHouseTypesRepository houseTypesRepository = new RepositoryHouseTypes();
+                //HouseTypeService houseTypeService = new HouseTypeService(houseTypesRepository);
+                IServiceTypesRepository serviceTypesRepository = new RepositoryServiceTypes();
+                //ServiceTypesService serviceTypesService = new ServiceTypesService(serviceTypesRepository);
+                IAddOnsRepository addOnsRepository = new RepositoryAddOns();
+                //AddOnsService addOnsService = new AddOnsService(addOnsRepository);
+
                 var UpdateChoices = AnsiConsole.Prompt
                     (new MultiSelectionPrompt<string>()
                     .Title("Choose what you want to update: ")
-                    .InstructionsText("{grey](Press[blue]<space>[/] to select and [green]<enter>[/] when finished[/]")
+                    .InstructionsText("[grey]Press[blue]<space>[/] to select and [green]<enter>[/] when finished[/]")
                     .AddChoices("Booking Date",
                                 "Number Of Rooms",
                                 "Carpeted Rooms",
@@ -80,7 +91,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 // SERVICE TYPE
                 if (UpdateChoices.Contains("Service Type"))
                 {
-                    ServiceTypes selectedServiceType = _serviceTypeInput.GetServiceTypeInput();
+                    selectedServiceType = _serviceTypeInput.GetServiceTypeInput();
                     singleBooking.ServiceTypeId = selectedServiceType.ServiceTypeId;
                 }
 
@@ -121,7 +132,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                     }
                     else
                     {
-                        Console.WriteLine("Recurring type cannot be changed because this booking is not recurring.");
+                        AnsiConsole.MarkupLine("[red]Recurring type cannot be changed because this booking is not recurring.[/]");
                     }
                 }
 
@@ -137,8 +148,34 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 {
                     addOnSelections = null;
                 }
-                
-                selectedHouseType = houseTypeService.FindHouseType(singleBooking.HouseTypeId);
+
+                selectedServiceType = _serviceTypesService.FindServiceType(singleBooking.ServiceTypeId);
+                selectedHouseType = _houseTypeService.FindHouseType(singleBooking.HouseTypeId);
+
+                DiscountService discountService = new DiscountService();
+                PricingService pricingService = new PricingService(discountService);
+                string discountName;
+                singleBooking.SubTotal = pricingService.CalculateSubtotal(singleBooking, selectedHouseType, selectedServiceType, addOnSelections);
+                singleBooking.DiscountAmount = discountService.CalculateDiscountAmount(singleBooking, singleBooking.SubTotal, out discountName);
+                switch (discountName)
+                {
+                    case "First-Time Customer Discount":
+                        singleBooking.DiscountRuleId = "DR001";
+                        break;
+                    case "Recurring Booking Discount":
+                        singleBooking.DiscountRuleId = "DR003";
+                        break;
+                    case "Large Booking Discount":
+                        singleBooking.DiscountRuleId = "DR002";
+                        break;
+                    default:
+                        singleBooking.DiscountRuleId = null;
+                        break;
+                }
+                singleBooking.SurchargeAmount = pricingService.CalculateWeekendSurcharge(singleBooking, (singleBooking.SubTotal - singleBooking.DiscountAmount));
+                singleBooking.TotalAmount = pricingService.CalculateFinalTotal(singleBooking, selectedHouseType, selectedServiceType, addOnSelections);
+                singleBooking.UpdatedAt = DateTime.Today;
+                singleBooking.UpdatedBy = username;
                 // VALIDATES ALL THE CHANGES MADE 
                 bool isValid = _validator.ValidateBooking(singleBooking, selectedHouseType,  out string errorMessage);
                 
@@ -151,7 +188,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 }
 
                 Console.WriteLine();
-                Console.WriteLine($"Validation error: {errorMessage}");
+                AnsiConsole.MarkupLine($"[red]Validation error: {errorMessage}[/]");
                 Console.WriteLine(" Please Correct the Booking Information. ");
             }
         }
@@ -162,7 +199,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
             while (!int.TryParse(Console.ReadLine(), out number))
             {
-                Console.WriteLine("Please Enter a Valid Number: ");
+                AnsiConsole.MarkupLine("[red]Please Enter a Valid Number: [/]");
             }
             return number;
         }
@@ -173,7 +210,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
             while (!DateTime.TryParse(Console.ReadLine(),out date))
             {
-                Console.Write("Please Enter a Valid Date: ");
+                AnsiConsole.MarkupLine("[red]Please Enter a Valid Date: [/]");
             }
             return date;
         }

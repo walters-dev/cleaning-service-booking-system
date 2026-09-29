@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
-    public class InMemoryRepositoryHouseTypes : IHouseTypesRepository
+    public class RepositoryHouseTypes : IHouseTypesRepository
     {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         public IList<HouseTypes> GetHouseTypes()
@@ -42,19 +42,20 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             HouseTypes houseTypesInfo = new HouseTypes();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("dbo.GetCustomer", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.GetHouseType", connection);//waiting for sql procedure.......................................................................
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
+                command.Parameters.AddWithValue("@HouseTypeId", Id);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    houseTypesInfo.HouseTypeId = reader.GetString(reader.GetOrdinal("HouseTypeId"));
-                    houseTypesInfo.Name = reader.GetString(reader.GetOrdinal("Name"));
+                    houseTypesInfo.HouseTypeId = reader.GetString(reader.GetOrdinal("HouseTypesid"));
+                    houseTypesInfo.Name = reader.GetString(reader.GetOrdinal("HouseName"));
                     houseTypesInfo.BaseRate = reader.GetDecimal(reader.GetOrdinal("BaseRate"));
-                    houseTypesInfo.RatePerRoom = reader.GetDecimal(reader.GetOrdinal("RatePerRate"));
+                    houseTypesInfo.RatePerRoom = reader.GetDecimal(reader.GetOrdinal("RatePerRoom"));
                     houseTypesInfo.MinRooms = reader.GetInt32(reader.GetOrdinal("MinRooms"));
                     houseTypesInfo.MaxRooms = reader.GetInt32(reader.GetOrdinal("MaxRooms"));
-                    houseTypesInfo.IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"));
+                    //houseTypesInfo.IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"));
                 }
             }
             return houseTypesInfo;

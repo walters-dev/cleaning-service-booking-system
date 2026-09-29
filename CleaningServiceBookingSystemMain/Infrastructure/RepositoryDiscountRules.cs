@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
-    public class InMemoryRepositoryDiscountRules : IDiscountRulesRepository
+    public class RepositoryDiscountRules : IDiscountRulesRepository
     {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         public IList<DiscountRules> GetDiscountRules()
