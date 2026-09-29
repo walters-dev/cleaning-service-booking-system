@@ -14,35 +14,6 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
     {
         //methods need to be public or cannot implement interface member
         DatabaseConnection databaseConnection = new DatabaseConnection();
-         public IList<Customers> GetCustomers()
-        {
-            List<Customers> customersInfo = new List<Customers>();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
-            {
-                SqlCommand command = new SqlCommand("dbo.GetAllCustomers", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    var customer = new Customers()
-                    {
-                        CustomerId = reader.GetString(reader.GetOrdinal("CustomerId")),
-                        FullName = reader.GetString(reader.GetOrdinal("FullName")),
-                        PhoneNumber = reader.GetString(reader.GetOrdinal("Phonenumber")),
-                        Email = reader.GetString(reader.GetOrdinal("Email")),
-                        PhyAddress = reader.GetString(reader.GetOrdinal("PhysAddress")),
-                        CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
-                        CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy")),
-                        UpdatdeBy = reader.GetString(reader.GetOrdinal("UpdatedBy")),
-                        UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt"))
-                    };
-                    customersInfo.Add(customer);
-                }
-                
-            }
-            return customersInfo;
-        }
         public Customers GetCustomerById(string? Id)// ? means it can be null
         {
             Customers customersInfo = new Customers();
@@ -83,33 +54,6 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@CreatedAt", customers.CreatedAt);
                 command.Parameters.AddWithValue("@CreatedBy", customers.CreatedBy);
                 command.ExecuteNonQuery();                                          //saves new customer to database
-            }
-        }
-        public void Update(Customers customers)
-        {
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
-            {
-                SqlCommand command = new SqlCommand("dbo.UpdateCustomer", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Connection.Open();
-                command.Parameters.AddWithValue("@Fullname", customers.FullName);
-                command.Parameters.AddWithValue("@Phonenumber", customers.PhoneNumber);
-                command.Parameters.AddWithValue("@Email", customers.Email);
-                command.Parameters.AddWithValue("@PhysAddress", customers.PhyAddress);
-                command.Parameters.AddWithValue("@UpdatedAt", customers.UpdatedAt);
-                command.Parameters.AddWithValue("@UpdatedBy", customers.UpdatdeBy);
-                command.ExecuteNonQuery();
-            }
-        }
-        public void Delete(Customers customers)
-        {
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
-            {
-                SqlCommand command = new SqlCommand("dbo.DeleteCustomer", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Connection.Open();
-                command.Parameters.AddWithValue("@CustomerID", customers.CustomerId);
-                command.ExecuteNonQuery();
             }
         }
         public Customers GetCustomersByPhoneNumber(string phonenumber)

@@ -55,41 +55,5 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
             return discountRulesInfo;
         }
-        public void Add(DiscountRules discountRules)
-        {
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
-            {
-                SqlCommand command = new SqlCommand("dbo.AddBooking", connection);//waiting for sql procedure.......................................................................
-                command.CommandType = CommandType.StoredProcedure;
-                command.Connection.Open();
-                //need to add a thing for id
-                command.Parameters.AddWithValue("@DiscountRuleId", discountRules.DiscountRuleId);
-                command.Parameters.AddWithValue("@Name", discountRules.Name);
-                command.Parameters.AddWithValue("@DisPercentage", discountRules.DisPercentage);
-                command.Parameters.AddWithValue("@CriteriaDescription", discountRules.CriteriaDescription);
-                command.Parameters.AddWithValue("@IsActive", discountRules.IsActive);
-                command.ExecuteNonQuery();
-            }
-        }
-        public string DiscountRulesRowCount()
-        {
-            int id;
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
-            {
-                SqlCommand command = new SqlCommand("dbo.DiscountRulesRowCount", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.Read())
-                {
-                    id = reader.GetInt32("RowsCount");
-                }
-                else
-                {
-                    id = 0;
-                }
-            }
-            return "DR" + (id + 1);
-        }
     }
 }

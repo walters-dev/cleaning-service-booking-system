@@ -72,42 +72,6 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.ExecuteNonQuery();
             }
         }
-        public void Update(BookingAddOns bookingAddOns)
-        {
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
-            {
-                SqlCommand command = new SqlCommand("dbo.AddBooking", connection);//waiting for sql procedure.......................................................................
-                command.CommandType = CommandType.StoredProcedure;
-                command.Connection.Open();
-                //need to add a thing for id
-                command.Parameters.AddWithValue("@BookingAddOnId", bookingAddOns.BookingAddOnId);
-                command.Parameters.AddWithValue("@Booking_id", bookingAddOns.BookingId);
-                command.Parameters.AddWithValue("@AddOn_id", bookingAddOns.AddOnId);
-                command.Parameters.AddWithValue("@Quantity", bookingAddOns.Quantity);
-                command.Parameters.AddWithValue("@LineAmount", bookingAddOns.LineAmount);
-                command.ExecuteNonQuery();
-            }
-        }
-        public string BookingAddOnsRowCount()
-        {
-            int id;
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
-            {
-                SqlCommand command = new SqlCommand("dbo.BookingAddOnsRowCount", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.Read())
-                {
-                    id = reader.GetInt32("RowsCount");
-                }
-                else
-                {
-                    id = 0;
-                }
-            }
-            return "BA" + (id + 1);
-        }
         public void DeleteBookingAddOnByBookingId(string Id)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))

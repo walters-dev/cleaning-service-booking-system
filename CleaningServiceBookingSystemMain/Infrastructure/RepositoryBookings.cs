@@ -62,41 +62,6 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             }
                 return bookingsInfo;
         }
-        public Bookings GetBookingsById(string? Id)
-        {
-            Bookings bookingsInfo = new Bookings();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
-            {
-                SqlCommand command = new SqlCommand("dbo.GetBooking", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    bookingsInfo.BookingId = reader.GetString(reader.GetOrdinal("BookingId"));
-                    bookingsInfo.CustomerId = reader.GetString(reader.GetOrdinal("Customers_id"));
-                    bookingsInfo.HouseTypeId = reader.GetString(reader.GetOrdinal("Housetypes_id"));
-                    bookingsInfo.ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypes_id"));
-                    bookingsInfo.DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id"));
-                    bookingsInfo.BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate"));
-                    bookingsInfo.NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms"));
-                    bookingsInfo.IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring"));
-                    bookingsInfo.RecurringBookingType = reader.GetString(reader.GetOrdinal("RecurringBookingType"));
-                    bookingsInfo.SubTotal = reader.GetDecimal(reader.GetOrdinal("SubTotal"));
-                    bookingsInfo.DiscountAmount = reader.GetDecimal(reader.GetOrdinal("DiscountAmount"));
-                    bookingsInfo.SurchargeAmount = reader.GetDecimal(reader.GetOrdinal("SurchargeAmount"));
-                    bookingsInfo.TotalAmount = reader.GetDecimal(reader.GetOrdinal("TotalAmount"));
-                    bookingsInfo.BookingStatus = reader.GetString(reader.GetOrdinal("BookingStatus"));
-                    bookingsInfo.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
-                    bookingsInfo.CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"));
-                    bookingsInfo.UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));
-                    bookingsInfo.UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt"));
-                    bookingsInfo.FirstTimeBooking = reader.GetBoolean(reader.GetOrdinal("FirstTimeBooking"));
-                    bookingsInfo.CarpetedRooms = reader.GetInt32(reader.GetOrdinal("CarpetedRooms"));
-                }
-            }
-            return bookingsInfo;
-        }
         public void Add(Bookings bookings)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
@@ -161,17 +126,6 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@CarpetedRooms", bookings.CarpetedRooms);
                 command.Parameters.AddWithValue("@UpdatedAt", bookings.UpdatedAt);
                 command.Parameters.AddWithValue("@UpdatedBy", bookings.UpdatedBy);
-                command.ExecuteNonQuery();
-            }
-        }
-        public void Delete(Bookings bookings)
-        {
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
-            {
-                SqlCommand command = new SqlCommand("dbo.DeleteCustomer", connection);//waiting for sql procedure.......................................................................
-                command.CommandType = CommandType.StoredProcedure;
-                command.Connection.Open();
-                command.Parameters.AddWithValue("@BookingId", bookings.BookingId);
                 command.ExecuteNonQuery();
             }
         }

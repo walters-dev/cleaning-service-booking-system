@@ -17,9 +17,5 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         {
             return _repository.GetAddOns();
         }
-        public AddOns FindAddOn(string addOnsId)
-        {
-            return _repository.AddOnsByID(addOnsId);
-        }
     }
 }

@@ -20,28 +20,6 @@ BEGIN
      WHERE Phonenumber = @PhoneNumber;
 END;
 GO
-CREATE OR ALTER PROCEDURE UpdateCustomer
-    @CustomerID VARCHAR (7),
-    @Fullname VARCHAR(MAX),
-    @Phonenumber VARCHAR(10),
-    @Email VARCHAR(255),
-    @PhysAddress VARCHAR(255),
-    @UpdatedAt DATE,
-    @UpdatedBy VARCHAR(MAX)
-
-AS 
-BEGIN
-      UPDATE Customers
-      SET 
-          Fullname = @Fullname,
-          Phonenumber = @Phonenumber,
-          Email = @Email,
-          PhysAddress = @PhysAddress,
-          UpdatedAt = @UpdatedAt,
-          UpdatedBy = @UpdatedBy
-      WHERE CustomerId = @CustomerID;
-END;
-GO
 CREATE OR ALTER PROCEDURE AddCustomer
     @CustomerID VARCHAR (7),
     @Fullname VARCHAR(MAX),
@@ -73,22 +51,6 @@ BEGIN
         @CreatedAt,
         @CreatedBy
     );
-END;
-GO
-CREATE OR ALTER PROCEDURE GetAllCustomers
-AS
-BEGIN
-    SELECT *
-    FROM Customers;
-END;
-GO
-CREATE OR ALTER PROCEDURE DeleteCustomer
- @CustomerID VARCHAR (7)
-AS
-BEGIN
-      DELETE
-      FROM Customers
-      WHERE CustomerId = @CustomerID;
 END;
 GO
 /* Housetype PROCEDURES ===========================================================================================================================================================================*/
@@ -193,34 +155,6 @@ AS
 BEGIN
     SELECT * FROM AddOns
 END;
-GO
-CREATE OR ALTER PROCEDURE AddAddOn
-    @AddOnId VARCHAR(10),
-    @AddOnsName VARCHAR(MAX),
-    @Rate DECIMAL(10,2),
-    @PricingType VARCHAR(MAX),
-    @isActive BIT
-AS
-BEGIN
-
-    INSERT INTO AddOns
-    (
-        AddOnId,
-        AddOnsName,
-        Rate,
-        PricingType,
-        isActive
-    )
-    VALUES
-    (
-        @AddOnId,
-        @AddOnsName,
-        @Rate,
-        @PricingType,
-        @isActive
-    );
-
-END;
 /*booking procedures*/
 GO
 CREATE OR ALTER PROCEDURE ChangeBookingStatus
@@ -312,49 +246,6 @@ BEGIN
         @FirstTimeBooking,
         @CarpetedRooms
     );
-
-END;
-GO
-CREATE OR ALTER PROCEDURE GetBooking
-    @BookingId VARCHAR(7)
-AS
-BEGIN
-
-    SELECT
-        b.BookingId,
-        c.Fullname AS CustomerName,
-        h.HouseName,
-        s.ServiceName,
-        d.DiscountName,
-        b.BookingDate,
-        b.NumberOfRooms,
-        b.IsRecurring,
-        b.RecurringBookingType,
-        b.SubTotal,
-        b.DiscountAmount,
-        b.SurchargeAmount,
-        b.TotalAmount,
-        b.BookingStatus,
-        b.CreatedAt,
-        b.CreatedBy
-
-    FROM Bookings b
-
-    INNER JOIN Customers c
-        ON b.Customers_id = c.CustomerId
-
-    INNER JOIN Housetypes h
-        ON b.Housetypes_id = h.HouseTypesid
-
-    INNER JOIN Servicetypes s
-        ON b.ServiceTypes_id = s.ServiceTypeId
-
-    LEFT JOIN DiscountRules d
-        ON b.DiscountRule_id = d.DiscountRuleId
-
-    WHERE b.BookingId = @BookingId
-
-    ORDER BY b.BookingDate DESC;
 
 END;
 GO
@@ -640,42 +531,6 @@ FROM Customers
 END;
 
 GO
-CREATE OR ALTER PROCEDURE HousetypesRowCount
-AS
-BEGIN
-SELECT
-    COUNT(Housetypes.HouseTypesid) AS RowsCount
-FROM Housetypes
-END;
-
-GO
-CREATE OR ALTER PROCEDURE ServicetypesRowCount
-AS
-BEGIN
-SELECT
-    COUNT(Servicetypes.ServiceTypeId) AS RowsCount
-FROM Servicetypes
-END;
-
-GO
-CREATE OR ALTER PROCEDURE DiscountRulesRowCount
-AS
-BEGIN
-SELECT
-    COUNT(DiscountRules.DiscountRuleId) AS RowsCount
-FROM DiscountRules
-END;
-
-GO
-CREATE OR ALTER PROCEDURE AddOnsRowCount
-AS
-BEGIN
-SELECT
-    COUNT(AddOns.AddOnId) AS RowsCount
-FROM AddOns
-END;
-
-GO
 CREATE OR ALTER PROCEDURE BookingsRowCount
 AS
 BEGIN
@@ -684,14 +539,6 @@ SELECT
 FROM Bookings
 END;
 
-GO
-CREATE OR ALTER PROCEDURE BookingAddOnsRowCount
-AS
-BEGIN
-SELECT
-    COUNT(BookingAddOns.BookingAddOnId) AS RowsCount
-FROM BookingAddOns
-END;
 /*admin procedures*/
 GO
 CREATE OR ALTER PROCEDURE GetAdminByUsername
@@ -731,5 +578,3 @@ select * from DiscountRules
 select * from AddOns
 select * from Housetypes
 SELECT * FROM Servicetypes
-INSERT INTO Bookings(BookingId, Customers_id, Housetypes_id, ServiceTypes_id, BookingDate, NumberOfRooms, IsRecurring, RecurringBookingType, SubTotal, DiscountAmount, SurchargeAmount, TotalAmount, BookingStatus, CreatedAt, CreatedBy, CarpetedRooms, FirstTimeBooking, UpdatedAt, UpdatedBy) 
-VALUES('BT1', 'CT1', 'HT003', 'ST003', '2025-10-01', 7, 0, '', 1999, 300, 50, 1749, 'Completed', '2025-09-01', 'Admin', 0,1, '2025-09-01', 'Admin')
