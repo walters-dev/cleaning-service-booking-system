@@ -11,51 +11,6 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
     public class RepositoryBookingAddOns : IBookingAddOnsRepository
     {
         DatabaseConnection databaseConnection = new DatabaseConnection();
-        public IList<BookingAddOns> GetBookingAddOns()
-        {
-            List<BookingAddOns> bookingAddOnsInfo = new List<BookingAddOns>();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
-            {
-                SqlCommand command = new SqlCommand("fghj", connection);//waiting for sql procedure.......................................................................
-                command.CommandType = CommandType.StoredProcedure;
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    var bookingAddOns = new BookingAddOns()
-                    {
-                        BookingAddOnId = reader.GetString(reader.GetOrdinal("BookingAddOnId")),
-                        BookingId = reader.GetString(reader.GetOrdinal("BookingId")),
-                        AddOnId = reader.GetString(reader.GetOrdinal("AddOnId")),
-                        Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")),
-                        LineAmount = reader.GetDecimal(reader.GetOrdinal("LineAmount"))
-                    };
-                    bookingAddOnsInfo.Add(bookingAddOns);
-                }
-                
-            }
-            return bookingAddOnsInfo;
-        }
-        public BookingAddOns bookingAddOnsByID(string? Id)
-        {
-            BookingAddOns bookingAddOnsInfo = new BookingAddOns();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
-            {
-                SqlCommand command = new SqlCommand("dbo.GetCustomer", connection);//waiting for sql procedure.......................................................................
-                command.CommandType = CommandType.StoredProcedure;
-                command.Connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    bookingAddOnsInfo.BookingAddOnId = reader.GetString(reader.GetOrdinal("BookingAddOnId"));
-                    bookingAddOnsInfo.BookingId = reader.GetString(reader.GetOrdinal("BookingId"));
-                    bookingAddOnsInfo.AddOnId = reader.GetString(reader.GetOrdinal("AddOnId"));
-                    bookingAddOnsInfo.Quantity = reader.GetInt32(reader.GetOrdinal("Quantity"));
-                    bookingAddOnsInfo.LineAmount = reader.GetDecimal(reader.GetOrdinal("LineAmount"));
-                }
-            }
-            return bookingAddOnsInfo;
-        }
         public void Add(BookingAddOns bookingAddOns)
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))

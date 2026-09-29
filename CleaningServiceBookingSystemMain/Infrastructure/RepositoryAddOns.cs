@@ -17,7 +17,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<AddOns> addOnsInfo = new List<AddOns>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("dbo.GetAllAddOns", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.GetAllAddOns", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();

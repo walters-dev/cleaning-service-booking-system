@@ -26,7 +26,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
             List<AddOnSelection> selectedAddOns = new List<AddOnSelection>();
             while (true)
             {
-                //carpetedRooms = 0;
                 Console.WriteLine();
                 Console.WriteLine("===== ADD-ONS =====");
 
@@ -111,25 +110,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                         }
 
                         break;
-                        // Put value into Booking
-                        //bookings.CarpetedRooms = carpetedRooms; //need to get this as a parameter first--------------------------------------------------------------------------
-
-
-                        // CALL BOOKING VALIDATOR
-                        string errorMessage;
-
-                       // bool isValid = _validator.ValidateCarpetedRooms(booking,out errorMessage);
-
-
-                        //if (isValid)
-                        //{
-                        //    quantity = booking.CarpetedRooms;
-
-                        //    break;
-                        //}
-
-
-                        //Console.WriteLine($"Error: {errorMessage}");
                     }
                 }
 
