@@ -28,33 +28,13 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         AddOnId = reader.GetString(reader.GetOrdinal("AddOnId")),
                         AddOnsName = reader.GetString(reader.GetOrdinal("AddOnsName")),
                         Rate = reader.GetDecimal(reader.GetOrdinal("Rate")),
-                        PricingType = reader.GetString(reader.GetOrdinal("PricingType")),
-                        //IsActive = reader.GetBoolean(reader.GetOrdinal("isActive"))
+                        PricingType = reader.GetString(reader.GetOrdinal("PricingType"))
                     };
                     addOnsInfo.Add(addOns);
                 }
             }
             return addOnsInfo;
         }
-        public AddOns AddOnsByID(string? Id)
-        {
-            AddOns addOnsInfo = new AddOns();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
-            {
-                SqlCommand command = new SqlCommand("dbo.GetCustomer", connection);//waiting for sql procedure.......................................................................
-                command.CommandType = CommandType.StoredProcedure;
-                command.Connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    addOnsInfo.AddOnId = reader.GetString(reader.GetOrdinal("AddOnId"));
-                    addOnsInfo.AddOnsName = reader.GetString(reader.GetOrdinal("AddOnsName"));
-                    addOnsInfo.Rate = reader.GetDecimal(reader.GetOrdinal("Rate"));
-                    addOnsInfo.PricingType = reader.GetString(reader.GetOrdinal("PricingType"));
-                    addOnsInfo.IsActive = reader.GetBoolean(reader.GetOrdinal("isActive"));
-                }
-            }
-            return addOnsInfo;
-        }
+        
     }
 }

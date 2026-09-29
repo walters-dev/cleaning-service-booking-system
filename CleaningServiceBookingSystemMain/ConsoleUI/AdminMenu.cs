@@ -39,6 +39,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             IServiceTypesRepository serviceTypesRepository = new RepositoryServiceTypes();
             ServiceTypesService serviceTypesService = new ServiceTypesService(serviceTypesRepository);
 
+            Customers customersBooking = new Customers();
             BookingAddOns bookingAddOns = new BookingAddOns();
             DiscountService discountService = new DiscountService();
             PricingService pricingService = new PricingService(discountService);
@@ -118,7 +119,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             new SelectionPrompt<string>()
                             .Title("Choose customer:")
                             .AddChoices("Existing customer", "New customer"));
-                        Customers customersBooking = new Customers();
+                        
                         if (createBookingChoices == "Existing customer")            //Existing customer chosen from create booking menu
                         {
                             AnsiConsole.MarkupLine("[green]Existing customer selected[/]");
@@ -285,7 +286,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 .AddColumn("Customer Address");//creates headers for bookings 
                                 foreach (var booking in bookings)
                                 {
-                                    allBookingsTable.AddRow(booking.BookingDate.Value.Date.ToString("dd MMM yyyy"), booking.NumberOfRooms.ToString(), booking.BookingStatus, booking.TotalAmount.ToString("C"), booking.CreatedBy, booking.CreatedAt.Value.Date.ToString("dd MMM yyyy"), booking.CarpetedRooms.ToString(), booking.RecurringBookingType, "customers name", "address");
+                                    customersBooking = customerService.FindCustomer(booking.CustomerId);
+                                    allBookingsTable.AddRow(booking.BookingDate.Value.Date.ToString("dd MMM yyyy"), booking.NumberOfRooms.ToString(), booking.BookingStatus, booking.TotalAmount.ToString("C"), booking.CreatedBy, booking.CreatedAt.Value.Date.ToString("dd MMM yyyy"), booking.CarpetedRooms.ToString(), booking.RecurringBookingType, customersBooking.FullName, customersBooking.PhyAddress);
                                     //displays booking info then repeats till last booking
                                 }
                                 AnsiConsole.Write(allBookingsTable);

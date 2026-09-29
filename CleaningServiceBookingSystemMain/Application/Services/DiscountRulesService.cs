@@ -21,13 +21,5 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         {
             return _discountRulesRepository.GetDiscountRulesById(discountId);
         }
-        public void RegisterDiscountRule(DiscountRules discountRules)
-        {
-            _discountRulesRepository.Add(discountRules);
-        }
-        public string FindDiscountCount()
-        {
-            return _discountRulesRepository.DiscountRulesRowCount();
-        }
     }
 }

@@ -12,11 +12,7 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         public CustomerService(ICustomerRepository repository)
         {
             _customerRepository = repository;
-        }
-        public IList<Customers> ViewAllCustomers()
-        {
-            return _customerRepository.GetCustomers();
-        }
+        }}
         public Customers FindCustomer(string? customerId)
         {
             return _customerRepository.GetCustomerById(customerId);
@@ -24,14 +20,6 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         public void RegisterCustomer(Customers customer)
         {
             _customerRepository.Add(customer);
-        }
-        public void AmendCustomer(Customers customer)
-        {
-            _customerRepository.Update(customer);
-        }
-        public void DeleteCustomer(Customers customer)
-        {
-            _customerRepository.Delete(customer);
         }
         public Customers FindCustomerWithPhoneNumber(string phonenumber)
         {
