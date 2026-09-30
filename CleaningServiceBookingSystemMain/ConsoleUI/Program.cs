@@ -1,16 +1,19 @@
-﻿using System;
-using Spectre;
+﻿using Spectre;
 using Spectre.Console;
+using System;
+using System.Text;
+
 namespace CleaningServiceBookingSystemMain.ConsoleUI
 {
     class Program
     {
         static void Main(string[] args)
         {
-
+            //sets encoding to UTF8 so that the spinner can have a different style
+            System.Console.OutputEncoding = Encoding.UTF8;
+            System.Console.InputEncoding = Encoding.UTF8;
             //Declare variables and initialization
             bool IsUserSelected = false;
-            IsUserSelected = false;
             while (IsUserSelected == false)
             {
                 var menuChoices = AnsiConsole.Prompt(
@@ -32,13 +35,20 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         managerMenu.ViewManagerMenu();
                         break;
                     case "Terminate application":
-                        Console.WriteLine("Application is terminated");
+                        //loads the font for the figlet
                         var font = FigletFont.Load("C:\\Users\\RPS3\\Documents\\Projects\\CleaningServiceBookingSystem\\CleaningServiceBookingSystemMain\\figlet-fonts-main\\DOS Rebel.flf");
                         var centerAligned = new FigletText(font, "BYE")
                         {
                             Justification = Justify.Center
                         };
-                        AnsiConsole.Write(centerAligned);
+                        AnsiConsole.Write(centerAligned);//diplays figlet centred
+                        AnsiConsole.Status()
+                            .Spinner(Spinner.Known.Dots)
+                            .SpinnerStyle(Style.Parse("lightgreen"))
+                            .Start("Terminating appllication...", ctx =>
+                            {
+                                Thread.Sleep(3000);
+                            });
                         IsUserSelected = true;                          //stops menu loop
                         break;
                 }

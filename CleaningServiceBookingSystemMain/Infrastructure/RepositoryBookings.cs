@@ -15,12 +15,12 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         public IList<Bookings> GetBookings()
         {
             List<Bookings> bookingsInfo = new List<Bookings>();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.GetAllBookings", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.GetAllBookings", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
                     int active = reader.GetOrdinal("IsRecurring");
@@ -31,11 +31,9 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         CustomerId = reader.GetString(reader.GetOrdinal("Customers_id")),
                         HouseTypeId = reader.GetString(reader.GetOrdinal("Housetypes_id")),
                         ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypes_id")),
-                        //DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id")),
                         BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate")),
                         NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms")),
-                        //IsRecurring = reader.IsDBNull(active) ? (bool?)null : reader.GetBoolean(active);
-                        IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring")),//............................................
+                        IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring")),
                         RecurringBookingType = reader.GetString(reader.GetOrdinal("RecurringBookingType")),
                         SubTotal = reader.GetDecimal(reader.GetOrdinal("SubTotal")),
                         DiscountAmount = reader.GetDecimal(reader.GetOrdinal("DiscountAmount")),
@@ -49,7 +47,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt")),
                         UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"))
                     };
-                    if (reader["DiscountRule_id"] != DBNull.Value)
+                    if (reader["DiscountRule_id"] != DBNull.Value)//checks if DiscountRule_id is null, if not then read the record
                     {
                         booking.DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id"));
                     }
@@ -64,12 +62,11 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         }
         public void Add(Bookings bookings)
         {
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.AddBooking", connection);
+                SqlCommand command = new SqlCommand("dbo.AddBooking", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
-                //need to add a thing for id
                 command.Parameters.AddWithValue("@BookingId", bookings.BookingId);
                 command.Parameters.AddWithValue("@Customers_id", bookings.CustomerId);
                 command.Parameters.AddWithValue("@Housetypes_id", bookings.HouseTypeId);
@@ -84,7 +81,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 }
                 command.Parameters.AddWithValue("@BookingDate", bookings.BookingDate);
                 command.Parameters.AddWithValue("@NumberOfRooms", bookings.NumberOfRooms);
-                command.Parameters.AddWithValue("@IsRecurring", bookings.IsRecurring);//............................................ 
+                command.Parameters.AddWithValue("@IsRecurring", bookings.IsRecurring);
                 command.Parameters.AddWithValue("@RecurringBookingType", bookings.RecurringBookingType); 
                 command.Parameters.AddWithValue("@SubTotal", bookings.SubTotal); 
                 command.Parameters.AddWithValue("@DiscountAmount", bookings.DiscountAmount); 
@@ -97,17 +94,16 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@CarpetedRooms", bookings.CarpetedRooms);
                 command.Parameters.AddWithValue("@UpdatedAt", bookings.UpdatedAt);
                 command.Parameters.AddWithValue("@UpdatedBy", bookings.UpdatedBy);
-                command.ExecuteNonQuery();
+                command.ExecuteNonQuery();//executes the query and saves new booking to database
             }
         }
         public void Update(Bookings bookings)
         {
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.UpdateBooking", connection);
+                SqlCommand command = new SqlCommand("dbo.UpdateBooking", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
-                //need to add a thing for id
                 command.Parameters.AddWithValue("@BookingId", bookings.BookingId);
                 command.Parameters.AddWithValue("@Customers_id", bookings.CustomerId);
                 command.Parameters.AddWithValue("@Housetypes_id", bookings.HouseTypeId);
@@ -115,7 +111,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@DiscountRule_id", bookings.DiscountRuleId);
                 command.Parameters.AddWithValue("@BookingDate", bookings.BookingDate);
                 command.Parameters.AddWithValue("@NumberOfRooms", bookings.NumberOfRooms);
-                command.Parameters.AddWithValue("@IsRecurring", bookings.IsRecurring);//............................................
+                command.Parameters.AddWithValue("@IsRecurring", bookings.IsRecurring);
                 command.Parameters.AddWithValue("@RecurringBookingType", bookings.RecurringBookingType);
                 command.Parameters.AddWithValue("@SubTotal", bookings.SubTotal);
                 command.Parameters.AddWithValue("@DiscountAmount", bookings.DiscountAmount);
@@ -126,20 +122,20 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@CarpetedRooms", bookings.CarpetedRooms);
                 command.Parameters.AddWithValue("@UpdatedAt", bookings.UpdatedAt);
                 command.Parameters.AddWithValue("@UpdatedBy", bookings.UpdatedBy);
-                command.ExecuteNonQuery();
+                command.ExecuteNonQuery();//executes the query which saves changes to a pre-existing booking to the database
             }
         }
-        public IList<BookingByDate> ListByRange(DateTime startDate, DateTime endDate)
+        public IList<BookingByDate> ListByRange(DateTime startDate, DateTime endDate)//sets up connection to database
         {
             List<BookingByDate> bookingsInfo = new List<BookingByDate>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("dbo.BookingListByDateRange", connection);
+                SqlCommand command = new SqlCommand("dbo.BookingListByDateRange", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 command.Parameters.AddWithValue("@StartDate", startDate);
                 command.Parameters.AddWithValue("@EndDate", endDate);
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
                     var booking = new BookingByDate()
@@ -162,13 +158,13 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         public IList<CustomerBookingHistory> BookingHistory(string phonenumber)
         {
             List<CustomerBookingHistory> bookingsInfo = new List<CustomerBookingHistory>();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.CustomerBookingHistory", connection);
+                SqlCommand command = new SqlCommand("dbo.CustomerBookingHistory", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 command.Parameters.AddWithValue("@PhoneNumber", phonenumber);
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
                     var booking = new CustomerBookingHistory()
@@ -191,12 +187,12 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         public IList<BookingRevenueSummary> RevenueSummary()
         {
             List<BookingRevenueSummary> bookingsInfo = new List<BookingRevenueSummary>();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.RevenueSummary", connection);
+                SqlCommand command = new SqlCommand("dbo.RevenueSummary", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
                     var booking = new BookingRevenueSummary()
@@ -214,12 +210,12 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         public IList<BookingByHouseType> BookingsByHouseType()
         {
             List<BookingByHouseType> bookingsInfo = new List<BookingByHouseType>();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.BookingsByHouseType", connection);
+                SqlCommand command = new SqlCommand("dbo.BookingsByHouseType", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
                     var booking = new BookingByHouseType()
@@ -236,12 +232,12 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         public IList<BookingDiscountUsage> DiscountUsage()
         {
             List<BookingDiscountUsage> bookingsInfo = new List<BookingDiscountUsage>();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.DiscountUsageSummary", connection);
+                SqlCommand command = new SqlCommand("dbo.DiscountUsageSummary", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
                     var booking = new BookingDiscountUsage()
@@ -262,25 +258,27 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
 
         public void ChangeBoookingStatus(Bookings bookings)
         {
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.ChangeBookingStatus", connection);
+                SqlCommand command = new SqlCommand("dbo.ChangeBookingStatus", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 command.Parameters.AddWithValue("@BookingId", bookings.BookingId);
                 command.Parameters.AddWithValue("@BookingStatus", bookings.BookingStatus);
-                command.ExecuteNonQuery();
+                command.Parameters.AddWithValue("@UpdatedBy", bookings.UpdatedBy);
+                command.Parameters.AddWithValue("@UpdatedAt", bookings.UpdatedAt);
+                command.ExecuteNonQuery();//executes the query which saves booking status changes to a pre-existing booking to the database
             }
         }
         public string BookingsRowCount()
         {
             int id;
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.BookingsRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.BookingsRowCount", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 if (reader.Read())
                 {
                     id = reader.GetInt32("RowsCount");
@@ -295,12 +293,12 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         public IList<Bookings> GetBookingsCreatedToday()
         {
             List<Bookings> bookingsInfo = new List<Bookings>();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.GetBookingsByCreatedDate", connection);
+                SqlCommand command = new SqlCommand("dbo.GetBookingsByCreatedDate", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
                     var bookings = new Bookings()
@@ -312,7 +310,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id")),
                         BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate")),
                         NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms")),
-                        IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring")),//............................................
+                        IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring")),
                         RecurringBookingType = reader.GetString(reader.GetOrdinal("RecurringBookingType")),
                         SubTotal = reader.GetDecimal(reader.GetOrdinal("SubTotal")),
                         DiscountAmount = reader.GetDecimal(reader.GetOrdinal("DiscountAmount")),
@@ -334,22 +332,21 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         public Bookings GetBookingsByPhoneNumberAndDate(string phonenumber, DateTime date)
         {
             Bookings booking = new Bookings();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.GetBookingsByPhoneNumberAndDate", connection);
+                SqlCommand command = new SqlCommand("dbo.GetBookingsByPhoneNumberAndDate", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 command.Parameters.AddWithValue("@PhoneNumber", phonenumber);
                 command.Parameters.AddWithValue("@BookingDate", date);
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
                     booking.BookingId = reader.GetString(reader.GetOrdinal("BookingId"));
                     booking.CustomerId = reader.GetString(reader.GetOrdinal("Customers_id"));
                     booking.HouseTypeId = reader.GetString(reader.GetOrdinal("Housetypes_id"));
                     booking.ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypes_id"));
-                    //booking.DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id"));
-                    if (reader["DiscountRule_id"] != DBNull.Value)
+                    if (reader["DiscountRule_id"] != DBNull.Value)//checks if DiscountRule_id is null, if not then read the record
                     {
                         booking.DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id"));
                     }
@@ -366,8 +363,6 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     booking.SurchargeAmount = reader.GetDecimal(reader.GetOrdinal("SurchargeAmount"));
                     booking.TotalAmount = reader.GetDecimal(reader.GetOrdinal("TotalAmount"));
                     booking.BookingStatus = reader.GetString(reader.GetOrdinal("BookingStatus"));
-                    //booking.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
-                    //booking.CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"));
                     booking.UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));
                     booking.UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt"));
                     booking.FirstTimeBooking = reader.GetBoolean(reader.GetOrdinal("FirstTimeBooking"));

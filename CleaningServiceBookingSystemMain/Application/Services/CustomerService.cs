@@ -9,7 +9,7 @@ namespace CleaningServiceBookingSystemMain.Application.Services
     public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _customerRepository;
-        public CustomerService(ICustomerRepository repository)
+        public CustomerService(ICustomerRepository repository)//prevents the service from running without its dependency
         {
             _customerRepository = repository;
         }

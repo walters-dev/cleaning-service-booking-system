@@ -9,7 +9,7 @@ namespace CleaningServiceBookingSystemMain.Application.Services
     public class DiscountRulesService : IDiscountRulesService
     {
         private readonly IDiscountRulesRepository _discountRulesRepository;
-        public DiscountRulesService(IDiscountRulesRepository repository)
+        public DiscountRulesService(IDiscountRulesRepository repository)//prevents the service from running without its dependency
         {
             _discountRulesRepository = repository;
         }

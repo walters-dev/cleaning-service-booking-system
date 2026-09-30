@@ -211,7 +211,7 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
             //checks if the admin user name already exists
             IAdminRepository adminRepository = new RepositoryAdmins();
             IAdminService adminService = new AdminService(adminRepository);
-            if (adminService.FindAdminPassword(admin.Username).AdminPassword != null)
+            if (adminService.FindAdminPassword(admin.Username).AdminPassword != "")
             {
                 errorMessage = "Admin username already exists.";
                 return false;

@@ -7,7 +7,7 @@ namespace CleaningServiceBookingSystemMain.Application.Interfaces
 {
     public interface IServiceTypesService
     {
-        IList<ServiceTypes> ViewAllServiceTypes();
-        ServiceTypes FindServiceType(string? serviceTypeId);
+        IList<ServiceTypes> ViewAllServiceTypes();//returns all service types
+        ServiceTypes FindServiceType(string? serviceTypeId);//finds 1 service type
     }
 }

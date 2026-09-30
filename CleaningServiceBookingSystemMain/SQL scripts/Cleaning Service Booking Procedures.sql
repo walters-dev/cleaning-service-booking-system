@@ -160,13 +160,15 @@ GO
 CREATE OR ALTER PROCEDURE ChangeBookingStatus
 @BookingStatus VARCHAR(MAX),
 @BookingId VARCHAR(7),
-@Updatedby VARCHAR(MAX)
+@UpdatedBy VARCHAR(MAX),
+@UpdatedAt DATE
 AS
 BEGIN
 UPDATE Bookings
 SET
-UpdatedBy = @Updatedby,
-BookingStatus = @BookingStatus 
+UpdatedBy = @UpdatedBy,
+BookingStatus = @BookingStatus,
+UpdatedAt = @UpdatedAt
 WHERE BookingId = @BookingId
 END;
 GO 
@@ -578,3 +580,4 @@ select * from DiscountRules
 select * from AddOns
 select * from Housetypes
 SELECT * FROM Servicetypes
+select * from AdminTable
