@@ -7,8 +7,8 @@ namespace CleaningServiceBookingSystemMain.Application.Interfaces
 {
     public interface IAdminService
     {
-        void RegisterAdmin(Admins admin);
-        Admins FindAdminPassword(string? userName);
-        string FindAdminCount();
+        void RegisterAdmin(Admins admin);//register admin in system
+        Admins FindAdminPassword(string? userName);//finds 1 admin via username
+        string FindAdminCount();//finds count of admins in system
     }
 }

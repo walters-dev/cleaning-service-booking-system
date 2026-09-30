@@ -10,7 +10,7 @@ namespace CleaningServiceBookingSystemMain.Application.Services
     {
         private readonly IAddOnsRepository _repository;
         
-        public AddOnsService(IAddOnsRepository repository)
+        public AddOnsService(IAddOnsRepository repository)//prevents the service from running without its dependency
         {
             _repository = repository;
         }

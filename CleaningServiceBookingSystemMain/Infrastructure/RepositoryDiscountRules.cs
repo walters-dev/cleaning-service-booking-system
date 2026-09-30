@@ -14,12 +14,12 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         public IList<DiscountRules> GetDiscountRules()
         {
             List<DiscountRules> discountRulesInfo = new List<DiscountRules>();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("fghj", connection);
+                SqlCommand command = new SqlCommand("fghj", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
                     var discountRules = new DiscountRules()
@@ -27,8 +27,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRuleId")),
                         Name = reader.GetString(reader.GetOrdinal("DiscountName")),
                         DisPercentage = reader.GetDecimal(reader.GetOrdinal("DiscPercentage")),
-                        CriteriaDescription = reader.GetString(reader.GetOrdinal("CriteriaDescription")),
-                        IsActive = reader.GetBoolean(reader.GetOrdinal("isActive"))
+                        CriteriaDescription = reader.GetString(reader.GetOrdinal("CriteriaDescription"))
                     };
                     discountRulesInfo.Add(discountRules);
                 }
@@ -38,19 +37,18 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         public DiscountRules GetDiscountRulesById(string? Id)
         {
             DiscountRules discountRulesInfo = new DiscountRules();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.GetCustomer", connection);
+                SqlCommand command = new SqlCommand("dbo.GetCustomer", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
                     discountRulesInfo.DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRuleId"));
                     discountRulesInfo.Name = reader.GetString(reader.GetOrdinal("Name"));
                     discountRulesInfo.DisPercentage = reader.GetDecimal(reader.GetOrdinal("DisPercentage"));
                     discountRulesInfo.CriteriaDescription = reader.GetString(reader.GetOrdinal("CriteriaDescription"));
-                    discountRulesInfo.IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"));
                 }
             }
             return discountRulesInfo;

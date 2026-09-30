@@ -13,9 +13,9 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         DatabaseConnection databaseConnection = new DatabaseConnection();
         public void Add(BookingAddOns bookingAddOns)
         {
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.AddBookingAddOn", connection);
+                SqlCommand command = new SqlCommand("dbo.AddBookingAddOn", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 //need to add a thing for id
@@ -24,29 +24,29 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@AddOn_id", bookingAddOns.AddOnId);
                 command.Parameters.AddWithValue("@Quantity", bookingAddOns.Quantity);
                 command.Parameters.AddWithValue("@LineAmount", bookingAddOns.LineAmount);
-                command.ExecuteNonQuery();
+                command.ExecuteNonQuery();//executes the query which saves a new booking add on to database
             }
         }
         public void DeleteBookingAddOnByBookingId(string Id)
         {
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.DeleteBookingAddOnByAddOnId", connection);
+                SqlCommand command = new SqlCommand("dbo.DeleteBookingAddOnByAddOnId", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 command.Parameters.AddWithValue("@BookingId", Id);
-                command.ExecuteNonQuery();
+                command.ExecuteNonQuery();//executes the query which deletes booking add ons with booking id in the database
             }
         }
         public int GetLastRowAddOnBookings()
         {
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
                 char[] removeChars = { 'B', 'A' };//list of characters to remove
-                SqlCommand command = new SqlCommand("dbo.GetLastRowAddOnBookings", connection);
+                SqlCommand command = new SqlCommand("dbo.GetLastRowAddOnBookings", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 if (reader.Read())
                 {
                     //removes letters and returns the integer left over 

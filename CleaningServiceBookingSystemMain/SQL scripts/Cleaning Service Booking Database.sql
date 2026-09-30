@@ -14,11 +14,8 @@ CREATE TABLE Customers (
     Email VARCHAR(255),
     PhysAddress VARCHAR(255),
     CreatedAt DATE,
-    UpdatedAt DATE,
-    CreatedBy VARCHAR(MAX),
-    UpdatedBy VARCHAR(MAX)
+    CreatedBy VARCHAR(MAX)
 );
-
 
 CREATE TABLE Housetypes (
     HouseTypesid VARCHAR(7) PRIMARY KEY,
@@ -26,18 +23,14 @@ CREATE TABLE Housetypes (
     BaseRate DECIMAL(10,2),
     RatePerRoom DECIMAL(10,2),
     MinRooms INT,
-    MaxRooms INT,
-    isActive BIT
+    MaxRooms INT
 );
-
-
 
 CREATE TABLE Servicetypes (
     ServiceTypeId VARCHAR(7) PRIMARY KEY,
     ServiceName VARCHAR(MAX),
     ServiceDescription VARCHAR(MAX),
-    Multiplier DECIMAL(10,2),
-    isActive BIT
+    Multiplier DECIMAL(10,2)
 );
  
 
@@ -46,7 +39,6 @@ CREATE TABLE DiscountRules (
     DiscountRuleId VARCHAR(7) PRIMARY KEY,
     DiscountName VARCHAR(MAX),
     CriteriaDescription VARCHAR(MAX),
-    isActive BIT,
     DiscPercentage DECIMAL(10,2)
 );
 
@@ -56,8 +48,7 @@ CREATE TABLE AddOns (
     AddOnId VARCHAR(10) PRIMARY KEY,
     AddOnsName VARCHAR(MAX),
     Rate DECIMAL(10,2),
-    PricingType VARCHAR(MAX),
-    isActive BIT
+    PricingType VARCHAR(MAX)
 );
 
 

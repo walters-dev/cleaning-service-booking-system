@@ -7,7 +7,7 @@ namespace CleaningServiceBookingSystemMain.Application.Interfaces
 {
     public interface IDiscountRulesService
     {
-        IList<DiscountRules> ViewAllDiscountRules();
-        DiscountRules FindDiscountRules(string? discountId);
+        IList<DiscountRules> ViewAllDiscountRules();//returns all discount rules
+        DiscountRules FindDiscountRules(string? discountId); //finds 1 discount rule
     }
 }
