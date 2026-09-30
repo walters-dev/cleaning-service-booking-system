@@ -53,7 +53,7 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
             }
             //checks if a customer is already using this phone number
             ICustomerRepository customerRepository = new RepositoryCustomers();
-            CustomerService customerService = new CustomerService(customerRepository);
+            ICustomerService customerService = new CustomerService(customerRepository);
             if (customerService.FindCustomerWithPhoneNumber(customer.PhoneNumber).FullName != null)
             {
                 errorMessage = "Phone number already in use for another customer.";
@@ -210,7 +210,7 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
             }
             //checks if the admin user name already exists
             IAdminRepository adminRepository = new RepositoryAdmins();
-            AdminService adminService = new AdminService(adminRepository);
+            IAdminService adminService = new AdminService(adminRepository);
             if (adminService.FindAdminPassword(admin.Username).AdminPassword != null)
             {
                 errorMessage = "Admin username already exists.";

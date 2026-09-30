@@ -6,7 +6,7 @@ using CleaningServiceBookingSystemMain.Domain.Models;
 
 namespace CleaningServiceBookingSystemMain.Application.Services
 {
-    public class HouseTypeService
+    public class HouseTypeService : IHouseTypeService
     {
         private readonly IHouseTypesRepository _houseTypesRepository;
         public HouseTypeService(IHouseTypesRepository repository)

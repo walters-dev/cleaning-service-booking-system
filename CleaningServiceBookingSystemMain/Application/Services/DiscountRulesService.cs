@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Application.Services
 {
-    public class DiscountRulesService
+    public class DiscountRulesService : IDiscountRulesService
     {
         private readonly IDiscountRulesRepository _discountRulesRepository;
         public DiscountRulesService(IDiscountRulesRepository repository)

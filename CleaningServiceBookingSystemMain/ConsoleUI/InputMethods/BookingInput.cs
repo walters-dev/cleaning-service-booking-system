@@ -32,7 +32,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Console.WriteLine();
                 Console.WriteLine("===== BOOKING INFORMATION =====");
 
-                BookingService bookingService = new BookingService(_bookingRepository);
+                IBookingService bookingService = new BookingService(_bookingRepository);
                 booking.BookingId = bookingService.FindBookingCount(); //gets booking count to create primary key that does not overlap
 
                 HouseTypes houseTypes = new HouseTypes();

@@ -6,9 +6,10 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Application.Services
 {
-    public class AddOnsService
+    public class AddOnsService : IAddOnsService
     {
         private readonly IAddOnsRepository _repository;
+        
         public AddOnsService(IAddOnsRepository repository)
         {
             _repository = repository;

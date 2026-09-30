@@ -16,7 +16,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<DiscountRules> discountRulesInfo = new List<DiscountRules>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("fghj", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("fghj", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -40,7 +40,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             DiscountRules discountRulesInfo = new DiscountRules();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("dbo.GetCustomer", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.GetCustomer", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 SqlDataReader reader = command.ExecuteReader();

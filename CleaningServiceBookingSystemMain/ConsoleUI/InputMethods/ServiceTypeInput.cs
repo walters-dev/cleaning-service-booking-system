@@ -13,7 +13,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
         public ServiceTypes GetServiceTypeInput()
         {
-            ServiceTypesService serviceTypesService = new ServiceTypesService(_serviceTypesRepository);
+            IServiceTypesService serviceTypesService = new ServiceTypesService(_serviceTypesRepository);
 
             IList<ServiceTypes> serviceTypes =
                 serviceTypesService.ViewAllServiceTypes();

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Application.Services
 {
-    public class BookingService
+    public class BookingService : IBookingService
     {
         private readonly IBookingsRepository _bookingRepository;
         public BookingService(IBookingsRepository repository)

@@ -10,6 +10,7 @@ using System;
 using System.Linq.Expressions;
 using CleaningServiceBookingSystemMain.Application.Services;
 using CleaningServiceBookingSystemMain.Domain.Services;
+using CleaningServiceBookingSystemMain.Application;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI
 {
@@ -25,19 +26,19 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             string username, password, email, phonenumber;
             //creation of classes and services
             IAddOnsRepository addOnsRepository = new RepositoryAddOns();
-            AddOnsService addOnsService = new AddOnsService(addOnsRepository);
+            IAddOnsService addOnsService = new AddOnsService(addOnsRepository);
             IAdminRepository adminRepository = new RepositoryAdmins();
-            AdminService adminService = new AdminService(adminRepository);
+            IAdminService adminService = new AdminService(adminRepository);
             ICustomerRepository customerRepository = new RepositoryCustomers();
-            CustomerService customerService = new CustomerService(customerRepository);
+            ICustomerService customerService = new CustomerService(customerRepository);
             IBookingsRepository bookingsRepository = new RepositoryBookings();
-            BookingService bookingService = new BookingService(bookingsRepository);
+            IBookingService bookingService = new BookingService(bookingsRepository);
             IBookingAddOnsRepository bookingAddOnsRepository = new RepositoryBookingAddOns();
-            BookingAddOnService bookingAddOnService = new BookingAddOnService(bookingAddOnsRepository);   
+            IBookingAddOnService bookingAddOnService = new BookingAddOnService(bookingAddOnsRepository);   
             IHouseTypesRepository houseTypesRepository = new RepositoryHouseTypes();
-            HouseTypeService houseTypeService = new HouseTypeService(houseTypesRepository);
+            IHouseTypeService houseTypeService = new HouseTypeService(houseTypesRepository);
             IServiceTypesRepository serviceTypesRepository = new RepositoryServiceTypes();
-            ServiceTypesService serviceTypesService = new ServiceTypesService(serviceTypesRepository);
+            IServiceTypesService serviceTypesService = new ServiceTypesService(serviceTypesRepository);
 
             Customers customersBooking = new Customers();
             BookingAddOns bookingAddOns = new BookingAddOns();
