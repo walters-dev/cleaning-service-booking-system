@@ -26,7 +26,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Customers customer = new Customers();
 
                 Console.WriteLine();
-                Console.WriteLine("===== CUSTOMER INFORMATION =====");
+                Console.WriteLine("===== CUSTOMER INFORMATION ====="); //Captures User Input
                 ICustomerService service = new CustomerService(_customerRepository);
                 customer.CustomerId = service.FindCustomerCount();
 
@@ -45,7 +45,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 customer.CreatedAt = DateTime.Today;
                 customer.CreatedBy = username;
 
-                bool isValid = _validator.ValidateCustomer(customer, out string errorMessage);
+                bool isValid = _validator.ValidateCustomer(customer, out string errorMessage); //Valids If the customer Exists
 
                 if (isValid)
                 {
@@ -62,7 +62,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
         }
 
-        public string GetEmail()
+        public string GetEmail() // Validates if the email exists
         {
             while (true)
             {
@@ -80,7 +80,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Console.WriteLine("Please Enter the email again");
             }
         }
-        public string GetPhoneNumber()
+        public string GetPhoneNumber() // Validates if the phone number exists
         {
             while (true)
             {

@@ -21,35 +21,19 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
             Console.WriteLine();
             Console.WriteLine("===== SERVICE TYPES =====");
 
-            if (serviceTypes.Count == 0)
-            {
-                throw new InvalidOperationException(
-                    "No service types are available.");
-            }
-            int i;
-            for (i = 0;
-                 i < serviceTypes.Count;
-                 i++)
-            {
-                Console.WriteLine(
-                    $"{i + 1}. " +
-                    $"{serviceTypes[i].ServiceDescription} " +
-                    $"- Multiplier: " +
-                    $"{serviceTypes[i].Multiplier}");
-            }
+            ServiceTypes selectedServiceType = AnsiConsole.Prompt(
+               new SelectionPrompt<ServiceTypes>()
+                   .Title("[yellow]Choose a service type:[/]")
+                   .PageSize(10)
+                   .HighlightStyle(new Style(Color.Green))
+                   .UseConverter(serviceType =>
+                       $"{serviceType.ServiceDescription} - Multiplier: {serviceType.Multiplier}x")
+                   .AddChoices(serviceTypes)
+           );
 
-            while (true)
-            {
-                Console.Write("Choose a service type: ");
+            // Return the service type selected by the user.
+            return selectedServiceType;
 
-                if (!int.TryParse(Console.ReadLine(),out int choice) || choice > i)
-                {
-                    AnsiConsole.MarkupLine("[red]Please enter a valid number.[/]");
-
-                    continue;
-                }
-                return serviceTypes[choice - 1];
-            }
         }
     }
 }
