@@ -31,7 +31,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.DeleteBookingAddOnByAddOnId", connection);//gets stored procedure from database
+                SqlCommand command = new SqlCommand("dbo.DeleteBookingAddOnByBookingId", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 command.Parameters.AddWithValue("@BookingId", Id);
@@ -57,6 +57,38 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     return 0;
                 }
             }
+        }
+        public IList<BookingAddOns> GetBookingAddOnsByBookingId(string Id)
+        {
+            IList<BookingAddOns> bookingAddOns= new List<BookingAddOns>();
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
+            {
+                SqlCommand command = new SqlCommand("dbo.GetBookingAddOnsByBookingId", connection);//gets stored procedure from database
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                command.Parameters.AddWithValue("@BookingId", Id);
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
+                while (reader.Read())
+                {
+                    BookingAddOns bookingAddOn = new BookingAddOns()
+                    {
+                        BookingAddOnId = reader.GetString(reader.GetOrdinal("BookingAddOnId")),
+                        BookingId = reader.GetString(reader.GetOrdinal("Booking_id")),
+                        AddOnId = reader.GetString(reader.GetOrdinal("AddOn_id")),
+                        LineAmount = reader.GetDecimal(reader.GetOrdinal("Quantity")),
+                        Quantity = reader.GetInt32(reader.GetOrdinal("LineAmount"))
+                    };
+                    bookingAddOns.Add(bookingAddOn);
+
+                }
+                if (bookingAddOns.Count == 0)
+                {
+                    throw new ArgumentException();
+                }
+                
+                return bookingAddOns;
+            }
+
         }
     }
 }

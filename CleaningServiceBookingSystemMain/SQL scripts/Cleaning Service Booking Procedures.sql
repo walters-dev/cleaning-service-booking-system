@@ -155,6 +155,13 @@ AS
 BEGIN
     SELECT * FROM AddOns
 END;
+GO 
+CREATE OR ALTER PROCEDURE GetAddOnByAddOnId
+@AddOnId VARCHAR(7)
+AS
+BEGIN
+    SELECT * FROM AddOns WHERE AddOnId = @AddOnId
+END;
 /*booking procedures*/
 GO
 CREATE OR ALTER PROCEDURE ChangeBookingStatus
@@ -330,7 +337,14 @@ BEGIN
     ORDER BY BookingAddOnId DESC;
 END;
 GO
-CREATE OR ALTER PROCEDURE DeleteBookingAddOnByAddOnId
+CREATE OR ALTER PROCEDURE GetBookingAddOnsByBookingId
+@BookingId VARCHAR(7)
+AS
+BEGIN
+    SELECT * FROM BookingAddOns WHERE Booking_id = @BookingId;
+END;
+GO
+CREATE OR ALTER PROCEDURE DeleteBookingAddOnByBookingId
 @BookingId VARCHAR(7)
 AS
 BEGIN

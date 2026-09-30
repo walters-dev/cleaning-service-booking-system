@@ -21,25 +21,27 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         private readonly IHouseTypeService _houseTypeService; // Store the services used to find house-type and service-type details.
         private readonly IServiceTypesService _serviceTypesService;
         private readonly IAddOnsService _addOnsService; // Store the supplied add-on service. This field is currently unused in this class.
+        private readonly IBookingAddOnService _bookingAddOnService;
 
-        public UpdateInput(HouseTypeInput houseTypeInput, ServiceTypeInput serviceTypeInput, IHouseTypeService houseTypeService, IServiceTypesService serviceTypesService, IAddOnsService addOnsService) // The constructor receives the helper and service objects needed by this class.
+        public UpdateInput(HouseTypeInput houseTypeInput, ServiceTypeInput serviceTypeInput, IHouseTypeService houseTypeService, IServiceTypesService serviceTypesService, IAddOnsService addOnsService, IBookingAddOnService bookingAddOnService) // The constructor receives the helper and service objects needed by this class.
         {
             _houseTypeInput = houseTypeInput; // Save the supplied objects in fields so the other methods can use them.
             _serviceTypeInput = serviceTypeInput;
             _houseTypeService = houseTypeService;
             _serviceTypesService = serviceTypesService;
             _addOnsService = addOnsService;
+            _bookingAddOnService = bookingAddOnService;
         }
 
-        public Bookings GetUpdateInput(Bookings singleBooking, out IList<AddOnSelection>? addOnSelections, string username) // Update the supplied booking. out also returns an add-on selection list, and ? allows that list to be null.
+        public Bookings GetUpdateInput(Bookings singleBooking, out IList<AddOnSelection> addOnSelections, string username) // Update the supplied booking. out also returns an add-on selection list, and ? allows that list to be null.
         {
             while (true) // Repeat the update process until the booking passes validation and the method returns.
             {
                 HouseTypes selectedHouseType = new HouseTypes(); // Create temporary objects to hold the house type and service type during this update attempt.
                 ServiceTypes selectedServiceType = new ServiceTypes();
-                IHouseTypesRepository houseTypesRepository = new RepositoryHouseTypes();
+                //IHouseTypesRepository houseTypesRepository = new RepositoryHouseTypes();
                 //HouseTypeService houseTypeService = new HouseTypeService(houseTypesRepository);
-                IServiceTypesRepository serviceTypesRepository = new RepositoryServiceTypes();
+                //IServiceTypesRepository serviceTypesRepository = new RepositoryServiceTypes();
                 //ServiceTypesService serviceTypesService = new ServiceTypesService(serviceTypesRepository);
                 IAddOnsRepository addOnsRepository = new RepositoryAddOns(); // Create the repository that will be passed to the add-on input helper.
                 //AddOnsService addOnsService = new AddOnsService(addOnsRepository);
@@ -155,6 +157,24 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 DiscountService discountService = new DiscountService(); // Create the service responsible for calculating discounts.
                 PricingService pricingService = new PricingService(discountService); // Create the pricing service and provide the discount service it needs.
                 string discountName; // Declare a variable that will receive the discount name through an out parameter.
+                if (addOnSelections == null)
+                {
+                    try
+                    {
+                        IList <BookingAddOns> bookingAddOns = _bookingAddOnService.FindBookingAddOnsByBookingId(singleBooking.BookingId);
+                        foreach(var bookingAddOn in bookingAddOns)
+                        {
+                            AddOnSelection addOnSelection = new AddOnSelection();
+                            addOnSelection.AddOn.AddOnId = bookingAddOn.AddOnId;
+                            addOnSelection.AddOn.Rate = _addOnsService.FindAddOn(bookingAddOn.AddOnId).Rate;
+                            addOnSelections.Add(addOnSelection);
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                }
                 singleBooking.SubTotal = pricingService.CalculateSubtotal(singleBooking, selectedHouseType, selectedServiceType, addOnSelections); // Recalculate the subtotal using the updated booking details and supplied add-on list.
                 singleBooking.DiscountAmount = discountService.CalculateDiscountAmount(singleBooking, singleBooking.SubTotal, out discountName); // Calculate the discount amount and receive the discount name through out.
                 switch (discountName) // Match the discount name to the discount-rule ID stored in the booking.

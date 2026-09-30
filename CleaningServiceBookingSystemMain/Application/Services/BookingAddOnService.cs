@@ -25,5 +25,9 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         {
             return _bookingAddOnsRepository.GetLastRowAddOnBookings();
         }
+        public IList<BookingAddOns> FindBookingAddOnsByBookingId(string Id)
+        {
+            return _bookingAddOnsRepository.GetBookingAddOnsByBookingId(Id);
+        }
     }
 }
