@@ -11,9 +11,9 @@ namespace CleaningServiceBookingSystemMain.Application.InputMethods
     {
         private readonly BookingValidator _bookingValidator = new BookingValidator();
 
-        public Admins GetAdminInput() 
+        public Admins GetAdminInput() // Gets the admin Input 
         {
-            while (true)
+            while (true) // Uses a loop to Capture user input and stores them
             {
                 Admins admin = new Admins();
 
@@ -25,15 +25,15 @@ namespace CleaningServiceBookingSystemMain.Application.InputMethods
                 Console.Write("Password: ");
                 admin.AdminPassword = Console.ReadLine();
 
-                bool isValid = _bookingValidator.ValidateExistingAdmin(admin, out string errorMessage);
+                bool isValid = _bookingValidator.ValidateExistingAdmin(admin, out string errorMessage); // Checks Whether the Admin exists or not
 
                 if (isValid)
                 {
-                    return admin;
+                    return admin; // Will return Admin if The Admin Exists
                 }
 
                 Console.WriteLine();
-                AnsiConsole.MarkupLine($"[red]Error: {errorMessage}[/]") ;
+                AnsiConsole.MarkupLine($"[red]Error: {errorMessage}[/]") ; // Will Display An Error Message if The admin does not exist and will prompt the user to try again
                 Console.WriteLine("Please try Again");
             }
         }

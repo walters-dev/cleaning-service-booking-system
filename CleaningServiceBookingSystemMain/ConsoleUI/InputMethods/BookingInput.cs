@@ -8,27 +8,27 @@ using Spectre.Console;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
-    public class BookingInput
+    public class BookingInput // Collect the information needed to create a new booking object.
     {
-        private readonly HouseTypeInput _houseTypeInput = new HouseTypeInput();
+        private readonly HouseTypeInput _houseTypeInput = new HouseTypeInput(); // Create the house-type and service-type input helpers. readonly prevents reassignment after construction.
         private readonly ServiceTypeInput _serviceTypeInput = new ServiceTypeInput();
         
-        private readonly BookingValidator _validator =
+        private readonly BookingValidator _validator = // Create the validator used to check the booking information.
             new BookingValidator();
-        private readonly IBookingsRepository _bookingRepository;
+        private readonly IBookingsRepository _bookingRepository; // Store the booking repository supplied through the constructor.
 
-        public BookingInput(IBookingsRepository bookingRepository)
+        public BookingInput(IBookingsRepository bookingRepository) // The constructor receives the repository that the booking service will use.
         {
-            _bookingRepository = bookingRepository;
+            _bookingRepository = bookingRepository; // Save the supplied repository in a field so this class can use it later.
         }
 
-        public Bookings GetBookingInput(int carpetedRooms, IList<AddOnSelection> addOns, string phonenumber, string username, string customerId)
+        public Bookings GetBookingInput(int carpetedRooms, IList<AddOnSelection> addOns, string phonenumber, string username, string customerId) // Collect and return a valid booking using the supplied carpeted-room count, add-ons, phone number, username and customer ID.
         {
-            while (true)
+            while (true) // Repeat the input process when validation fails. Each attempt creates a fresh booking object.
             {
 
-                Bookings booking = new Bookings();
-               
+                Bookings booking = new Bookings(); // Create an empty booking object whose properties will hold the booking information.
+
                 Console.WriteLine();
                 Console.WriteLine("===== BOOKING INFORMATION =====");
 
@@ -68,20 +68,20 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 {
                     booking.RecurringBookingType = "";
                 }
-                DiscountService discountService = new DiscountService();
-                PricingService pricingService = new PricingService(discountService);
+                DiscountService discountService = new DiscountService();  // Create the service responsible for calculating discounts.
+                PricingService pricingService = new PricingService(discountService); // Create the pricing service and provide the discount service it needs.
                 if (bookingService.FindCustomerBookingHistory(phonenumber).Count == 0)//retrieves customer history from storage, if there is no history it becomes a first time booking
                 {
-                    booking.FirstTimeBooking = true;
+                    booking.FirstTimeBooking = true; // Mark this as a first-time booking because the customer's booking history is empty.
                 }
                 else
                 {
-                    booking.FirstTimeBooking = false;
+                    booking.FirstTimeBooking = false; // Mark this as a returning customer's booking because previous bookings exist.
                 }
                 string discountName;
-                booking.CustomerId = customerId;
-                booking.SubTotal = pricingService.CalculateSubtotal(booking, houseTypes, serviceTypes, addOns);
-                booking.DiscountAmount = discountService.CalculateDiscountAmount(booking, booking.SubTotal, out discountName);
+                booking.CustomerId = customerId; // Link this booking object to the customer using the supplied customer ID.
+                booking.SubTotal = pricingService.CalculateSubtotal(booking, houseTypes, serviceTypes, addOns); // Calculate the subtotal using the booking details, selected house and service types, and supplied add-ons.
+                booking.DiscountAmount = discountService.CalculateDiscountAmount(booking, booking.SubTotal, out discountName); // Calculate the discount amount and receive the discount name through out.
                 switch (discountName)           //Gets the discount id that is in use
                 {
                     case "First-Time Customer Discount":
@@ -94,32 +94,32 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                         booking.DiscountRuleId = "DR002";
                         break;
                     default:
-                        booking.DiscountRuleId = null;
+                        booking.DiscountRuleId = null; // Leave the discount-rule ID empty if none of the listed discount names match.
                         break;
                 }
-                booking.SurchargeAmount = pricingService.CalculateWeekendSurcharge(booking, (booking.SubTotal - booking.DiscountAmount));
-                booking.TotalAmount = pricingService.CalculateFinalTotal(booking, houseTypes, serviceTypes, addOns);
+                booking.SurchargeAmount = pricingService.CalculateWeekendSurcharge(booking, (booking.SubTotal - booking.DiscountAmount)); // Calculate the weekend surcharge using the subtotal after subtracting the discount.
+                booking.TotalAmount = pricingService.CalculateFinalTotal(booking, houseTypes, serviceTypes, addOns); // Ask the pricing service to calculate the booking's final total.
                 booking.BookingStatus = "Pending";  //pending is chosen as default
                 booking.CreatedAt = DateTime.Today;
                 booking.CreatedBy = username;       //username is the username of the admin that created the booking
                 booking.UpdatedAt = DateTime.Today;
                 booking.UpdatedBy = username;
                 
-                bool isValid =_validator.ValidateBooking(booking, houseTypes, out string errorMessage);
+                bool isValid =_validator.ValidateBooking(booking, houseTypes, out string errorMessage); // Validate the booking and selected house type. out provides any validation error message.
 
-                if (isValid)
+                if (isValid) // Return the booking only when the validator reports that it is valid.
                 {
-                    return booking;
+                    return booking; 
                 }
 
                 Console.WriteLine();
-                AnsiConsole.MarkupLine($"[red]Validation error: {errorMessage}[/]");
+                AnsiConsole.MarkupLine($"[red]Validation error: {errorMessage}[/]"); // Insert the error message into the text and display it in red using Spectre.Console markup.
 
                 Console.WriteLine("Please enter the booking information again.");
             }
         }
 
-        private int GetInteger()
+        private int GetInteger() // A private helper used inside this class to read a whole number.
         {
             int number;
 
@@ -131,7 +131,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
             return number;
         }
 
-        private DateTime GetDate()
+        private DateTime GetDate() // A private helper used inside this class to read a date.
         {
             DateTime date;
 
@@ -143,7 +143,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
             return date;
         }
 
-        private bool GetRecurringChoice()
+        private bool GetRecurringChoice() // Ask whether the booking repeats and return the answer as a bool.
         {
             while (true)
             {
@@ -170,7 +170,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
             }
         }
 
-        private string GetRecurringType()
+        private string GetRecurringType() // Ask how often the booking repeats and return the selected frequency as text.
         {
             while (true)
             {
@@ -182,7 +182,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Console.WriteLine("3. Monthly");
                 Console.Write("Choice: ");
 
-                int choice = GetInteger();
+                int choice = GetInteger(); // Read the user's menu choice as a whole number.
 
                 if (choice == 1)
                 {
@@ -203,7 +203,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
             }
         }
 
-        public DateTime GetSingleBookingDateInput()
+        public DateTime GetSingleBookingDateInput() // A public method other classes can call to collect and validate a single booking date.
         {
             while (true)
             {
@@ -217,7 +217,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
 
 
-                bool isValid = _validator.ValidateSingleDateInput(bookingDate, out string errorMessage);
+                bool isValid = _validator.ValidateSingleDateInput(bookingDate, out string errorMessage); // Validate the date text and receive any error message through out.
                 if (isValid)
                 {
                     DateTime BookingDate = DateTime.Parse(bookingDate);
