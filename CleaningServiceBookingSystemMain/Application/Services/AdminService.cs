@@ -6,7 +6,7 @@ using CleaningServiceBookingSystemMain.Domain.Models;
 
 namespace CleaningServiceBookingSystemMain.Application.Services
 {
-    public class AdminService
+    public class AdminService : IAdminService
     {
         private readonly IAdminRepository _adminRepository;
         public AdminService(IAdminRepository repository)

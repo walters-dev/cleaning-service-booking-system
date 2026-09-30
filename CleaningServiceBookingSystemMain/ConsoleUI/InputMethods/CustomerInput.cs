@@ -27,7 +27,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
                 Console.WriteLine();
                 Console.WriteLine("===== CUSTOMER INFORMATION =====");
-                CustomerService service = new CustomerService(_customerRepository);
+                ICustomerService service = new CustomerService(_customerRepository);
                 customer.CustomerId = service.FindCustomerCount();
 
                 Console.Write("Enter full name: ");

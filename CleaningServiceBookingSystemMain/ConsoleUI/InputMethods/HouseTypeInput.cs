@@ -13,7 +13,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
         public HouseTypes GetHouseTypeInput()
         {
-            HouseTypeService service = new HouseTypeService(_houseTypesRepository);
+            IHouseTypeService service = new HouseTypeService(_houseTypesRepository);
 
             IList<HouseTypes> houseTypes = service.ViewAllHouseTypes();
 

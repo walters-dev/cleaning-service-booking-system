@@ -18,11 +18,11 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
       private readonly ServiceTypeInput _serviceTypeInput;
 
         private readonly BookingValidator _validator = new BookingValidator();
-        private readonly HouseTypeService _houseTypeService;
-        private readonly ServiceTypesService _serviceTypesService;
-        private readonly AddOnsService _addOnsService;
+        private readonly IHouseTypeService _houseTypeService;
+        private readonly IServiceTypesService _serviceTypesService;
+        private readonly IAddOnsService _addOnsService;
 
-        public UpdateInput(HouseTypeInput houseTypeInput, ServiceTypeInput serviceTypeInput, HouseTypeService houseTypeService, ServiceTypesService serviceTypesService, AddOnsService addOnsService)
+        public UpdateInput(HouseTypeInput houseTypeInput, ServiceTypeInput serviceTypeInput, IHouseTypeService houseTypeService, IServiceTypesService serviceTypesService, IAddOnsService addOnsService)
         {
             _houseTypeInput = houseTypeInput;
             _serviceTypeInput = serviceTypeInput;

@@ -28,7 +28,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Console.WriteLine();
                 Console.WriteLine("===== ADMIN INFORMATION =====");
 
-                AdminService service = new AdminService(_adminRepository);
+                IAdminService service = new AdminService(_adminRepository);
                 admin.AdminId = service.FindAdminCount();
 
                 Console.Write("Enter username: ");

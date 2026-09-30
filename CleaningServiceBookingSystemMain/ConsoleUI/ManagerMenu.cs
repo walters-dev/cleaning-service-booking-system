@@ -20,7 +20,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             //creation of classes and services
             IBookingsRepository bookingsRepository = new RepositoryBookings();
             ICustomerRepository customerRepository = new RepositoryCustomers();
-            BookingService bookingService = new BookingService(bookingsRepository);
+            IBookingService bookingService = new BookingService(bookingsRepository);
             CustomerInput customerInput = new CustomerInput(customerRepository);
             DateRangeInput dateRangeInput = new DateRangeInput();
 

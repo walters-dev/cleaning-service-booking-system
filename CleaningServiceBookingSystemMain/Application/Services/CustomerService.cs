@@ -6,13 +6,13 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Application.Services
 {
-    public class CustomerService
+    public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _customerRepository;
         public CustomerService(ICustomerRepository repository)
         {
             _customerRepository = repository;
-        }}
+        }
         public Customers FindCustomer(string? customerId)
         {
             return _customerRepository.GetCustomerById(customerId);
