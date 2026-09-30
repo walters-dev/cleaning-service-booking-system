@@ -7,7 +7,7 @@ namespace CleaningServiceBookingSystemMain.Application.Interfaces
 {
     public interface IHouseTypeService
     {
-        IList<HouseTypes> ViewAllHouseTypes();
-        HouseTypes FindHouseType(string? houseTypeId);
+        IList<HouseTypes> ViewAllHouseTypes();//returns all house types
+        HouseTypes FindHouseType(string? houseTypeId);//finds 1 house type
     }
 }

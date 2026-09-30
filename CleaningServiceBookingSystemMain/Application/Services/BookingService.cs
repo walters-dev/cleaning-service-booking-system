@@ -9,7 +9,7 @@ namespace CleaningServiceBookingSystemMain.Application.Services
     public class BookingService : IBookingService
     {
         private readonly IBookingsRepository _bookingRepository;
-        public BookingService(IBookingsRepository repository)
+        public BookingService(IBookingsRepository repository)//prevents the service from running without its dependency
         {
             _bookingRepository = repository;
         }

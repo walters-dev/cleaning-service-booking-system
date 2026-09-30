@@ -56,7 +56,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 tableHistory.ShowRowSeparators();
                                 tableHistory.BorderColor(Color.Blue);
                                 tableHistory.Title($"{bookingsHistory[0].Fullname}'s booking history:");
-                                //tableHistory.AddColumn("Customer name"); they know who the customer is 
                                 tableHistory.AddColumn("House Type");
                                 tableHistory.AddColumn("Service Type");
                                 tableHistory.AddColumn("Booking Date");
@@ -109,11 +108,11 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 {
                                     if (countHouse % 2 == 0)        //alternates 2 different bar colours used
                                     {
-                                        chart.AddItem(booking.HouseName, booking.BookingCount, Color.Aqua);
+                                        chart.AddItem(booking.HouseName, booking.BookingCount, Color.IndianRed);
                                     }
                                     else
                                     {
-                                        chart.AddItem(booking.HouseName, booking.BookingCount, Color.Green);
+                                        chart.AddItem(booking.HouseName, booking.BookingCount, Color.Purple);
                                     }
                                     countHouse -= 1;
                                 }
@@ -125,7 +124,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         Console.Clear();
                         AnsiConsole.MarkupLine("[green]Summaries selected[/]");
                         var chartMoney = new BreakdownChart();
-                        //var chart = new BarChart();
                         IList < BookingRevenueSummary > summary = bookingService.ViewRevenueSummary();
                         if (summary.Count == 0)
                         {
@@ -135,27 +133,42 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         chartMoney.ShowPercentage();
                         chartMoney.UseValueFormatter((value, culture) => $"R {value:N}");       //formats the items to currrency
                         int countSummary = summary.Count;
+                        Table summaryTable = new Table()
+                                    .HideRowSeparators()
+                                    .NoBorder()
+                                    .HideHeaders()
+                                    .AddColumn("")
+                                    .AddColumn("", col => col.Centered());
                         foreach (var booking in summary)
                         {
                             if (countSummary % 4 == 0) //alternates 4 different bar colours used
                             {
-                                chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.Aqua);
+                                chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.DarkMagenta_1);
+                                summaryTable.AddRow($"[DarkMagenta_1]{booking.ServiceName}: [/]", booking.BookingCount.ToString());
                             }
                             else if(countSummary % 4 == 1)
                             {
-                                chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.Green);
+                                chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.RoyalBlue1);
+                                summaryTable.AddRow($"[RoyalBlue1]{booking.ServiceName}: [/]", booking.BookingCount.ToString());
                             }
                             else if (countSummary % 4 == 2)
                             {
-                                chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.Magenta1);
+                                chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.DarkViolet);
+                                summaryTable.AddRow($"[DarkViolet]{booking.ServiceName}: [/]", booking.BookingCount.ToString());
                             }
                             else
                             {
-                                chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.Yellow);
+                                chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.BlueViolet);
+                                summaryTable.AddRow($"[BlueViolet]{booking.ServiceName}: [/]", booking.BookingCount.ToString());
                             }
                             countSummary -= 1;
+                            
                         }
                         AnsiConsole.Write(chartMoney);
+                        var singleBookingPanel = new Panel(summaryTable);
+                        singleBookingPanel.Header("Booking Numbers per Service");
+                        Console.WriteLine();
+                        AnsiConsole.Write(singleBookingPanel);
                         break;
                     case "Trends":
                         Console.Clear();

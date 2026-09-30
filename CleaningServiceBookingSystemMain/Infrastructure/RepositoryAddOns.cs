@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using Microsoft.Data.SqlClient;
 using CleaningServiceBookingSystemMain.Application.Interfaces;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
@@ -15,12 +14,12 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         public IList<AddOns> GetAddOns()
         {
             List<AddOns> addOnsInfo = new List<AddOns>();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
                 SqlCommand command = new SqlCommand("dbo.GetAllAddOns", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
                     var addOns = new AddOns()

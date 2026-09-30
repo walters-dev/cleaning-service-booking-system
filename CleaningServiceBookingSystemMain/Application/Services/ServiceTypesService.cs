@@ -9,7 +9,7 @@ namespace CleaningServiceBookingSystemMain.Application.Services
     public class ServiceTypesService : IServiceTypesService
     {
         private readonly IServiceTypesRepository _serviceTypesRepository;
-        public ServiceTypesService(IServiceTypesRepository repository)
+        public ServiceTypesService(IServiceTypesRepository repository)//prevents the service from running without its dependency
         {
             _serviceTypesRepository = repository;
         }
