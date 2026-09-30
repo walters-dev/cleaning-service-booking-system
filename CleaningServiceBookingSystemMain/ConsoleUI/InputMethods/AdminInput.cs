@@ -26,7 +26,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Admins admin = new Admins();
 
                 Console.WriteLine();
-                Console.WriteLine("===== ADMIN INFORMATION =====");
+                Console.WriteLine("===== ADMIN INFORMATION ====="); // Captures User input
 
                 IAdminService service = new AdminService(_adminRepository);
                 admin.AdminId = service.FindAdminCount();
@@ -43,7 +43,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 //return admin;
                 string errorMessage;
 
-                bool isValid = _bookingValidator.ValidateAdmin(admin, out errorMessage);
+                bool isValid = _bookingValidator.ValidateAdmin(admin, out errorMessage); // Validates if the admin is correct
 
                 if (isValid)
                 {

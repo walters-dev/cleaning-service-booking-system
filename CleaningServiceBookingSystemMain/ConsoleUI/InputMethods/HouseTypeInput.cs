@@ -13,6 +13,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
         public HouseTypes GetHouseTypeInput()
         {
+           
+            
             IHouseTypeService service = new HouseTypeService(_houseTypesRepository);
 
             IList<HouseTypes> houseTypes = service.ViewAllHouseTypes();
@@ -20,31 +22,16 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
             Console.WriteLine();
             Console.WriteLine("===== HOUSE TYPES =====");
 
-            if (houseTypes.Count == 0)
-            {
-                throw new InvalidOperationException("No house types are available.");
-            }
-            int i;
-            for (i = 0; i < houseTypes.Count; i++)
-            {
-                Console.WriteLine(
-                    $"{i + 1}. " +
-                    $"{houseTypes[i].Name} " +
-                    $"- R{houseTypes[i].BaseRate}");
-            }
-            
-            while (true)
-            {
-                Console.Write("Choose a house type: ");
+            HouseTypes selectedHouseType = AnsiConsole.Prompt(
+                  new SelectionPrompt<HouseTypes>()
+                      .Title("[yellow]Choose a house type:[/]")
+                      .HighlightStyle(new Style(Color.Green))
+                      .UseConverter(houseType =>$"{houseType.Name} - R{houseType.BaseRate}")
+                      .AddChoices(houseTypes)
 
-                if (!int.TryParse(Console.ReadLine(),out int choice) ||choice > i)
-                {
-                    AnsiConsole.MarkupLine("[red]Please enter a valid number.[/]");
-
-                    continue;
-                }
-                return houseTypes[choice - 1];
-            }
+                    
+            );
+            return selectedHouseType;
         }
     }
 }
