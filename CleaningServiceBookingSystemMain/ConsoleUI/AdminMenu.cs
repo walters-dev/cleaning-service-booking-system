@@ -10,6 +10,7 @@ using System;
 using System.Linq.Expressions;
 using CleaningServiceBookingSystemMain.Application.Services;
 using CleaningServiceBookingSystemMain.Domain.Services;
+using CleaningServiceBookingSystemMain.Application;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI
 {
@@ -24,20 +25,29 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             bool IsAdminMenuRunning, IsConfirmData, IsCorrectPassword;
             string username, password, email, phonenumber;
             //creation of classes and services
-            IAddOnsRepository addOnsRepository = new InMemoryRepositoryAddOns();
-            IAdminRepository adminRepository = new InMemoryRepositoryAdmins();
-            AdminService adminService = new AdminService(adminRepository);
-            ICustomerRepository customerRepository = new InMemoryRepositoryCustomers();
-            CustomerService customerService = new CustomerService(customerRepository);
-            IBookingsRepository bookingsRepository = new InMemoryRepositoryBookings();
-            BookingService bookingService = new BookingService(bookingsRepository);
-            IBookingAddOnsRepository bookingAddOnsRepository = new InMemoryRepositoryBookingAddOns();
-            BookingAddOnService bookingAddOnService = new BookingAddOnService(bookingAddOnsRepository);   
+            IAddOnsRepository addOnsRepository = new RepositoryAddOns();
+            IAddOnsService addOnsService = new AddOnsService(addOnsRepository);
+            IAdminRepository adminRepository = new RepositoryAdmins();
+            IAdminService adminService = new AdminService(adminRepository);
+            ICustomerRepository customerRepository = new RepositoryCustomers();
+            ICustomerService customerService = new CustomerService(customerRepository);
+            IBookingsRepository bookingsRepository = new RepositoryBookings();
+            IBookingService bookingService = new BookingService(bookingsRepository);
+            IBookingAddOnsRepository bookingAddOnsRepository = new RepositoryBookingAddOns();
+            IBookingAddOnService bookingAddOnService = new BookingAddOnService(bookingAddOnsRepository);   
+            IHouseTypesRepository houseTypesRepository = new RepositoryHouseTypes();
+            IHouseTypeService houseTypeService = new HouseTypeService(houseTypesRepository);
+            IServiceTypesRepository serviceTypesRepository = new RepositoryServiceTypes();
+            IServiceTypesService serviceTypesService = new ServiceTypesService(serviceTypesRepository);
+
+            Customers customersBooking = new Customers();
             BookingAddOns bookingAddOns = new BookingAddOns();
             DiscountService discountService = new DiscountService();
             PricingService pricingService = new PricingService(discountService);
             AddOnInput addOnInput = new AddOnInput(addOnsRepository);
             CustomerInput customerInput = new CustomerInput(customerRepository);
+            HouseTypeInput houseTypeInput = new HouseTypeInput();
+            ServiceTypeInput serviceTypeInput = new ServiceTypeInput();
 
             ExistingAdmin adminLogInInput = new ExistingAdmin();
             Admins admins = new Admins();
@@ -110,7 +120,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             new SelectionPrompt<string>()
                             .Title("Choose customer:")
                             .AddChoices("Existing customer", "New customer"));
-                        Customers customersBooking = new Customers();
+                        
                         if (createBookingChoices == "Existing customer")            //Existing customer chosen from create booking menu
                         {
                             AnsiConsole.MarkupLine("[green]Existing customer selected[/]");
@@ -181,12 +191,10 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         {
                             int carpetedRooms = 0;
                             IList<AddOnSelection> addOns = addOnInput.GetAddOnInput(ref carpetedRooms);
-
-                            //bookingAddOns input...........................................................................................................................................
+                            singleBooking.CarpetedRooms = carpetedRooms;
                             bookingAddOns.Quantity = addOns.Count;
                             bookingAddOns.LineAmount = pricingService.CalculateAddOnTotal(singleBooking, addOns);
                             singleBooking = bookingInput.GetBookingInput(carpetedRooms, addOns, customersBooking.PhoneNumber, admins.Username, customersBooking.CustomerId);
-
                             /*
                             System displays house types and service types from SQL Server
                             Staff enters number of rooms, booking date, add-ons and recurring option.
@@ -201,6 +209,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             {
                                 IsConfirmData = true;
                                 bookingService.RegisterBooking(singleBooking);
+                                int count = bookingAddOnService.FindLastRowAddOnBookings();
                                 //save booking data to storage
                                 if (addOns.Count != 0) //checks if there was any addOns selected
                                 {
@@ -208,7 +217,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                     {
                                         bookingAddOns.AddOnId = addOn.AddOn.AddOnId;
                                         bookingAddOns.BookingId = singleBooking.BookingId;
-                                        bookingAddOns.BookingAddOnId = bookingAddOnService.FindBookingAddOnCount();
+                                        bookingAddOns.BookingAddOnId = "BA" + (count + 1);//+1 so that it does not overlap with the other primary keys
                                         bookingAddOnService.RegisterBookingAddOn(bookingAddOns);
                                     }
                                 }
@@ -227,8 +236,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         while (IsConfirmData == false)
                         {
                             AnsiConsole.MarkupLine("[green]New Customer selected[/]");
-                            //new customer proccess 
-                            //CustomerInput customerInput = new CustomerInput();
                             Customers customers = new Customers();
                             customers = customerInput.GetCustomerInput(admins.Username);
 
@@ -264,6 +271,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 IList<Bookings> bookings = bookingService.ViewAllBookings();
                                 var allBookingsTable = new Table()
                                 .HeavyHeadBorder()
+                                .ShowRowSeparators()
                                 .AddColumn("Booking Date")
                                 .AddColumn("Number of rooms")
                                 .AddColumn("Booking Status")
@@ -276,10 +284,12 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 .AddColumn("Customer Address");//creates headers for bookings 
                                 foreach (var booking in bookings)
                                 {
-                                    allBookingsTable.AddRow(booking.BookingDate.Value.Date.ToString(), booking.NumberOfRooms.ToString(), booking.BookingStatus, booking.TotalAmount.ToString("C"), booking.CreatedBy, booking.CreatedAt.Value.Date.ToString("dd MMM yyyy"), booking.CarpetedRooms.ToString(), booking.RecurringBookingType, "customers name", "address");
+                                    customersBooking = customerService.FindCustomer(booking.CustomerId);
+                                    allBookingsTable.AddRow(booking.BookingDate.Value.Date.ToString("dd MMM yyyy"), booking.NumberOfRooms.ToString(), booking.BookingStatus, booking.TotalAmount.ToString("C"), booking.CreatedBy, booking.CreatedAt.Value.Date.ToString("dd MMM yyyy"), booking.CarpetedRooms.ToString(), booking.RecurringBookingType, customersBooking.FullName, customersBooking.PhyAddress);
                                     //displays booking info then repeats till last booking
                                 }
-                                break;
+                                AnsiConsole.Write(allBookingsTable);
+                                break; 
                             case "Report":
                                 IList <Bookings> bookingsReport = bookingService.ViewBookingsCreatedToday();
                                 Table bookingsReportTable = new Table()
@@ -308,11 +318,16 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 while (IsConfirmData == false)
                                 {
                                     singleBooking = bookingService.FindBookingsByPhoneNumberAndDate(customerInput.GetPhoneNumber(), bookingInput.GetSingleBookingDateInput());      //get booking by customer/date
+                                    if (singleBooking.BookingId == null)
+                                    {
+                                        AnsiConsole.MarkupLine("[red]Booking does not exist[/]");
+                                        break;
+                                    }
                                     Table singleBookingTable = new Table()
                                     .HideRowSeparators()
                                     .NoBorder()
-                                    .AddColumn("Phone number: ")
-                                    .AddColumn("")
+                                    .AddColumn("Customer: ")
+                                    .AddColumn(customerService.FindCustomer(singleBooking.CustomerId).FullName)
                                     .AddRow("Booking date: ", singleBooking.BookingDate.Value.Date.ToString())
                                     .AddRow("Booking Status: ", singleBooking.BookingStatus)
                                     .AddRow("Total Amount: ", singleBooking.TotalAmount.ToString("C"));
@@ -360,6 +375,82 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             case "Update":
                                 //input Date and Customer to find the booking needed then display the booking then confirm if correct booking
                                 // updatedby, updatedat, recalc, addons which means delete booking addons where  addonid = addonid, change date, num of rooms carpeted rooms, number of rooms, house type, service type, isreccuring, recurring type
+                                IsConfirmData = false;
+                                while (IsConfirmData == false)
+                                {
+                                    singleBooking = bookingService.FindBookingsByPhoneNumberAndDate(customerInput.GetPhoneNumber(), bookingInput.GetSingleBookingDateInput());
+                                    //confirm exists
+                                    if (singleBooking.BookingId == null)
+                                    {
+                                        AnsiConsole.MarkupLine("[red]Booking does not exist[/]");
+                                        break;
+                                    }
+                                    Table singleBookingTable = new Table()
+                                    .HideRowSeparators()
+                                    .NoBorder()
+                                    .AddColumn("Customer: ")
+                                    .AddColumn(customerService.FindCustomer(singleBooking.CustomerId).FullName)
+                                    .AddRow("Booking date: ", singleBooking.BookingDate.Value.Date.ToString())
+                                    .AddRow("Booking Status: ", singleBooking.BookingStatus)
+                                    .AddRow("Total Amount: ", singleBooking.TotalAmount.ToString("C"));
+                                    var singleBookingPanel = new Panel(singleBookingTable);
+                                    singleBookingPanel.Header("Customer Information");
+                                    AnsiConsole.Write(singleBookingPanel);
+                                    //show booking
+                                    var confirmCorrectUpdateBookingChoices = AnsiConsole.Prompt(
+                                        new SelectionPrompt<string>()
+                                        .Title("Is the booking details correct:")
+                                        .AddChoices("Yes", "No"));
+                                    switch (confirmCorrectUpdateBookingChoices)
+                                    {
+                                        case "Yes":
+                                            IsConfirmData = true;
+                                            break;
+                                        case "No":
+                                            Console.Clear();
+                                            break;
+                                    }
+                                }
+                                
+                                IsConfirmData = false;
+                                while (IsConfirmData == false)
+                                {
+                                    UpdateInput updateInput = new UpdateInput(houseTypeInput, serviceTypeInput, houseTypeService, serviceTypesService, addOnsService);
+                                    IList<AddOnSelection>? addOnSelections;
+                                    singleBooking = updateInput.GetUpdateInput(singleBooking, out addOnSelections, admins.Username);
+                                    var confirmSelectedUpdateChoices = AnsiConsole.Prompt(
+                                        new SelectionPrompt<string>()
+                                        .Title("Is the booking details correct:")
+                                        .AddChoices("Yes", "No"));
+
+                                    switch (confirmSelectedUpdateChoices)
+                                    {
+                                        case "Yes":
+                                            bookingService.AmendBooking(singleBooking);
+                                            if (addOnSelections != null)
+                                            {
+                                                bookingAddOns.Quantity = addOnSelections.Count;
+                                                bookingAddOns.LineAmount = pricingService.CalculateAddOnTotal(singleBooking, addOnSelections);
+
+                                                bookingAddOnService.RemoveBookingAddOnsByBookingId(singleBooking.BookingId);
+                                                int count = bookingAddOnService.FindLastRowAddOnBookings();
+                                                foreach (var addOnSelection in addOnSelections)
+                                                {
+                                                    bookingAddOnService.RemoveBookingAddOnsByBookingId(singleBooking.BookingId);
+                                                    bookingAddOns.BookingId = singleBooking.BookingId;
+                                                    bookingAddOns.AddOnId = addOnSelection.AddOn.AddOnId;
+                                                    bookingAddOns.BookingAddOnId = "BA" + (count +1);//+1 so that it does not overlap with the other primary keys
+                                                    bookingAddOnService.RegisterBookingAddOn(bookingAddOns);
+                                                }
+                                            }
+                                            //save to sql
+                                            IsConfirmData = true;
+                                            break;
+                                        case "No":
+
+                                            break;
+                                    }
+                                }
                                 break;
                         }
 
@@ -386,7 +477,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         viewCustomerPanel.Header("Customer Information");
                         AnsiConsole.Write(viewCustomerPanel);
                         break;
-                    case "Add Admin":                                                           //add admin chosen from admin menu
+                    case "Add Admin":                     //add admin chosen from admin menu
                         IsConfirmData = false;
                         while (IsConfirmData == false)
                         {

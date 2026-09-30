@@ -5,8 +5,10 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Application.Interfaces
 {
-    public interface IAddOnsRepository
+    public interface IAdminService
     {
-        IList<AddOns> GetAddOns(); //gets list of all Add Ons from storage
+        void RegisterAdmin(Admins admin);
+        Admins FindAdminPassword(string? userName);
+        string FindAdminCount();
     }
 }

@@ -1,23 +1,19 @@
-﻿using CleaningServiceBookingSystemMain.Domain.Models;
-using CleaningServiceBookingSystemMain.Application.Validators;
-using CleaningServiceBookingSystemMain.Infrastructure;
-using CleaningServiceBookingSystemMain.Application.Interfaces;
+﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
 using CleaningServiceBookingSystemMain.Application.Services;
+using CleaningServiceBookingSystemMain.Application.Validators;
+using CleaningServiceBookingSystemMain.Domain.Models;
+using CleaningServiceBookingSystemMain.Infrastructure;
+using Spectre.Console;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class HouseTypeInput
     {
-        private readonly IHouseTypesRepository _houseTypesRepository = new InMemoryRepositoryHouseTypes();
-
-        //public HouseTypeInput(IHouseTypesRepository houseTypesRepository)   bcs its in bookinginput it wont work
-        //{
-        //    _houseTypesRepository = houseTypesRepository;
-        //}
+        private readonly IHouseTypesRepository _houseTypesRepository = new RepositoryHouseTypes();//bcs its in bookinginput it doesnt like constructors
 
         public HouseTypes GetHouseTypeInput()
         {
-            HouseTypeService service = new HouseTypeService(_houseTypesRepository);
+            IHouseTypeService service = new HouseTypeService(_houseTypesRepository);
 
             IList<HouseTypes> houseTypes = service.ViewAllHouseTypes();
 
@@ -43,20 +39,11 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
                 if (!int.TryParse(Console.ReadLine(),out int choice) ||choice > i)
                 {
-                    Console.WriteLine("Please enter a valid number.");
+                    AnsiConsole.MarkupLine("[red]Please enter a valid number.[/]");
 
                     continue;
                 }
                 return houseTypes[choice - 1];
-                //bool isValid =
-                //    _validator.ValidateMenuChoice(choice,1,houseTypes.Count,"house type",out string errorMessage);
-
-                //if (isValid)
-                //{
-                //    return houseTypes[choice - 1];
-                //}
-
-                // Console.WriteLine(errorMessage);
             }
         }
     }

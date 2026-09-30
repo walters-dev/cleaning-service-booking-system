@@ -7,7 +7,6 @@ CREATE TABLE AdminTable (
     Admin_Password VARCHAR(90),
     Email VARCHAR(255)
 );
-select * from AdminTable;
 CREATE TABLE Customers (
     CustomerId VARCHAR(7) PRIMARY KEY,
     Fullname VARCHAR(MAX),

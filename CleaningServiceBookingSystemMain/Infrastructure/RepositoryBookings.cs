@@ -9,7 +9,7 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
-    public class InMemoryRepositoryBookings : IBookingsRepository
+    public class RepositoryBookings : IBookingsRepository
     {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         public IList<Bookings> GetBookings()
@@ -24,13 +24,14 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 while (reader.Read())
                 {
                     int active = reader.GetOrdinal("IsRecurring");
+                    
                     var booking = new Bookings()
                     {
                         BookingId = reader.GetString(reader.GetOrdinal("BookingId")),
                         CustomerId = reader.GetString(reader.GetOrdinal("Customers_id")),
                         HouseTypeId = reader.GetString(reader.GetOrdinal("Housetypes_id")),
                         ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypes_id")),
-                        DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id")),
+                        //DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id")),
                         BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate")),
                         NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms")),
                         //IsRecurring = reader.IsDBNull(active) ? (bool?)null : reader.GetBoolean(active);
@@ -48,45 +49,18 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt")),
                         UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"))
                     };
+                    if (reader["DiscountRule_id"] != DBNull.Value)
+                    {
+                        booking.DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id"));
+                    }
+                    else
+                    {
+                        booking.DiscountRuleId = null;
+                    }
                     bookingsInfo.Add(booking);
                 }
             }
                 return bookingsInfo;
-        }
-        public Bookings GetBookingsById(string? Id)
-        {
-            Bookings bookingsInfo = new Bookings();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
-            {
-                SqlCommand command = new SqlCommand("dbo.GetBooking", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    bookingsInfo.BookingId = reader.GetString(reader.GetOrdinal("BookingId"));
-                    bookingsInfo.CustomerId = reader.GetString(reader.GetOrdinal("Customers_id"));
-                    bookingsInfo.HouseTypeId = reader.GetString(reader.GetOrdinal("Housetypes_id"));
-                    bookingsInfo.ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypes_id"));
-                    bookingsInfo.DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id"));
-                    bookingsInfo.BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate"));
-                    bookingsInfo.NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms"));
-                    bookingsInfo.IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring"));
-                    bookingsInfo.RecurringBookingType = reader.GetString(reader.GetOrdinal("RecurringBookingType"));
-                    bookingsInfo.SubTotal = reader.GetDecimal(reader.GetOrdinal("SubTotal"));
-                    bookingsInfo.DiscountAmount = reader.GetDecimal(reader.GetOrdinal("DiscountAmount"));
-                    bookingsInfo.SurchargeAmount = reader.GetDecimal(reader.GetOrdinal("SurchargeAmount"));
-                    bookingsInfo.TotalAmount = reader.GetDecimal(reader.GetOrdinal("TotalAmount"));
-                    bookingsInfo.BookingStatus = reader.GetString(reader.GetOrdinal("BookingStatus"));
-                    bookingsInfo.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
-                    bookingsInfo.CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"));
-                    bookingsInfo.UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));
-                    bookingsInfo.UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt"));
-                    bookingsInfo.FirstTimeBooking = reader.GetBoolean(reader.GetOrdinal("FirstTimeBooking"));
-                    bookingsInfo.CarpetedRooms = reader.GetInt32(reader.GetOrdinal("CarpetedRooms"));
-                }
-            }
-            return bookingsInfo;
         }
         public void Add(Bookings bookings)
         {
@@ -121,7 +95,8 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@CreatedBy", bookings.CreatedBy);
                 command.Parameters.AddWithValue("@FirstTimeBooking", bookings.FirstTimeBooking);
                 command.Parameters.AddWithValue("@CarpetedRooms", bookings.CarpetedRooms);
-
+                command.Parameters.AddWithValue("@UpdatedAt", bookings.UpdatedAt);
+                command.Parameters.AddWithValue("@UpdatedBy", bookings.UpdatedBy);
                 command.ExecuteNonQuery();
             }
         }
@@ -151,17 +126,6 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.Parameters.AddWithValue("@CarpetedRooms", bookings.CarpetedRooms);
                 command.Parameters.AddWithValue("@UpdatedAt", bookings.UpdatedAt);
                 command.Parameters.AddWithValue("@UpdatedBy", bookings.UpdatedBy);
-                command.ExecuteNonQuery();
-            }
-        }
-        public void Delete(Bookings bookings)
-        {
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
-            {
-                SqlCommand command = new SqlCommand("dbo.DeleteCustomer", connection);//waiting for sql procedure.......................................................................
-                command.CommandType = CommandType.StoredProcedure;
-                command.Connection.Open();
-                command.Parameters.AddWithValue("@BookingId", bookings.BookingId);
                 command.ExecuteNonQuery();
             }
         }
@@ -284,7 +248,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     {
                         DiscountName = reader.GetString(reader.GetOrdinal("DiscountName")),
                         BookingId = reader.GetString(reader.GetOrdinal("BookingId")),
-                        Fullname = reader.GetString(reader.GetOrdinal("Fullname")),
+                        Fullname = reader.GetString(reader.GetOrdinal("CustomerName")),
                         SubTotal = reader.GetDecimal(reader.GetOrdinal("SubTotal")),
                         DiscountAmount = reader.GetDecimal(reader.GetOrdinal("DiscountAmount")),
                         AmountAfterDiscount = reader.GetDecimal(reader.GetOrdinal("AmountAfterDiscount"))
@@ -381,6 +345,18 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 while (reader.Read())
                 {
                     booking.BookingId = reader.GetString(reader.GetOrdinal("BookingId"));
+                    booking.CustomerId = reader.GetString(reader.GetOrdinal("Customers_id"));
+                    booking.HouseTypeId = reader.GetString(reader.GetOrdinal("Housetypes_id"));
+                    booking.ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypes_id"));
+                    //booking.DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id"));
+                    if (reader["DiscountRule_id"] != DBNull.Value)
+                    {
+                        booking.DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id"));
+                    }
+                    else
+                    {
+                        booking.DiscountRuleId = null;
+                    }
                     booking.BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate"));
                     booking.NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms"));
                     booking.IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring"));
@@ -392,10 +368,10 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                     booking.BookingStatus = reader.GetString(reader.GetOrdinal("BookingStatus"));
                     //booking.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
                     //booking.CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"));
-                    //booking.FirstTimeBooking = reader.GetBoolean(reader.GetOrdinal("FirstTimeBooking"));
-                    //booking.CarpetedRooms = reader.GetInt32(reader.GetOrdinal("CarpetedRooms"));
-                    //booking.UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt"));
-                    //booking.UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));
+                    booking.UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"));
+                    booking.UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt"));
+                    booking.FirstTimeBooking = reader.GetBoolean(reader.GetOrdinal("FirstTimeBooking"));
+                    booking.CarpetedRooms = reader.GetInt32(reader.GetOrdinal("CarpetedRooms"));
                 }
                 return booking;
             }

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
-    public class InMemoryRepositoryAdmins : IAdminRepository
+    public class RepositoryAdmins : IAdminRepository
     {
         DatabaseConnection databaseConnection = new DatabaseConnection();
 
@@ -16,7 +16,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
-                SqlCommand command = new SqlCommand("dbo.AddAdmin", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.AddAdmin", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 //need to add a thing for id
@@ -33,7 +33,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
             {
                 Admins admin = new Admins();
-                SqlCommand command = new SqlCommand("dbo.GetAdminByUsername", connection);
+                SqlCommand command = new SqlCommand("dbo.GetAdminByUsername", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 command.Parameters.AddWithValue("@Username", userName);

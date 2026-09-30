@@ -1,24 +1,19 @@
-﻿using CleaningServiceBookingSystemMain.Domain.Models;
-using CleaningServiceBookingSystemMain.Application.Validators;
-using CleaningServiceBookingSystemMain.Infrastructure;
-using CleaningServiceBookingSystemMain.Application.Interfaces;
+﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
 using CleaningServiceBookingSystemMain.Application.Services;
+using CleaningServiceBookingSystemMain.Application.Validators;
+using CleaningServiceBookingSystemMain.Domain.Models;
+using CleaningServiceBookingSystemMain.Infrastructure;
+using Spectre.Console;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class ServiceTypeInput
     {
-        private readonly IServiceTypesRepository _serviceTypesRepository = new InMemoryRepositoryServiceTypes();
-
-        //public ServiceTypeInput(IServiceTypesRepository serviceTypesRepository)
-        //{
-        //    _serviceTypesRepository =
-        //        serviceTypesRepository;
-        //}
+        private readonly IServiceTypesRepository _serviceTypesRepository = new RepositoryServiceTypes();
 
         public ServiceTypes GetServiceTypeInput()
         {
-            ServiceTypesService serviceTypesService = new ServiceTypesService(_serviceTypesRepository);
+            IServiceTypesService serviceTypesService = new ServiceTypesService(_serviceTypesRepository);
 
             IList<ServiceTypes> serviceTypes =
                 serviceTypesService.ViewAllServiceTypes();
@@ -49,19 +44,11 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
                 if (!int.TryParse(Console.ReadLine(),out int choice) || choice > i)
                 {
-                    Console.WriteLine("Please enter a valid number.");
+                    AnsiConsole.MarkupLine("[red]Please enter a valid number.[/]");
 
                     continue;
                 }
                 return serviceTypes[choice - 1];
-                //bool isValid =_validator.ValidateMenuChoice(choice, 1, serviceTypes.Count, "service type",out string errorMessage);
-
-                //if (isValid)
-                //{
-                //    return serviceTypes[choice - 1];
-                //}
-
-                // Console.WriteLine(errorMessage);
             }
         }
     }

@@ -9,6 +9,6 @@ namespace CleaningServiceBookingSystemMain.Application.Interfaces
     {
         void Add(Admins admins);        //Adds an admin to storage
         public Admins GetAdminPasswordByUsername(string userName); //Gets an admin from stoarge where Username matches
-        public string AdminRowCount();
+        public string AdminRowCount();      //Gets admin count from storage
     }
 }

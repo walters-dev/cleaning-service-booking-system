@@ -5,8 +5,9 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Application.Interfaces
 {
-    public interface IAddOnsRepository
+    public interface IHouseTypeService
     {
-        IList<AddOns> GetAddOns(); //gets list of all Add Ons from storage
+        IList<HouseTypes> ViewAllHouseTypes();
+        HouseTypes FindHouseType(string? houseTypeId);
     }
 }

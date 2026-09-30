@@ -3,7 +3,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
-namespace CleaningServiceBookingSystemMain.Application.Interfaces
+namespace CleaningServiceBookingSystemMain.Application
 {
 
 
@@ -17,7 +17,7 @@ namespace CleaningServiceBookingSystemMain.Application.Interfaces
 		}
 		public bool VerifyPassword(string hashPassword, string enteredPassword)//checks if password is the same as the password in database
 		{
-			var isValid = BCrypt.Net.BCrypt.Verify(enteredPassword, hashPassword);
+			var isValid = BCrypt.Net.BCrypt.Verify(enteredPassword, hashPassword);//hashes enteredpassword with the salt in hashpassword then compares 2
 			if (isValid)
 			{
 				return true;

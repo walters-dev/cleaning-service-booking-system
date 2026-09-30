@@ -17,12 +17,13 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
         {
             //declare and intialize variables
             bool IsManagerRunning = true;
-            IBookingsRepository bookingsRepository = new InMemoryRepositoryBookings();
-            ICustomerRepository customerRepository = new InMemoryRepositoryCustomers();
-            BookingService bookingService = new BookingService(bookingsRepository);
+            //creation of classes and services
+            IBookingsRepository bookingsRepository = new RepositoryBookings();
+            ICustomerRepository customerRepository = new RepositoryCustomers();
+            IBookingService bookingService = new BookingService(bookingsRepository);
             CustomerInput customerInput = new CustomerInput(customerRepository);
             DateRangeInput dateRangeInput = new DateRangeInput();
-            //Customers customer = new Customers();
+
             string phoneNumber;
             while (IsManagerRunning == true)
             {
@@ -72,6 +73,11 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             case "Booking List By Range":
                                 var dateRange = dateRangeInput.GetDateRangeInput();
                                 IList<BookingByDate> bookingsByDate = bookingService.FindAllBookingsInDateRange(dateRange.startDate, dateRange.endDate);
+                                if (bookingsByDate.Count == 0)
+                                {
+                                    AnsiConsole.MarkupLine("[red]No bookings exist in that date range.[/]");
+                                    break;
+                                }
                                 var tableRange = new Table();
                                 tableRange.DoubleBorder();
                                 tableRange.ShowRowSeparators();
@@ -93,9 +99,15 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 var chart = new BarChart();
                                 chart.Label("Bookings Order By House Type");
                                 IList<BookingByHouseType> bookingsByHouses = bookingService.ViewBookingsByHouse();
+                                if (bookingsByHouses.Count == 0)
+                                {
+                                    AnsiConsole.MarkupLine("[red]No bookings exist yet.[/]");
+                                    break;
+                                }
+                                int countHouse = bookingsByHouses.Count;
                                 foreach (var booking in bookingsByHouses)
                                 {
-                                    if (bookingsByHouses.Count % 2 == 0)        //alternates 2 different bar colours used
+                                    if (countHouse % 2 == 0)        //alternates 2 different bar colours used
                                     {
                                         chart.AddItem(booking.HouseName, booking.BookingCount, Color.Aqua);
                                     }
@@ -103,6 +115,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                     {
                                         chart.AddItem(booking.HouseName, booking.BookingCount, Color.Green);
                                     }
+                                    countHouse -= 1;
                                 }
                                 AnsiConsole.Write(chart);
                                 break;
@@ -114,19 +127,25 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         var chartMoney = new BreakdownChart();
                         //var chart = new BarChart();
                         IList < BookingRevenueSummary > summary = bookingService.ViewRevenueSummary();
+                        if (summary.Count == 0)
+                        {
+                            AnsiConsole.MarkupLine("[red]No bookings have been completed yet.[/]");
+                            break;
+                        }
                         chartMoney.ShowPercentage();
                         chartMoney.UseValueFormatter((value, culture) => $"R {value:N}");       //formats the items to currrency
+                        int countSummary = summary.Count;
                         foreach (var booking in summary)
                         {
-                            if (summary.Count % 4 == 0) //alternates 4 different bar colours used
+                            if (countSummary % 4 == 0) //alternates 4 different bar colours used
                             {
                                 chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.Aqua);
                             }
-                            else if(summary.Count % 4 == 1)
+                            else if(countSummary % 4 == 1)
                             {
                                 chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.Green);
                             }
-                            else if (summary.Count % 4 == 2)
+                            else if (countSummary % 4 == 2)
                             {
                                 chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.Magenta1);
                             }
@@ -134,7 +153,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             {
                                 chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.Yellow);
                             }
-                            
+                            countSummary -= 1;
                         }
                         AnsiConsole.Write(chartMoney);
                         break;
@@ -142,6 +161,11 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         Console.Clear();
                         AnsiConsole.MarkupLine("[green]Trends selected[/]");
                         IList <BookingDiscountUsage> bookingsDiscounts = bookingService.ViewDiscountUsage();
+                        if (bookingsDiscounts.Count == 0)
+                        {
+                            AnsiConsole.MarkupLine("[red]No bookings have discounts yet.[/]");
+                            break;
+                        }
                         var discountTable = new Table();
                         discountTable.DoubleBorder();
                         discountTable.ShowRowSeparators();

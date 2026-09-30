@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Application.Services
 {
-    public class BookingService
+    public class BookingService : IBookingService
     {
         private readonly IBookingsRepository _bookingRepository;
         public BookingService(IBookingsRepository repository)
@@ -17,10 +17,6 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         {
             return _bookingRepository.GetBookings();
         }
-        public Bookings FindBooking(string? bookingId)
-        {
-            return _bookingRepository.GetBookingsById(bookingId);
-        }
         public void RegisterBooking(Bookings booking)
         {
             _bookingRepository.Add(booking);
@@ -28,10 +24,6 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         public void AmendBooking(Bookings booking)
         {
             _bookingRepository.Update(booking);
-        }
-        public void DeleteBooking(Bookings booking)
-        {
-            _bookingRepository.Delete(booking);
         }
         public IList<BookingByDate> FindAllBookingsInDateRange(DateTime startDate, DateTime endDate)
         {

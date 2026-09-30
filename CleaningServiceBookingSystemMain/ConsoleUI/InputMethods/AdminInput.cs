@@ -3,6 +3,7 @@ using CleaningServiceBookingSystemMain.Application.Services;
 using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,7 +28,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Console.WriteLine();
                 Console.WriteLine("===== ADMIN INFORMATION =====");
 
-                AdminService service = new AdminService(_adminRepository);
+                IAdminService service = new AdminService(_adminRepository);
                 admin.AdminId = service.FindAdminCount();
 
                 Console.Write("Enter username: ");
@@ -50,7 +51,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 }
 
                 Console.WriteLine();
-                Console.WriteLine($"Error: {errorMessage}");
+                AnsiConsole.MarkupLine($"[red]Error: {errorMessage}[/]");
                 Console.WriteLine("Please try Again");
             }
         }

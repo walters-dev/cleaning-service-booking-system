@@ -5,8 +5,9 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Application.Interfaces
 {
-    public interface IAddOnsRepository
+    public interface IDiscountRulesService
     {
-        IList<AddOns> GetAddOns(); //gets list of all Add Ons from storage
+        IList<DiscountRules> ViewAllDiscountRules();
+        DiscountRules FindDiscountRules(string? discountId);
     }
 }

@@ -1,20 +1,15 @@
-﻿using System;
+﻿using CleaningServiceBookingSystemMain.Application.Validators;
+using CleaningServiceBookingSystemMain.Domain.Models;
+using Spectre.Console;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using CleaningServiceBookingSystemMain.Application.Validators;
-
-using CleaningServiceBookingSystemMain.Domain.Models;
 
 namespace CleaningServiceBookingSystemMain.Application.InputMethods
 {
     public class ExistingAdmin
     {
         private readonly BookingValidator _bookingValidator = new BookingValidator();
-
-        //public ExistingAdmin(BookingValidator bookingValidator)
-        //{
-        //    _bookingValidator = bookingValidator;
-        //}
 
         public Admins GetAdminInput() 
         {
@@ -38,7 +33,7 @@ namespace CleaningServiceBookingSystemMain.Application.InputMethods
                 }
 
                 Console.WriteLine();
-                Console.WriteLine($"Error: {errorMessage}") ;
+                AnsiConsole.MarkupLine($"[red]Error: {errorMessage}[/]") ;
                 Console.WriteLine("Please try Again");
             }
         }
