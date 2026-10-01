@@ -27,22 +27,108 @@ The system follows a layered architecture — **Domain → Application → Infra
 ## Architecture
 
 ```
-Domain/
-  Models/      → Plain data classes (Bookings, Customers, HouseTypes, ServiceTypes, AddOns, AddOnSelection,
-                  DiscountRules, Admins, plus reporting models: BookingByDate, BookingByHouseType,
-                  BookingDiscountUsage, BookingRevenueSummary, CustomerBookingHistory)
-  Services/    → Business logic (PricingService, DiscountService)
-Application/
-  Interfaces/  → Repository and service contracts (I*Repository, I*Service pairs for each entity)
-  Services/    → Application-level services wrapping each repository (AddOnsService, AdminService,
-                  BookingService, CustomerService, DiscountRulesService, HouseTypeService, ServiceTypesService)
-  Validators/  → Input validation (BookingValidator)
-Infrastructure/→ SQL Server-backed repository implementations (RepositoryBookings, RepositoryCustomers,
-                  RepositoryHouseTypes, RepositoryServiceTypes, RepositoryAddOns, RepositoryDiscountRules,
-                  RepositoryAdmins, RepositoryBookingAddOns), DatabaseConnection
-ConsoleUI/     → Menus (AdminMenu, ManagerMenu), Program.cs entry point, and per-entity InputMethods
-                  (BookingInput, CustomerInput, AdminInput, HouseTypeInput, ServiceTypeInput, AddonInput,
-                  DateRangeInput, UpdateInput, ExistingAdmin)
+C:\USERS\RPS3\DOCUMENTS\PROJECTS\CLEANINGSERVICEBOOKINGSYSTEM
+|   .gitignore
+|   CleaningServiceBookingSystem.slnx
+|   tree.txt
+|   
++---CleaningServiceBookingSystemMain
+|   |   CleaningServiceBookingSystemMain.csproj
+|   |   
+|   +---Application
+|   |   |   BookingStruct.cs
+|   |   |   HashCryptography.cs
+|   |   |   
+|   |   +---Interfaces
+|   |   |       IAddOnsRepository.cs
+|   |   |       IAddOnsService.cs
+|   |   |       IAdminRepository.cs
+|   |   |       IAdminService.cs
+|   |   |       IBookingAddOnService.cs
+|   |   |       IBookingAddOnsRepository.cs
+|   |   |       IBookingService.cs
+|   |   |       IBookingsRepository.cs
+|   |   |       ICustomerRepository.cs
+|   |   |       ICustomerService.cs
+|   |   |       IDiscountRulesRepository.cs
+|   |   |       IDiscountRulesService.cs
+|   |   |       IHouseTypeService.cs
+|   |   |       IHouseTypesRepository.cs
+|   |   |       IServiceTypesRepository.cs
+|   |   |       IServiceTypesService.cs
+|   |   |       
+|   |   +---Services
+|   |   |       AddOnsService.cs
+|   |   |       AdminService.cs
+|   |   |       BookingAddOnService.cs
+|   |   |       BookingService.cs
+|   |   |       CustomerService.cs
+|   |   |       DiscountRulesService.cs
+|   |   |       HouseTypeService.cs
+|   |   |       ServiceTypesService.cs
+|   |   |       
+|   |   \---Validators
+|   |           BookingValidator.cs
+|   |           
+|   |                   
+|   +---ConsoleUI
+|   |   |   AdminMenu.cs
+|   |   |   ManagerMenu.cs
+|   |   |   Program.cs
+|   |   |   
+|   |   \---InputMethods
+|   |           AddonInput.cs
+|   |           AdminInput.cs
+|   |           BookingInput.cs
+|   |           CustomerInput.cs
+|   |           DateRangeInput.cs
+|   |           ExistingAdmin.cs
+|   |           HouseTypeInput.cs
+|   |           ServiceTypeInput.cs
+|   |           UpdateInput.cs
+|   |           
+|   +---Domain
+|   |   +---Models
+|   |   |       AddOns.cs
+|   |   |       AddonSelection.cs
+|   |   |       Admins.cs
+|   |   |       BookingAddOns.cs
+|   |   |       BookingByDate.cs
+|   |   |       BookingByHouseType.cs
+|   |   |       BookingDiscountUsage.cs
+|   |   |       BookingRevenueSummary.cs
+|   |   |       Bookings.cs
+|   |   |       CustomerBookingHistory.cs
+|   |   |       Customers.cs
+|   |   |       DiscountRules.cs
+|   |   |       HouseTypes.cs
+|   |   |       ServiceTypes.cs
+|   |   |       
+|   |   \---Services
+|   |           DiscountService.cs
+|   |           PricingService.cs
+|   |           
+|   +---figlet-fonts-main
+|   |       DOS Rebel.flf
+|   |       
+|   +---Infrastructure
+|   |       DatabaseConnection.cs
+|   |       RepositoryAddOns.cs
+|   |       RepositoryAdmins.cs
+|   |       RepositoryBookingAddOns.cs
+|   |       RepositoryBookings.cs
+|   |       RepositoryCustomers.cs
+|   |       RepositoryDiscountRules.cs
+|   |       RepositoryHouseTypes.cs
+|   |       RepositoryServiceTypes.cs
+|   |       
+|   |                   
+|   \---SQL scripts
+|           Cleaning Service Booking Database.sql
+|           Cleaning Service Booking Procedures.sql
+|           Cleaning Service Booking Seeded Data.sql
+|           
+
 ```
 
 *An entity-relationship diagram is available in the repo: `UpdatedERDCleaningServicesBooking.drawio.png`.*
