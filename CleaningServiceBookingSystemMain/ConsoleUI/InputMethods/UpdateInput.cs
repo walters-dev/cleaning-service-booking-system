@@ -1,4 +1,5 @@
-﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
+﻿using CleaningServiceBookingSystemMain.Application;
+using CleaningServiceBookingSystemMain.Application.Interfaces;
 using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Domain.Services;
@@ -33,6 +34,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         public Bookings GetUpdateInput(/*(Bookings singleBooking,*/ out IList<AddOnSelection> addOnSelections, string username) // Update the supplied booking. out also returns an add-on selection list, and ? allows that list to be null.
         {
             //_originalBooking = singleBooking;
+            //create struct here
+            BookingStruct booking = new BookingStruct(_originalBooking);
             while (true) // Repeat the update process until the booking passes validation and the method returns.
             {
                 HouseTypes selectedHouseType = new HouseTypes(); // Create temporary objects to hold the house type and service type during this update attempt.
@@ -45,6 +48,20 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 IAddOnsRepository addOnsRepository = new RepositoryAddOns(); // Create the repository that will be passed to the add-on input helper.
                 //AddOnsService addOnsService = new AddOnsService(addOnsRepository);
                 Bookings newBookingChanges = _originalBooking;//gets original booking info at beginning of each loop to prevent invlaid or cancelled info from carrying over from previos loop
+                newBookingChanges.HouseTypeId = booking.HouseTypeId;
+                newBookingChanges.ServiceTypeId = booking.ServiceTypeId;
+                newBookingChanges.DiscountRuleId = booking.DiscountRuleId;
+                newBookingChanges.BookingDate = booking.BookingDate;
+                newBookingChanges.NumberOfRooms = booking.NumberOfRooms;
+                newBookingChanges.IsRecurring =  booking.IsRecurring;
+                newBookingChanges.RecurringBookingType = booking.RecurringBookingType;
+                newBookingChanges.SubTotal = booking.SubTotal;
+                newBookingChanges.DiscountAmount = booking.DiscountAmount;
+                newBookingChanges.SurchargeAmount = booking.SurchargeAmount;
+                newBookingChanges.TotalAmount = booking.TotalAmount;
+                newBookingChanges.BookingStatus = booking.BookingStatus;
+                newBookingChanges.UpdatedAt = booking.UpdatedAt;
+                newBookingChanges.UpdatedBy = booking.UpdatedBy;
                 var UpdateChoices = AnsiConsole.Prompt // Display a menu that allows multiple selections and store the selected option names.
                     (new MultiSelectionPrompt<string>()
                     .Title("Choose what you want to update: ")
