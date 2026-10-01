@@ -30,7 +30,8 @@ The system follows a layered architecture — **Domain → Application → Infra
 C:\USERS\RPS3\DOCUMENTS\PROJECTS\CLEANINGSERVICEBOOKINGSYSTEM
 |   .gitignore
 |   CleaningServiceBookingSystem.slnx
-|   tree.txt
+|   ERDCleaningServicesBooking.png
+|   README.md
 |   
 +---CleaningServiceBookingSystemMain
 |   |   CleaningServiceBookingSystemMain.csproj
@@ -131,7 +132,7 @@ C:\USERS\RPS3\DOCUMENTS\PROJECTS\CLEANINGSERVICEBOOKINGSYSTEM
 
 ```
 
-*An entity-relationship diagram is available in the repo: `UpdatedERDCleaningServicesBooking.drawio.png`.*
+*An entity-relationship diagram is available in the repo: `ERDCleaningServicesBooking.png`.*
 
 ---
 
