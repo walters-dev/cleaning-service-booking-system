@@ -8,18 +8,18 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
-    public class InMemoryRepositoryServiceTypes : IServiceTypesRepository
+    public class RepositoryServiceTypes : IServiceTypesRepository
     {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         public IList<ServiceTypes> GetServiceTypes()
         {
             List<ServiceTypes> serviceTypesInfo = new List<ServiceTypes>();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.GetAllServiceTypes", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.GetAllServiceTypes", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
                     var serviceTypes = new ServiceTypes()
@@ -27,8 +27,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypeId")),
                         ServiceName = reader.GetString(reader.GetOrdinal("ServiceName")),
                         Multiplier = reader.GetDecimal(reader.GetOrdinal("Multiplier")),
-                        ServiceDescription = reader.GetString(reader.GetOrdinal("ServiceDescription")),
-                        IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"))
+                        ServiceDescription = reader.GetString(reader.GetOrdinal("ServiceDescription"))
                     };
                     serviceTypesInfo.Add(serviceTypes);
                 }
@@ -38,21 +37,19 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         public ServiceTypes GetServiceTypesById(string? Id)
         {
             ServiceTypes houseTypesInfo = new ServiceTypes();
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.GetServiceType", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.GetServiceType", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
-                command.Parameters.AddWithValue("@ServiceTypes_id", Id);
-                command.ExecuteNonQuery();
-                SqlDataReader reader = command.ExecuteReader();
+                command.Parameters.AddWithValue("@ServiceId", Id);
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
                     houseTypesInfo.ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypeId"));
-                    houseTypesInfo.ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceName"));
+                    houseTypesInfo.ServiceName = reader.GetString(reader.GetOrdinal("ServiceName"));
                     houseTypesInfo.Multiplier = reader.GetDecimal(reader.GetOrdinal("Multiplier"));
                     houseTypesInfo.ServiceDescription = reader.GetString(reader.GetOrdinal("ServiceDescription"));
-                    houseTypesInfo.IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive"));
                 }
             }
             return houseTypesInfo;

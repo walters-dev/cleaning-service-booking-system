@@ -5,8 +5,8 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Application.Interfaces
 {
-    public interface IAddOnsRepository
+    public interface IAddOnsService
     {
-        IList<AddOns> GetAddOns(); //gets list of all Add Ons from storage
+        IList<AddOns> ViewAllAddOns();//returns all add ons
     }
 }

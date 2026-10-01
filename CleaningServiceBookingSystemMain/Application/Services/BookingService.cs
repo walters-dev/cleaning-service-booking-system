@@ -6,20 +6,16 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Application.Services
 {
-    public class BookingService
+    public class BookingService : IBookingService
     {
         private readonly IBookingsRepository _bookingRepository;
-        public BookingService(IBookingsRepository repository)
+        public BookingService(IBookingsRepository repository)//prevents the service from running without its dependency
         {
             _bookingRepository = repository;
         }
         public IList<Bookings> ViewAllBookings()
         {
             return _bookingRepository.GetBookings();
-        }
-        public Bookings FindBooking(string? bookingId)
-        {
-            return _bookingRepository.GetBookingsById(bookingId);
         }
         public void RegisterBooking(Bookings booking)
         {
@@ -29,17 +25,13 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         {
             _bookingRepository.Update(booking);
         }
-        public void DeleteBooking(Bookings booking)
-        {
-            _bookingRepository.Delete(booking);
-        }
         public IList<BookingByDate> FindAllBookingsInDateRange(DateTime startDate, DateTime endDate)
         {
             return _bookingRepository.ListByRange(startDate, endDate);
         }
-        public IList<CustomerBookingHistory> FindCustomerBookingHistory(string email)
+        public IList<CustomerBookingHistory> FindCustomerBookingHistory(string phonenumber)
         {
-            return _bookingRepository.BookingHistory(email);
+            return _bookingRepository.BookingHistory(phonenumber);
         }
         public IList<BookingRevenueSummary> ViewRevenueSummary()
         {
@@ -64,6 +56,10 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         public IList<Bookings> ViewBookingsCreatedToday()
         {
             return _bookingRepository.GetBookingsCreatedToday();
+        }
+        public Bookings FindBookingsByPhoneNumberAndDate(string phonenumber, DateTime date)
+        {
+            return _bookingRepository.GetBookingsByPhoneNumberAndDate(phonenumber, date);
         }
     }
 }

@@ -11,35 +11,13 @@ BEGIN
      WHERE CustomerId=@CustomerID;
 END;
 GO
-CREATE OR ALTER PROCEDURE GetCustomerByEmail
-    @Email VARCHAR (7)
+CREATE OR ALTER PROCEDURE GetCustomerByPhoneNumber
+    @PhoneNumber VARCHAR (10)
 AS
 BEGIN
      SELECT *
      FROM Customers 
-     WHERE Email LIKE '%' + @Email + '%';
-END;
-GO
-CREATE OR ALTER PROCEDURE UpdateCustomer
-    @CustomerID VARCHAR (7),
-    @Fullname VARCHAR(MAX),
-    @Phonenumber VARCHAR(10),
-    @Email VARCHAR(255),
-    @PhysAddress VARCHAR(255),
-    @UpdatedAt DATE,
-    @UpdatedBy VARCHAR(MAX)
-
-AS 
-BEGIN
-      UPDATE Customers
-      SET 
-          Fullname = @Fullname,
-          Phonenumber = @Phonenumber,
-          Email = @Email,
-          PhysAddress = @PhysAddress,
-          UpdatedAt = @UpdatedAt,
-          UpdatedBy = @UpdatedBy
-      WHERE CustomerId = @CustomerID;
+     WHERE Phonenumber = @PhoneNumber;
 END;
 GO
 CREATE OR ALTER PROCEDURE AddCustomer
@@ -73,22 +51,6 @@ BEGIN
         @CreatedAt,
         @CreatedBy
     );
-END;
-GO
-CREATE OR ALTER PROCEDURE GetAllCustomers
-AS
-BEGIN
-    SELECT *
-    FROM Customers;
-END;
-GO
-CREATE OR ALTER PROCEDURE DeleteCustomer
- @CustomerID VARCHAR (7)
-AS
-BEGIN
-      DELETE
-      FROM Customers
-      WHERE CustomerId = @CustomerID;
 END;
 GO
 /* Housetype PROCEDURES ===========================================================================================================================================================================*/
@@ -133,6 +95,14 @@ BEGIN
     SELECT * 
     FROM Housetypes;
 END
+GO
+CREATE OR ALTER PROCEDURE GetHouseType
+@HouseTypeId VARCHAR(7)
+AS
+BEGIN
+    SELECT * FROM Housetypes
+    WHERE HouseTypesid = @HouseTypeId
+END;
 GO
 /*SERVICE PROCEDURES ==================================================================================================================================================================================================== */
 GO 
@@ -185,44 +155,20 @@ AS
 BEGIN
     SELECT * FROM AddOns
 END;
-GO
-CREATE OR ALTER PROCEDURE AddAddOn
-    @AddOnId VARCHAR(10),
-    @AddOnsName VARCHAR(MAX),
-    @Rate DECIMAL(10,2),
-    @PricingType VARCHAR(MAX),
-    @isActive BIT
-AS
-BEGIN
-
-    INSERT INTO AddOns
-    (
-        AddOnId,
-        AddOnsName,
-        Rate,
-        PricingType,
-        isActive
-    )
-    VALUES
-    (
-        @AddOnId,
-        @AddOnsName,
-        @Rate,
-        @PricingType,
-        @isActive
-    );
-
-END;
 /*booking procedures*/
 GO
 CREATE OR ALTER PROCEDURE ChangeBookingStatus
-@BookingStatus BIT,
-@BookingId VARCHAR(7)
+@BookingStatus VARCHAR(MAX),
+@BookingId VARCHAR(7),
+@UpdatedBy VARCHAR(MAX),
+@UpdatedAt DATE
 AS
 BEGIN
 UPDATE Bookings
 SET
-BookingStatus = @BookingStatus 
+UpdatedBy = @UpdatedBy,
+BookingStatus = @BookingStatus,
+UpdatedAt = @UpdatedAt
 WHERE BookingId = @BookingId
 END;
 GO 
@@ -237,7 +183,7 @@ CREATE OR ALTER PROCEDURE AddBooking
     @Customers_id VARCHAR(7),
     @Housetypes_id VARCHAR(7),
     @ServiceTypes_id VARCHAR(7),
-    @DiscountRule_id VARCHAR(7),
+    @DiscountRule_id VARCHAR(7) = NULL,
     @BookingDate DATE,
     @NumberOfRooms INT,
     @IsRecurring BIT,
@@ -249,6 +195,8 @@ CREATE OR ALTER PROCEDURE AddBooking
     @BookingStatus VARCHAR(MAX),
     @CreatedAt DATE,
     @CreatedBy VARCHAR(MAX),
+    @UpdatedAt DATE,
+    @UpdatedBy VARCHAR(MAX),
     @FirstTimeBooking BIT, 
     @CarpetedRooms INTEGER
 AS
@@ -272,6 +220,8 @@ BEGIN
         BookingStatus,
         CreatedAt,
         CreatedBy,
+        UpdatedAt,
+        UpdatedBy,
         FirstTimeBooking,
         CarpetedRooms
     )
@@ -293,52 +243,11 @@ BEGIN
         @BookingStatus,
         @CreatedAt,
         @CreatedBy,
+        @UpdatedAt,
+        @UpdatedBy,
         @FirstTimeBooking,
         @CarpetedRooms
     );
-
-END;
-GO
-CREATE OR ALTER PROCEDURE GetBooking
-    @BookingId VARCHAR(7)
-AS
-BEGIN
-
-    SELECT
-        b.BookingId,
-        c.Fullname AS CustomerName,
-        h.HouseName,
-        s.ServiceName,
-        d.DiscountName,
-        b.BookingDate,
-        b.NumberOfRooms,
-        b.IsRecurring,
-        b.RecurringBookingType,
-        b.SubTotal,
-        b.DiscountAmount,
-        b.SurchargeAmount,
-        b.TotalAmount,
-        b.BookingStatus,
-        b.CreatedAt,
-        b.CreatedBy
-
-    FROM Bookings b
-
-    INNER JOIN Customers c
-        ON b.Customers_id = c.CustomerId
-
-    INNER JOIN Housetypes h
-        ON b.Housetypes_id = h.HouseTypesid
-
-    INNER JOIN Servicetypes s
-        ON b.ServiceTypes_id = s.ServiceTypeId
-
-    LEFT JOIN DiscountRules d
-        ON b.DiscountRule_id = d.DiscountRuleId
-
-    WHERE b.BookingId = @BookingId
-
-    ORDER BY b.BookingDate DESC;
 
 END;
 GO
@@ -347,7 +256,7 @@ CREATE OR ALTER PROCEDURE UpdateBooking
     @Customers_id VARCHAR(7),
     @Housetypes_id VARCHAR(7),
     @ServiceTypes_id VARCHAR(7),
-    @DiscountRule_id VARCHAR(7),
+    @DiscountRule_id VARCHAR(7) = NULL,
     @BookingDate DATE,
     @NumberOfRooms INT,
     @IsRecurring BIT,
@@ -358,10 +267,11 @@ CREATE OR ALTER PROCEDURE UpdateBooking
     @TotalAmount DECIMAL(10,2),
     @BookingStatus VARCHAR(MAX),
     @FirstTimeBooking BIT, 
-    @CarpetedRooms INTEGER
+    @CarpetedRooms INTEGER,
+    @UpdatedAt DATE,
+    @UpdatedBy VARCHAR(MAX)
 AS
 BEGIN
-
     UPDATE Bookings
     SET
         Customers_id = @Customers_id,
@@ -378,7 +288,9 @@ BEGIN
         TotalAmount = @TotalAmount,
         BookingStatus = @BookingStatus,
         FirstTimeBooking = @FirstTimeBooking,
-        CarpetedRooms = @CarpetedRooms
+        CarpetedRooms = @CarpetedRooms,
+        UpdatedAt = @UpdatedAt,
+        UpdatedBy = @UpdatedBy
     WHERE BookingId = @BookingId;
 
 END;
@@ -409,6 +321,20 @@ BEGIN
         @LineAmount
     );
 
+END;
+GO 
+CREATE OR ALTER PROCEDURE GetLastRowAddOnBookings
+AS
+BEGIN
+    SELECT TOP 1 * FROM BookingAddOns 
+    ORDER BY BookingAddOnId DESC;
+END;
+GO
+CREATE OR ALTER PROCEDURE DeleteBookingAddOnByAddOnId
+@BookingId VARCHAR(7)
+AS
+BEGIN
+    DELETE FROM BookingAddOns WHERE Booking_id = @BookingId;
 END;
 GO
 CREATE OR ALTER PROCEDURE BookingListByDateRange
@@ -445,7 +371,7 @@ BEGIN
 END;
 GO
 CREATE OR ALTER PROCEDURE CustomerBookingHistory
-    @Email VARCHAR(7)
+    @PhoneNumber VARCHAR(10)
 AS
 BEGIN
 
@@ -471,7 +397,7 @@ BEGIN
     INNER JOIN Servicetypes s
         ON b.ServiceTypes_id = s.ServiceTypeId
 
-    WHERE c.Email = @Email
+    WHERE c.Phonenumber = @PhoneNumber
 
     ORDER BY b.BookingDate DESC;
 
@@ -552,8 +478,8 @@ BEGIN
 
 END;
 GO
-CREATE OR ALTER PROCEDURE GetBookingsByEmailAndDate
-    @Email VARCHAR(255),
+CREATE OR ALTER PROCEDURE GetBookingsByPhoneNumberAndDate
+    @PhoneNumber VARCHAR(10),
     @BookingDate DATE
 AS
 BEGIN
@@ -573,12 +499,16 @@ BEGIN
         b.SurchargeAmount,
         b.TotalAmount,
         b.BookingStatus,
+        b.UpdatedBy,
+        b.UpdatedAt,
+        b.FirstTimeBooking,
+        b.CarpetedRooms,
         c.Fullname,
         c.Email
     FROM Bookings AS b
     INNER JOIN Customers AS c
         ON b.Customers_id = c.CustomerId
-    WHERE c.Email = @Email
+    WHERE c.Phonenumber = @PhoneNumber
       AND b.BookingDate = @BookingDate;
     END;
 GO
@@ -603,42 +533,6 @@ FROM Customers
 END;
 
 GO
-CREATE OR ALTER PROCEDURE HousetypesRowCount
-AS
-BEGIN
-SELECT
-    COUNT(Housetypes.HouseTypesid) AS RowsCount
-FROM Housetypes
-END;
-
-GO
-CREATE OR ALTER PROCEDURE ServicetypesRowCount
-AS
-BEGIN
-SELECT
-    COUNT(Servicetypes.ServiceTypeId) AS RowsCount
-FROM Servicetypes
-END;
-
-GO
-CREATE OR ALTER PROCEDURE DiscountRulesRowCount
-AS
-BEGIN
-SELECT
-    COUNT(DiscountRules.DiscountRuleId) AS RowsCount
-FROM DiscountRules
-END;
-
-GO
-CREATE OR ALTER PROCEDURE AddOnsRowCount
-AS
-BEGIN
-SELECT
-    COUNT(AddOns.AddOnId) AS RowsCount
-FROM AddOns
-END;
-
-GO
 CREATE OR ALTER PROCEDURE BookingsRowCount
 AS
 BEGIN
@@ -647,18 +541,10 @@ SELECT
 FROM Bookings
 END;
 
-GO
-CREATE OR ALTER PROCEDURE BookingAddOnsRowCount
-AS
-BEGIN
-SELECT
-    COUNT(BookingAddOns.BookingAddOnId) AS RowsCount
-FROM BookingAddOns
-END;
-/*password procedure*/
+/*admin procedures*/
 GO
 CREATE OR ALTER PROCEDURE GetAdminByUsername
-@Username VARCHAR(7)
+@Username VARCHAR(20)
 AS
 BEGIN
 SELECT
@@ -671,7 +557,7 @@ CREATE OR ALTER PROCEDURE AddAdmin
 @AdminID Varchar(7),
 @Username Varchar(20) ,
 @AdminPassword Varchar(90),
-@Email Varchar(50)
+@Email Varchar(255)
 AS
 BEGIN
 INSERT INTO AdminTable(Admin_ID, Username, Admin_Password, Email)
@@ -683,10 +569,15 @@ AS
 BEGIN
     SELECT *
     FROM Bookings
-    WHERE CreatedAt = CURRENT_DATE;
+    WHERE CreatedAt = convert(date, getdate());
 END;
 
 GO
-
-
-
+select * from Customers
+select * from Bookings
+select * from BookingAddOns
+select * from DiscountRules
+select * from AddOns
+select * from Housetypes
+SELECT * FROM Servicetypes
+select * from AdminTable

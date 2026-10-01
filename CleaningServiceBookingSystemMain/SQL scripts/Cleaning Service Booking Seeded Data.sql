@@ -25,4 +25,4 @@ Values
 
 INSERT INTO AdminTable(Admin_Id, Username, Admin_Password, Email)
 VALUES
-('AT1','Admin','$2a$12$l8VsryAFB6I5iM44fc4XVuuxlq/EdYnBSVtRnUHWIG7c6BKhwO85i','admin@gmail.com')
+('AT1','Admin1','$2a$12$l8VsryAFB6I5iM44fc4XVuuxlq/EdYnBSVtRnUHWIG7c6BKhwO85i','admin@gmail.com')

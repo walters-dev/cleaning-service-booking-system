@@ -6,16 +6,12 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Application.Services
 {
-    public class CustomerService
+    public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _customerRepository;
-        public CustomerService(ICustomerRepository repository)
+        public CustomerService(ICustomerRepository repository)//prevents the service from running without its dependency
         {
             _customerRepository = repository;
-        }
-        public IList<Customers> ViewAllCustomers()
-        {
-            return _customerRepository.GetCustomers();
         }
         public Customers FindCustomer(string? customerId)
         {
@@ -25,17 +21,9 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         {
             _customerRepository.Add(customer);
         }
-        public void AmendCustomer(Customers customer)
+        public Customers FindCustomerWithPhoneNumber(string phonenumber)
         {
-            _customerRepository.Update(customer);
-        }
-        public void DeleteCustomer(Customers customer)
-        {
-            _customerRepository.Delete(customer);
-        }
-        public Customers FindCustomerWithEmail(string email)
-        {
-            return _customerRepository.GetCustomersByEmail(email);
+            return _customerRepository.GetCustomersByPhoneNumber(phonenumber);
         }
         public string FindCustomerCount()
         {

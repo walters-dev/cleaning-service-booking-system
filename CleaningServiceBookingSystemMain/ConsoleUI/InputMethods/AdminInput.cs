@@ -3,6 +3,7 @@ using CleaningServiceBookingSystemMain.Application.Services;
 using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,12 +13,12 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
     public class AdminInput
     {
 
-        private readonly BookingValidator _bookingValidator;
-        private readonly IAdminRepository _adminRepository = new InMemoryRepositoryAdmins();
-        //public AdminInput(BookingValidator bookingValidator)
-        //{
-        //    _bookingValidator = bookingValidator;
-        //}
+        private readonly BookingValidator _bookingValidator = new BookingValidator();
+        private readonly IAdminRepository _adminRepository;
+        public AdminInput(IAdminRepository adminRepository)
+        {
+            _adminRepository = adminRepository;
+        }
         public Admins GetAdminInput()
         {
            while (true)
@@ -25,9 +26,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Admins admin = new Admins();
 
                 Console.WriteLine();
-                Console.WriteLine("===== ADMIN INFORMATION =====");
+                Console.WriteLine("===== ADMIN INFORMATION ====="); // Captures User input
 
-                AdminService service = new AdminService(_adminRepository);
+                IAdminService service = new AdminService(_adminRepository);
                 admin.AdminId = service.FindAdminCount();
 
                 Console.Write("Enter username: ");
@@ -42,7 +43,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 //return admin;
                 string errorMessage;
 
-                bool isValid = _bookingValidator.ValidateAdmin(admin, out errorMessage);
+                bool isValid = _bookingValidator.ValidateAdmin(admin, out errorMessage); // Validates if the admin is correct
 
                 if (isValid)
                 {
@@ -50,7 +51,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 }
 
                 Console.WriteLine();
-                Console.WriteLine($"Error: {errorMessage}");
+                AnsiConsole.MarkupLine($"[red]Error: {errorMessage}[/]");
                 Console.WriteLine("Please try Again");
             }
         }

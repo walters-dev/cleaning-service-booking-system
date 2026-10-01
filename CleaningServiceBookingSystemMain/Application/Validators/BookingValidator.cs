@@ -1,4 +1,7 @@
+using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Application.Services;
 using CleaningServiceBookingSystemMain.Domain.Models;
+using CleaningServiceBookingSystemMain.Infrastructure;
 using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -43,7 +46,19 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 errorMessage = "Phone number is required.";
                 return false;
             }
-
+            if (customer.PhoneNumber.Length > 30)
+            {
+                errorMessage = "Phone number must be less than 30 characters";
+                return false;
+            }
+            //checks if a customer is already using this phone number
+            ICustomerRepository customerRepository = new RepositoryCustomers();
+            ICustomerService customerService = new CustomerService(customerRepository);
+            if (customerService.FindCustomerWithPhoneNumber(customer.PhoneNumber).FullName != null)
+            {
+                errorMessage = "Phone number already in use for another customer.";
+                return false;
+            }
             /* BRD 15: enforces reasonable length here as exactly 10 digits,
              * matching a standard South African phone number format (i.e. 0801234567).
              */
@@ -72,6 +87,11 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                     return false;
                 }
             }
+            if (customer.Email.Length > 255)
+            {
+                errorMessage = "Email must be less than 255 characters";
+                return false;
+            }
 
             /* Address is required by the Customers table definition in BRD section 12.1,
              * even though section 15 does not list it explicitly - a booking cannot be useful without a service address.
@@ -79,6 +99,11 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
             if (string.IsNullOrWhiteSpace(customer.PhyAddress))
             {
                 errorMessage = "Address is required.";
+                return false;
+            }
+            if (customer.PhyAddress.Length > 255)
+            {
+                errorMessage = "Address number must be less than 255 characters";
                 return false;
             }
 
@@ -141,7 +166,7 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 errorMessage = "Booking date cannot be in the past.";
                 return false;
             }
-
+            
             // Not explicitly named in section 15, but implied by data
             // quality (section 10, Non-Functional Requirements) - a
             // carpet-cleaning add-on (BRD 8.3) is priced per carpeted
@@ -178,10 +203,27 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 errorMessage = "Admin username is required.";
                 return false;
             }
-
+            if (admin.Username.Length > 20)
+            {
+                errorMessage = "Username must be less than 20 characters.";
+                return false;
+            }
+            //checks if the admin user name already exists
+            IAdminRepository adminRepository = new RepositoryAdmins();
+            IAdminService adminService = new AdminService(adminRepository);
+            if (adminService.FindAdminPassword(admin.Username).AdminPassword != "")
+            {
+                errorMessage = "Admin username already exists.";
+                return false;
+            }
             if (string.IsNullOrWhiteSpace(admin.AdminPassword))
             {
                 errorMessage = "Admin password is required.";
+                return false;
+            }
+            if (admin.AdminPassword.Length > 30)
+            {
+                errorMessage = "Password must be less than 30 characters.";
                 return false;
             }
 
@@ -197,7 +239,11 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                     return false;
                 }
             }
-
+            if (admin.Email.Length > 255)
+            {
+                errorMessage = "Email must be less than 255 characters.";
+                return false;
+            }
             errorMessage = string.Empty;
             return true;
         }
@@ -255,11 +301,11 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 return false;
             }
 
-            if (bookingDateResult1 < DateTime.Today)//......................................................................................................................
-            {
-                errorMessage = "Booking date cannot be in the past.";
-                return false;
-            }
+            //if (bookingDateResult1 < DateTime.Today)//......................................................................................................................
+            //{
+            //    errorMessage = "Booking date cannot be in the past.";
+            //    return false;
+            //}
 
             errorMessage = string.Empty;
             return true;
@@ -279,6 +325,16 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 }
             }
 
+            errorMessage = string.Empty;
+            return true;
+        }
+        public bool ValidateCustomerPhoneNumberInput(string phoneNumber, out string errorMessage)
+        {
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                errorMessage = "Phone number is required.";
+                return false;
+            }
             errorMessage = string.Empty;
             return true;
         }

@@ -7,12 +7,9 @@ namespace CleaningServiceBookingSystemMain.Application.Interfaces
 {
     public interface ICustomerRepository
     {
-        IList<Customers> GetCustomers();    //gets list of all customers from storage
         Customers GetCustomerById(string? Id);// ? means it can be null  //gets a specific customer from storage
         void Add(Customers customers);      //Adds a customer to storage
-        void Update(Customers customers);   //edits an already existing customer to storage
-        void Delete(Customers customers);   //deletes an customer from storage
-        Customers GetCustomersByEmail(string email);
-        string CustomersRowCount();
+        Customers GetCustomersByPhoneNumber(string phonenumber);       //retrieves one customers record from storage 
+        string CustomersRowCount(); //Gets customer count from storage
     } 
 }

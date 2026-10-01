@@ -6,10 +6,10 @@ using CleaningServiceBookingSystemMain.Domain.Models;
 
 namespace CleaningServiceBookingSystemMain.Application.Services
 {
-    public class AdminService
+    public class AdminService : IAdminService
     {
         private readonly IAdminRepository _adminRepository;
-        public AdminService(IAdminRepository repository)
+        public AdminService(IAdminRepository repository)//prevents the service from running without its dependency
         {
             _adminRepository = repository;
         }

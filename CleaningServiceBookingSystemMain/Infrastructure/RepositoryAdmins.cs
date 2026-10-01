@@ -8,37 +8,35 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
-    public class InMemoryRepositoryAdmins : IAdminRepository
+    public class RepositoryAdmins : IAdminRepository
     {
         DatabaseConnection databaseConnection = new DatabaseConnection();
 
         public void Add(Admins admins)
         {
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.AddAdmin", connection);//waiting for sql procedure.......................................................................
+                SqlCommand command = new SqlCommand("dbo.AddAdmin", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
-                //need to add a thing for id
                 command.Parameters.AddWithValue("@AdminID", admins.AdminId);
                 command.Parameters.AddWithValue("@Username", admins.Username);
                 command.Parameters.AddWithValue("@AdminPassword", admins.AdminPassword);
                 command.Parameters.AddWithValue("@Email", admins.Email);
-                command.ExecuteNonQuery();
+                command.ExecuteNonQuery();//executes the query which saves a new admin to database
             }
         }
 
         public Admins GetAdminPasswordByUsername(string userName)
         {
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
                 Admins admin = new Admins();
-                SqlCommand command = new SqlCommand("dbo.GetAdminByUsername", connection);
+                SqlCommand command = new SqlCommand("dbo.GetAdminByUsername", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 command.Parameters.AddWithValue("@Username", userName);
-                //command.ExecuteNonQuery();
-                using SqlDataReader reader = command.ExecuteReader();
+                using SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 if (reader.Read())
                 {
                     admin.AdminPassword = reader.GetString(reader.GetOrdinal("Admin_Password"));
@@ -58,12 +56,12 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         public string AdminRowCount()
         {
             int id;
-            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.AdminRowCount", connection);
+                SqlCommand command = new SqlCommand("dbo.AdminRowCount", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 if (reader.Read())
                 {
                     id = reader.GetInt32("RowsCount");

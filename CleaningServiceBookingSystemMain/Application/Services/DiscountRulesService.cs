@@ -6,10 +6,10 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Application.Services
 {
-    public class DiscountRulesService
+    public class DiscountRulesService : IDiscountRulesService
     {
         private readonly IDiscountRulesRepository _discountRulesRepository;
-        public DiscountRulesService(IDiscountRulesRepository repository)
+        public DiscountRulesService(IDiscountRulesRepository repository)//prevents the service from running without its dependency
         {
             _discountRulesRepository = repository;
         }
@@ -20,14 +20,6 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         public DiscountRules FindDiscountRules(string? discountId)
         {
             return _discountRulesRepository.GetDiscountRulesById(discountId);
-        }
-        public void RegisterDiscountRule(DiscountRules discountRules)
-        {
-            _discountRulesRepository.Add(discountRules);
-        }
-        public string FindDiscountCount()
-        {
-            return _discountRulesRepository.DiscountRulesRowCount();
         }
     }
 }

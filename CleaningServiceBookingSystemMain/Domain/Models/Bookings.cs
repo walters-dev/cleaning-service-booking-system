@@ -10,7 +10,7 @@ namespace CleaningServiceBookingSystemMain.Domain.Models
         public string CustomerId { get; set; }
         public string HouseTypeId { get; set; }
         public string ServiceTypeId { get; set; }
-        public string DiscountRuleId { get; set; }
+        public string? DiscountRuleId { get; set; }
         public DateTime? BookingDate { get; set; }
         public int NumberOfRooms { get; set; }
         public bool IsRecurring { get; set; }

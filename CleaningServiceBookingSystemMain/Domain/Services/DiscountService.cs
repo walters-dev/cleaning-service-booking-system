@@ -35,12 +35,12 @@ namespace CleaningServiceBookingSystemMain.Domain.Services
         /* Works out the single highest discount this booking is eligible for, and returns the amount it's worth against the given subtotal.
          * return => DiscountResult describing which discount (if any) was applied, its percentage, and the resulting monetary amount.
          */
-        public decimal CalculateDiscountAmount(Bookings booking, decimal subtotal)
+        public decimal CalculateDiscountAmount(Bookings booking, decimal subtotal, out string highestDiscountName)
         {
             /* Starts with "No discount" as the default, and only replace it if a higher-percentage eligible discount is found.
              * This avoids stacking two discounts together, as BRD 8.4 states: "the system must apply the single highest discount only."
              */
-            string highestDiscountName = "No discount";
+            highestDiscountName = "No discount";
             decimal highestPercentage = 0m;
 
             if (booking.FirstTimeBooking && FirstTimeCustomerPercentage > highestPercentage)

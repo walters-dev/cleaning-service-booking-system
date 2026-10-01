@@ -3,6 +3,7 @@ using CleaningServiceBookingSystemMain.Application.Services;
 using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
+using Spectre.Console;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -12,8 +13,12 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
     {
         private readonly BookingValidator _validator =
            new BookingValidator();
-        private readonly ICustomerRepository _customerRepository = new InMemoryRepositoryCustomers();
+        private readonly ICustomerRepository _customerRepository;
 
+        public CustomerInput(ICustomerRepository customerRepository) 
+        {
+            _customerRepository = customerRepository;
+        }
         public Customers GetCustomerInput(string username)
         {
            while (true)
@@ -21,8 +26,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 Customers customer = new Customers();
 
                 Console.WriteLine();
-                Console.WriteLine("===== CUSTOMER INFORMATION =====");
-                CustomerService service = new CustomerService(_customerRepository);
+                Console.WriteLine("===== CUSTOMER INFORMATION ====="); //Captures User Input
+                ICustomerService service = new CustomerService(_customerRepository);
                 customer.CustomerId = service.FindCustomerCount();
 
                 Console.Write("Enter full name: ");
@@ -40,7 +45,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 customer.CreatedAt = DateTime.Today;
                 customer.CreatedBy = username;
 
-                bool isValid = _validator.ValidateCustomer(customer, out string errorMessage);
+                bool isValid = _validator.ValidateCustomer(customer, out string errorMessage); //Valids If the customer Exists
 
                 if (isValid)
                 {
@@ -49,7 +54,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 else
                 {
                     Console.WriteLine();
-                    Console.WriteLine($"Validation error: {errorMessage}");
+                    AnsiConsole.MarkupLine($"[red]Validation error: {errorMessage}[/]");
                     Console.WriteLine("Please enter the customer information again.");
                 }
            }
@@ -57,11 +62,11 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
         }
 
-        public string GetEmail()
+        public string GetEmail() // Validates if the email exists
         {
             while (true)
             {
-                Console.WriteLine("Enter Customer Email");
+                Console.WriteLine("Enter Email");
                 string email = Console.ReadLine();
 
                 bool isValid = _validator.ValidateCustomerEmailInput(email, out string errormessage);
@@ -71,7 +76,25 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 }
 
                 Console.WriteLine();
-                Console.WriteLine($"Validation error: {errormessage}");
+                AnsiConsole.MarkupLine($"Validation error: {errormessage}");
+                Console.WriteLine("Please Enter the email again");
+            }
+        }
+        public string GetPhoneNumber() // Validates if the phone number exists
+        {
+            while (true)
+            {
+                Console.WriteLine("Enter phone number");
+                string phonenumber = Console.ReadLine();
+
+                bool isValid = _validator.ValidateCustomerPhoneNumberInput(phonenumber, out string errormessage);
+                if (isValid)
+                {
+                    return phonenumber;
+                }
+
+                Console.WriteLine();
+                AnsiConsole.MarkupLine($"Validation error: {errormessage}");
                 Console.WriteLine("Please Enter the email again");
             }
         }

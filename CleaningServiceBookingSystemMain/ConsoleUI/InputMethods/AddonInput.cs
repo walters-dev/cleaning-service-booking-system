@@ -1,145 +1,122 @@
 ﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
-using CleaningServiceBookingSystemMain.Application.Validators;
-using CleaningServiceBookingSystemMain.Domain.Models;
-using CleaningServiceBookingSystemMain.Infrastructure;
 using CleaningServiceBookingSystemMain.Application.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using CleaningServiceBookingSystemMain.Domain.Models;
+using Spectre.Console;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class AddOnInput
     {
-        private readonly IAddOnsRepository _addOnsRepository = new InMemoryRepositoryAddOns();
+        private readonly IAddOnsRepository _addOnsRepository;
 
-        private readonly BookingValidator _validator;
-
-        //public AddOnInput(IAddOnsRepository addOnsRepository)
-        //{
-        //    _addOnsRepository = addOnsRepository;
-        //}
-
-        public IList<AddOnSelection>? GetAddOnInput(out int carpetedRooms)
+        public AddOnInput(IAddOnsRepository addOnsRepository)
         {
-            AddOnsService service = new AddOnsService(_addOnsRepository);
-            IList<AddOns> addOns = service.ViewAllAddOns();
-            List<AddOnSelection> selectedAddOns = new List<AddOnSelection>();
-            while (true)
+            this._addOnsRepository = addOnsRepository;
+        }
+
+        private const int MaxRoomNumber = 12;
+
+        public IList<AddOnSelection>? GetAddOnInput(
+            ref int carpetedRooms)
+        {
+            // Ask the user whether they want any add-ons.
+            string addOnChoice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("[yellow]Would you like to add any add-ons?[/]")
+                    .AddChoices(
+                        "Yes",
+                        "No"
+                    )
+            );
+
+            // If the user does not want add-ons,
+            // return an empty list.
+            if (addOnChoice == "No")
             {
-                carpetedRooms = 0;
-                Console.WriteLine();
-                Console.WriteLine("===== ADD-ONS =====");
-
-                Console.WriteLine("0. Finish selecting add-ons");
-
-                int i;
-                for (i = 0; i < addOns.Count; i++)
-                {
-                    Console.WriteLine(
-                        $"{i + 1}. " +
-                        $"{addOns[i].AddOnsName} " +
-                        $"- R{addOns[i].Rate}");
-                }
+                return new List<AddOnSelection>();
+            }
 
 
-                Console.Write("Choose an add-on: ");
+            // Create the service using the repository.
+            AddOnsService service =
+                new AddOnsService(_addOnsRepository);
 
-                int choice;
+            // Get all available add-ons.
+            IList<AddOns> addOns =
+                service.ViewAllAddOns();
 
+            Console.WriteLine();
+            Console.WriteLine("===== ADD-ONS =====");
 
-                if (!int.TryParse(Console.ReadLine(), out choice) || choice > i)
-                {
-                    Console.WriteLine("Please enter a valid number.");
-                    continue;
-                }
+            // Allow the user to select multiple add-ons.
+            List<AddOns> selectedAddOns =
+                AnsiConsole.Prompt(
+                    new MultiSelectionPrompt<AddOns>()
+                        .Title("[yellow]Choose your add-ons:[/]")
+                        .InstructionsText(
+                            "[grey](Press [blue]<space>[/] to select, " +
+                            "[green]<enter>[/] when finished)[/]")
+                        .UseConverter(addOn =>$"{addOn.AddOnsName} - R{addOn.Rate}")
+                        .AddChoices(addOns)
+                );
 
+            // This list will store the selected add-ons
+            // together with their quantities.
+            List<AddOnSelection> selections =
+                new List<AddOnSelection>();
 
-                // Finish selecting
-                if (choice == 0)
-                {
-                    break;
-                }
-
-
-                // Check menu option
-                if (choice < 1 || choice > addOns.Count)
-                {
-                    Console.WriteLine("Please choose an option from the list.");
-                    continue;
-                }
-
-
-                AddOns selectedAddOn = addOns[choice - 1];
-
-
-                // Prevent duplicate add-ons
-                bool alreadySelected = selectedAddOns.Any(x => x.AddOn.AddOnId == selectedAddOn.AddOnId);
-
-
-                if (alreadySelected)
-                {
-                    Console.WriteLine("You already selected this add-on.");
-
-                    continue;
-                }
-
-
+            // Go through every add-on selected by the user.
+            foreach (AddOns selectedAddOn in selectedAddOns)
+            {
+                // Most add-ons only have a quantity of 1.
                 int quantity = 1;
 
-
-                // AD002 = Carpet Cleaning
+                // AD002 = Carpet Cleaning.
                 if (selectedAddOn.AddOnId == "AD002")
                 {
                     while (true)
                     {
-                        Console.Write("Enter number of carpeted rooms: ");
-
-                        //int carpetedRooms;
-
+                        Console.Write(
+                            "Enter number of carpeted rooms: ");
 
                         if (!int.TryParse(Console.ReadLine(), out carpetedRooms))
                         {
-                            Console.WriteLine("Please enter a valid number.");
+                            AnsiConsole.MarkupLine("[red]Please enter a valid number.[/]");
 
                             continue;
                         }
 
-                        //break;
-                        // Put value into Booking
-                        //bookings.CarpetedRooms = carpetedRooms; //need to get this as a parameter first--------------------------------------------------------------------------
+                        if (carpetedRooms < 1 || carpetedRooms > MaxRoomNumber)
+                        {
+                            AnsiConsole.MarkupLine("[red]Carpeted rooms must be between 1 and 12.[/]");
 
+                            continue;
+                        }
 
-                        // CALL BOOKING VALIDATOR
-                        string errorMessage;
+                        // The quantity of Carpet Cleaning
+                        // is the number of carpeted rooms.
+                        quantity = carpetedRooms;
 
-                       // bool isValid = _validator.ValidateCarpetedRooms(booking,out errorMessage);
-
-
-                        //if (isValid)
-                        //{
-                        //    quantity = booking.CarpetedRooms;
-
-                        //    break;
-                        //}
-
-
-                        //Console.WriteLine($"Error: {errorMessage}");
+                        break;
                     }
                 }
 
+                // Create an AddOnSelection object.
+                AddOnSelection selection =
+                    new AddOnSelection
+                    {
+                        AddOn = selectedAddOn,
+                        Quantity = quantity
+                    };
 
-                AddOnSelection selection =  
-                   new AddOnSelection
-                   {
-                       AddOn = selectedAddOn,
-                       Quantity = quantity
-                   };
+                // Add it to the list.
+                selections.Add(selection);
 
-                selectedAddOns.Add(selection);
-                Console.WriteLine($"{selectedAddOn.AddOnsName} added.");
+                Console.WriteLine(
+                    $"{selectedAddOn.AddOnsName} added.");
             }
-            return selectedAddOns;
+
+            return selections;
         }
     }
 }

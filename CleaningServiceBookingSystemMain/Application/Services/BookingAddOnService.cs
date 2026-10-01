@@ -6,32 +6,24 @@ using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Application.Services
 {
-    public class BookingAddOnService
+    public class BookingAddOnService : IBookingAddOnService
     {
         private readonly IBookingAddOnsRepository _bookingAddOnsRepository;
-        public BookingAddOnService(IBookingAddOnsRepository repository)
+        public BookingAddOnService(IBookingAddOnsRepository repository)//prevents the service from running without its dependency
         {
             _bookingAddOnsRepository = repository;
-        }
-        public IList<BookingAddOns> ViewAllBookingAddOns()
-        {
-            return _bookingAddOnsRepository.GetBookingAddOns();
-        }
-        public BookingAddOns FindBookingAddOn(string? bookingAddOnId)
-        {
-            return _bookingAddOnsRepository.bookingAddOnsByID(bookingAddOnId);
         }
         public void RegisterBookingAddOn(BookingAddOns bookingAddOns)
         {
             _bookingAddOnsRepository.Add(bookingAddOns);
         }
-        public void AmendBookingAddOn(BookingAddOns bookingAddOns)
+        public void RemoveBookingAddOnsByBookingId(string Id)
         {
-            _bookingAddOnsRepository.Update(bookingAddOns);
+            _bookingAddOnsRepository.DeleteBookingAddOnByBookingId(Id);
         }
-        public string FindBookingAddOnCount()
+        public int FindLastRowAddOnBookings()
         {
-            return _bookingAddOnsRepository.BookingAddOnsRowCount();
+            return _bookingAddOnsRepository.GetLastRowAddOnBookings();
         }
     }
 }

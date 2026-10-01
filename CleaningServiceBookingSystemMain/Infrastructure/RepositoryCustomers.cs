@@ -1,0 +1,102 @@
+﻿using CleaningServiceBookingSystemMain.Domain.Models;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data.SqlClient;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using CleaningServiceBookingSystemMain.Application.Interfaces;
+
+namespace CleaningServiceBookingSystemMain.Infrastructure
+{
+    //private readonly IList<Customers> 
+    public class RepositoryCustomers : ICustomerRepository
+    {
+        //methods need to be public or cannot implement interface member
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        public Customers GetCustomerById(string? Id)// ? means it can be null
+        {
+            Customers customersInfo = new Customers();
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.GetCustomer", connection);//gets stored procedure from database
+                command.CommandType = CommandType.StoredProcedure;
+                command.Connection.Open();
+                command.Parameters.AddWithValue("@CustomerID", Id);
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
+                while (reader.Read())
+                {
+                    customersInfo.CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"));
+                    customersInfo.FullName = reader.GetString(reader.GetOrdinal("FullName"));
+                    customersInfo.PhoneNumber = reader.GetString(reader.GetOrdinal("Phonenumber"));
+                    customersInfo.Email = reader.GetString(reader.GetOrdinal("Email"));
+                    customersInfo.PhyAddress = reader.GetString(reader.GetOrdinal("PhysAddress"));
+                    customersInfo.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
+                    customersInfo.CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"));
+                }
+            }
+            return customersInfo;
+        }
+        public void Add(Customers customers)
+        {
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.AddCustomer", connection);//gets stored procedure from database
+                command.CommandType = CommandType.StoredProcedure;
+                command.Connection.Open();
+                //need to add a thing for id
+                command.Parameters.AddWithValue("@CustomerID", customers.CustomerId);
+                command.Parameters.AddWithValue("@Fullname", customers.FullName);
+                command.Parameters.AddWithValue("@Phonenumber", customers.PhoneNumber);
+                command.Parameters.AddWithValue("@Email", customers.Email);
+                command.Parameters.AddWithValue("@PhysAddress", customers.PhyAddress);
+                command.Parameters.AddWithValue("@CreatedAt", customers.CreatedAt);
+                command.Parameters.AddWithValue("@CreatedBy", customers.CreatedBy);
+                command.ExecuteNonQuery();                          //saves new customer to database
+            }
+        }
+        public Customers GetCustomersByPhoneNumber(string phonenumber)
+        {
+            Customers customersInfo = new Customers();
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))
+            {
+                SqlCommand command = new SqlCommand("dbo.GetCustomerByPhoneNumber", connection);//gets stored procedure from database
+                command.CommandType = CommandType.StoredProcedure;
+                command.Connection.Open();
+                command.Parameters.AddWithValue("@PhoneNumber", phonenumber);
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
+                while (reader.Read())
+                {
+                    customersInfo.CustomerId = reader.GetString(reader.GetOrdinal("CustomerId"));
+                    customersInfo.FullName = reader.GetString(reader.GetOrdinal("FullName"));
+                    customersInfo.PhoneNumber = reader.GetString(reader.GetOrdinal("Phonenumber"));
+                    customersInfo.Email = reader.GetString(reader.GetOrdinal("Email"));
+                    customersInfo.PhyAddress = reader.GetString(reader.GetOrdinal("PhysAddress"));
+                    customersInfo.CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
+                    customersInfo.CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy"));
+                }
+            }
+            return customersInfo;
+        }
+        public string CustomersRowCount()
+        {
+            int id;
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
+            {
+                SqlCommand command = new SqlCommand("dbo.CustomersRowCount", connection);//gets stored procedure from database
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
+                if (reader.Read())
+                {
+                    id = reader.GetInt32("RowsCount");
+                }
+                else
+                {
+                    id = 0;
+                }
+            }
+            return "CT" + (id + 1);
+        }
+    }
+}

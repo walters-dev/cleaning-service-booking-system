@@ -9,7 +9,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         public string ConnectionString { get; private set; }
         public DatabaseConnection()
         {
-            ConnectionString = "Server=localhost\\SQLEXPRESS;Database=CleaningServiceBooking;Trusted_Connection=True;TrustServerCertificate=True;";
+            ConnectionString = "Server=(localdb)\\MSSQLLocalDB;Database=CleaningServiceBooking;Trusted_Connection=True;TrustServerCertificate=True;";//sets the connection string to local database
         }
 
     }
