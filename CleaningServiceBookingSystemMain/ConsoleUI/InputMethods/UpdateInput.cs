@@ -62,6 +62,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 newBookingChanges.BookingStatus = booking.BookingStatus;
                 newBookingChanges.UpdatedAt = booking.UpdatedAt;
                 newBookingChanges.UpdatedBy = booking.UpdatedBy;
+                newBookingChanges.CarpetedRooms = booking.CarpetedRooms;
                 var UpdateChoices = AnsiConsole.Prompt // Display a menu that allows multiple selections and store the selected option names.
                     (new MultiSelectionPrompt<string>()
                     .Title("Choose what you want to update: ")
@@ -103,6 +104,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 {
                     selectedHouseType = _houseTypeInput.GetHouseTypeInput(); // Use the house-type input helper to obtain the selected house-type object.
                     newBookingChanges.HouseTypeId = selectedHouseType.HouseTypeId; // Copy the selected house type's ID into the booking.
+                    Console.Write("Enter New Number Of Rooms: ");
+                    newBookingChanges.NumberOfRooms = GetInteger(); // Read a whole number and assign it to the booking's room count.
                     //currentHouseType = selectedHouseType;
                 }
 

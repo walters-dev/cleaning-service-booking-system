@@ -588,4 +588,4 @@ select * from DiscountRules
 select * from AddOns
 select * from Housetypes
 SELECT * FROM Servicetypes
-select * from AdminTable
+select * from AdminTable 
