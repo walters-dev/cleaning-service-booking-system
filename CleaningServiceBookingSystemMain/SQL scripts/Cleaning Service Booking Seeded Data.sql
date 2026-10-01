@@ -1,3 +1,6 @@
+USE CleaningServiceBooking;
+GO
+
 INSERT INTO Housetypes(HouseTypesid, HouseName, BaseRate, RatePerRoom, MinRooms, MaxRooms)
 VALUES
 ('HT001', 'Apartment/Flat', 350, 80, 1, 4),
