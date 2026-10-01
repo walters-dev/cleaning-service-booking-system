@@ -432,9 +432,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 IsConfirmData = false;
                                 while (IsConfirmData == false)
                                 {
-                                    UpdateInput updateInput = new UpdateInput(houseTypeInput, serviceTypeInput, houseTypeService, serviceTypesService, addOnsService);
-                                    IList<AddOnSelection>? addOnSelections;
-                                    singleBooking = updateInput.GetUpdateInput(singleBooking, out addOnSelections, admins.Username);
+                                    UpdateInput updateInput = new UpdateInput(houseTypeInput, serviceTypeInput, houseTypeService, serviceTypesService, addOnsService, bookingAddOnService, singleBooking);
+                                    IList<AddOnSelection>? addOnSelections ;
+                                    singleBooking = updateInput.GetUpdateInput( out addOnSelections, admins.Username);
                                     var confirmSelectedUpdateChoices = AnsiConsole.Prompt(
                                         new SelectionPrompt<string>()
                                         .Title("Is the booking details correct:")

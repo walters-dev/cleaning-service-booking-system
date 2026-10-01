@@ -10,6 +10,5 @@ namespace CleaningServiceBookingSystemMain.Domain.Models
         public string ServiceName { get; set; }
         public decimal Multiplier { get; set; }
         public string ServiceDescription { get; set; }
-        public bool? IsActive { get; set; }//? because the bool in the database is sometimes null
     }
 }
