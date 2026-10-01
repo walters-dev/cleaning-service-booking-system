@@ -160,7 +160,7 @@ C:\USERS\RPS3\DOCUMENTS\PROJECTS\CLEANINGSERVICEBOOKINGSYSTEM
    ```
 2. Open `CleaningServiceBookingSystem.slnx` in Visual Studio.
 3. Restore NuGet packages (Spectre.Console, BCrypt.Net, Microsoft.Data.SqlClient) — Visual Studio will typically do this automatically on first build.
-4. Run the provided SQL script (`Cleaning Service Booking Database.sql`) against your SQL Server instance to create and seed the database.
+4. Run the provided SQL script (`Cleaning Service Booking Database.sql` then `Cleaning Service Booking Procedures.sql` and `Cleaning Service Booking Seeded Data.sql`) against your SQL Server instance to create and seed the database.
 5. Configure the connection string in `Infrastructure/DatabaseConnection.cs` to point at your local database.
 6. Build and run the project (`F5` in Visual Studio).
 
