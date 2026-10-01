@@ -291,7 +291,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                     customersBooking = customerService.FindCustomer(booking.CustomerId);//finds customer asociated to specified booking
                                     houseTypes = houseTypeService.FindHouseType(booking.HouseTypeId);//finds house type asociated to specified booking
                                     serviceTypes = serviceTypesService.FindServiceType(booking.ServiceTypeId);//finds service type asociated to specified booking
-                                    //displays booking info then repeats till last booking
+                                    //adds booking info to table then repeats till last booking
                                     allBookingsTable.AddRow(booking.BookingDate.Value.Date.ToString("dd MMM yyyy"), booking.NumberOfRooms.ToString(), booking.BookingStatus, booking.TotalAmount.ToString("C"), booking.CreatedBy, booking.CreatedAt.Value.Date.ToString("dd MMM yyyy"), booking.CarpetedRooms.ToString(), booking.RecurringBookingType, customersBooking.FullName, customersBooking.PhyAddress, serviceTypes.ServiceName, houseTypes.Name);
                                 }
                                 AnsiConsole.Write(allBookingsTable);
@@ -312,7 +312,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                     .AddColumn("Total Amount");//sets up headings for table
                                 foreach (var booking in bookingsReport)
                                 {
-                                    //displays booking info then repeats till last booking
+                                    //adds booking info to table then repeats till last booking
                                     bookingsReportTable.AddRow(booking.BookingStatus, booking.RecurringBookingType, booking.NumberOfRooms.ToString(), booking.CarpetedRooms.ToString(), booking.CreatedBy, booking.TotalAmount.ToString("C"));
                                 }
                                 AnsiConsole.Write(bookingsReportTable);//displays all bookings created today
@@ -386,8 +386,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 }
                                 break;
                             case "Update":
-                                //input Date and Customer to find the booking needed then display the booking then confirm if correct booking
-                                //updatedby, updatedat, recalc, addons which means delete booking addons where  addonid = addonid, change date, num of rooms carpeted rooms, number of rooms, house type, service type, isreccuring, recurring type
                                 IsConfirmData = false;
                                 while (IsConfirmData == false)
                                 {
@@ -520,8 +518,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
 
                         }
                         break;
-                    case "Return to Main Menu":                                                           //add change user chosen from admin menu
-                        IsAdminMenuRunning = false;                                               //this will exit the admin menu loop
+                    case "Return to Main Menu":                        //Return to Main Menu chosen from admin menu
+                        Console.Clear();
+                        IsAdminMenuRunning = false;              //this will exit the admin menu loop
                         break;
 
                 }

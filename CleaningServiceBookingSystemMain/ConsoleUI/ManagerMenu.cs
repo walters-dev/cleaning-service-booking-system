@@ -30,25 +30,25 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                 var managerChoices = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                     .Title("Choose menu option:")
-                    .AddChoices("Bookings", "Summaries", "Trends", "Return to Main Menu"));
-                
+                    .AddChoices("Bookings", "Summaries", "Trends", "Return to Main Menu"));// display manager menu options
+
                 switch (managerChoices)
                 {
-                    case "Bookings":
+                    case "Bookings"://Bookings chosen from manager menu
                         Console.Clear();
                         AnsiConsole.MarkupLine("[green]Booking selected[/]");
                         var bookingChoices = AnsiConsole.Prompt(
                             new SelectionPrompt<string>()
                             .Title("Choose booking options:")
-                            .AddChoices("Customer Booking History", "Booking List By Range", "Bookings Order By House Type"));
+                            .AddChoices("Customer Booking History", "Booking List By Range", "Bookings Order By House Type"));// display booking options
                         switch (bookingChoices)
                         {
-                            case "Customer Booking History":
-                                phoneNumber = customerInput.GetPhoneNumber();
-                                IList<CustomerBookingHistory> bookingsHistory = bookingService.FindCustomerBookingHistory(phoneNumber);
-                                if (bookingsHistory.Count == 0)
+                            case "Customer Booking History"://Customer Booking History chosen from booking options
+                                phoneNumber = customerInput.GetPhoneNumber();//get user input for customer
+                                IList<CustomerBookingHistory> bookingsHistory = bookingService.FindCustomerBookingHistory(phoneNumber);//find user inputted customer with bookings in storage
+                                if (bookingsHistory.Count == 0)//if no booking history found stop this loop 
                                 {
-                                    AnsiConsole.MarkupLine("[red]Customer does not exist[/]");
+                                    AnsiConsole.MarkupLine("[red]Customer booking history does not exist[/]");
                                     break;
                                 }
                                 var tableHistory = new Table();
@@ -61,18 +61,19 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 tableHistory.AddColumn("Booking Date");
                                 tableHistory.AddColumn("Number of rooms");
                                 tableHistory.AddColumn("Total amount");
-                                tableHistory.AddColumn("Booking status");
+                                tableHistory.AddColumn("Booking status");//sets up headers for table
                                 foreach (var booking in bookingsHistory)
                                 {
+                                    //adds booking info to table then repeats till last booking
                                     tableHistory.AddRow(booking.HouseName, booking.ServiceName, booking.BookingDate.Date.ToString("dd MMM yyyy"), booking.NumberOfRooms.ToString(), booking.TotalAmount.ToString("C"), booking.BookingStatus);
                                 }
                                 var centered = Align.Center(tableHistory);
-                                AnsiConsole.Write(centered);
+                                AnsiConsole.Write(centered);//displays all bookings asociated with specified customer
                                 break;
-                            case "Booking List By Range":
-                                var dateRange = dateRangeInput.GetDateRangeInput();
-                                IList<BookingByDate> bookingsByDate = bookingService.FindAllBookingsInDateRange(dateRange.startDate, dateRange.endDate);
-                                if (bookingsByDate.Count == 0)
+                            case "Booking List By Range"://Booking List By Range chosen from booking options
+                                var dateRange = dateRangeInput.GetDateRangeInput();//get date range input for bookings
+                                IList<BookingByDate> bookingsByDate = bookingService.FindAllBookingsInDateRange(dateRange.startDate, dateRange.endDate);//finds bookings within date range from storage
+                                if (bookingsByDate.Count == 0)//if no bookings found stop this loop 
                                 {
                                     AnsiConsole.MarkupLine("[red]No bookings exist in that date range.[/]");
                                     break;
@@ -86,19 +87,20 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 tableRange.AddColumn("Booking Date");
                                 tableRange.AddColumn("Number of rooms");
                                 tableRange.AddColumn("Total amount");
-                                tableRange.AddColumn("Booking status");
-                                
+                                tableRange.AddColumn("Booking status");//sets up headers for table
+
                                 foreach (var booking in bookingsByDate)
                                 {
+                                    //adds booking info to table then repeats till last booking
                                     tableRange.AddRow(booking.Fullname, booking.HouseName, booking.ServiceName, booking.BookingDate.Date.ToString("dd MMM yyyy"), booking.NumberOfRooms.ToString(), booking.TotalAmount.ToString("C"), booking.BookingStatus.ToString());
                                 }
-                                AnsiConsole.Write(tableRange);
+                                AnsiConsole.Write(tableRange);//displays all bookings within date range
                                 break;
-                            case "Bookings Order By House Type":
+                            case "Bookings Order By House Type"://Bookings Order By House Type chosen from booking options
                                 var chart = new BarChart();
                                 chart.Label("Bookings Order By House Type");
-                                IList<BookingByHouseType> bookingsByHouses = bookingService.ViewBookingsByHouse();
-                                if (bookingsByHouses.Count == 0)
+                                IList<BookingByHouseType> bookingsByHouses = bookingService.ViewBookingsByHouse();//finds bookings grouped by house type from storage
+                                if (bookingsByHouses.Count == 0)//if no bookings found stop this loop 
                                 {
                                     AnsiConsole.MarkupLine("[red]No bookings exist yet.[/]");
                                     break;
@@ -116,16 +118,16 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                     }
                                     countHouse -= 1;
                                 }
-                                AnsiConsole.Write(chart);
+                                AnsiConsole.Write(chart);//displays bookings grouped by house types
                                 break;
                         }
                         break;
-                    case "Summaries":
+                    case "Summaries"://Summaries chosen from manager menu
                         Console.Clear();
                         AnsiConsole.MarkupLine("[green]Summaries selected[/]");
                         var chartMoney = new BreakdownChart();
-                        IList < BookingRevenueSummary > summary = bookingService.ViewRevenueSummary();
-                        if (summary.Count == 0)
+                        IList < BookingRevenueSummary > summary = bookingService.ViewRevenueSummary();//finds revenue summary bookings info from storage
+                        if (summary.Count == 0)//if no bookings found stop this loop 
                         {
                             AnsiConsole.MarkupLine("[red]No bookings have been completed yet.[/]");
                             break;
@@ -138,43 +140,47 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                     .NoBorder()
                                     .HideHeaders()
                                     .AddColumn("")
-                                    .AddColumn("", col => col.Centered());
+                                    .AddColumn("", col => col.Centered());//centres the 2nd column
                         foreach (var booking in summary)
                         {
                             if (countSummary % 4 == 0) //alternates 4 different bar colours used
                             {
                                 chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.DarkMagenta_1);
                                 summaryTable.AddRow($"[DarkMagenta_1]{booking.ServiceName}: [/]", booking.BookingCount.ToString());
+                                //adds summary info to table then repeats till last row
                             }
                             else if(countSummary % 4 == 1)
                             {
                                 chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.RoyalBlue1);
                                 summaryTable.AddRow($"[RoyalBlue1]{booking.ServiceName}: [/]", booking.BookingCount.ToString());
+                                //adds summary info to table then repeats till last row
                             }
                             else if (countSummary % 4 == 2)
                             {
                                 chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.DarkViolet);
                                 summaryTable.AddRow($"[DarkViolet]{booking.ServiceName}: [/]", booking.BookingCount.ToString());
+                                //adds summary info to table then repeats till last row
                             }
                             else
                             {
                                 chartMoney.AddItem(booking.ServiceName, decimal.ToDouble(booking.TotalRevenue), Color.BlueViolet);
                                 summaryTable.AddRow($"[BlueViolet]{booking.ServiceName}: [/]", booking.BookingCount.ToString());
+                                //adds summary info to table then repeats till last row
                             }
                             countSummary -= 1;
                             
                         }
-                        AnsiConsole.Write(chartMoney);
+                        AnsiConsole.Write(chartMoney);//displays breakdown of bookings revenue by service
                         var singleBookingPanel = new Panel(summaryTable);
                         singleBookingPanel.Header("Booking Numbers per Service");
                         Console.WriteLine();
-                        AnsiConsole.Write(singleBookingPanel);
+                        AnsiConsole.Write(singleBookingPanel);//displays count of bookings by service
                         break;
-                    case "Trends":
+                    case "Trends"://Trends chosen from manager menu
                         Console.Clear();
                         AnsiConsole.MarkupLine("[green]Trends selected[/]");
-                        IList <BookingDiscountUsage> bookingsDiscounts = bookingService.ViewDiscountUsage();
-                        if (bookingsDiscounts.Count == 0)
+                        IList <BookingDiscountUsage> bookingsDiscounts = bookingService.ViewDiscountUsage();//finds bookings with discount info from storage
+                        if (bookingsDiscounts.Count == 0)//if no bookings found stop this loop 
                         {
                             AnsiConsole.MarkupLine("[red]No bookings have discounts yet.[/]");
                             break;
@@ -186,16 +192,17 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         discountTable.AddColumn("Customer name:");
                         discountTable.AddColumn("SubTotal:");
                         discountTable.AddColumn("Discount amount:");
-                        discountTable.AddColumn("Amount after discount:");
+                        discountTable.AddColumn("Amount after discount:");//sets up headers for table
                         foreach (var booking in bookingsDiscounts)
                         {
                             discountTable.AddRow(booking.DiscountName, booking.Fullname, booking.SubTotal.ToString("C"), booking.DiscountAmount.ToString("C"), booking.AmountAfterDiscount.ToString("C"));
+                            //adds booking info to table then repeats till last booking
                         }
-                        AnsiConsole.Write(discountTable);
+                        AnsiConsole.Write(discountTable);//displays all discounted bookings created today
                         break;
-                    case "Return to Main Menu":
+                    case "Return to Main Menu"://Return to Main Menu chosen from manager menu
                         Console.Clear();
-                        IsManagerRunning = false;
+                        IsManagerRunning = false;//this will exit the manager menu loop
                         break;
                 }
             }

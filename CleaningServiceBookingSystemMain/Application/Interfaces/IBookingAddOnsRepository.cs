@@ -10,6 +10,6 @@ namespace CleaningServiceBookingSystemMain.Application.Interfaces
         void Add(BookingAddOns bookingAddOns);      //Adds an Booking Add On to storage
         void DeleteBookingAddOnByBookingId(string Id);  //Removes BookingAddOns related to a single booking id
         int GetLastPrimaryKeyAddOnBookings();      //Gets booking add ons last primary key from storage
-        IList<BookingAddOns> GetBookingAddOnsByBookingId(string Id);
+        IList<BookingAddOns> GetBookingAddOnsByBookingId(string Id); //gets a specific customer from storage
     }
 }
