@@ -19,8 +19,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         private readonly IServiceTypesService _serviceTypesService;
         private readonly IAddOnsService _addOnsService; // Store the supplied add-on service. This field is currently unused in this class.
         private readonly IBookingAddOnService _bookingAddOnService;
-        private readonly Bookings _originalBooking;
-        public UpdateInput(HouseTypeInput houseTypeInput, ServiceTypeInput serviceTypeInput, IHouseTypeService houseTypeService, IServiceTypesService serviceTypesService, IAddOnsService addOnsService, IBookingAddOnService bookingAddOnService, Bookings singleBooking) // The constructor receives the helper and service objects needed by this class.
+        public UpdateInput(HouseTypeInput houseTypeInput, ServiceTypeInput serviceTypeInput, IHouseTypeService houseTypeService, IServiceTypesService serviceTypesService, IAddOnsService addOnsService, IBookingAddOnService bookingAddOnService) // The constructor receives the helper and service objects needed by this class.
         {
             _houseTypeInput = houseTypeInput; // Save the supplied objects in fields so the other methods can use them.
             _serviceTypeInput = serviceTypeInput;
@@ -28,26 +27,19 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
             _serviceTypesService = serviceTypesService;
             _addOnsService = addOnsService;
             _bookingAddOnService = bookingAddOnService;
-            _originalBooking = singleBooking;
         }
 
-        public Bookings GetUpdateInput(/*(Bookings singleBooking,*/ out IList<AddOnSelection> addOnSelections, string username) // Update the supplied booking. out also returns an add-on selection list, and ? allows that list to be null.
+        public Bookings GetUpdateInput(Bookings singleBooking, out IList<AddOnSelection> addOnSelections, string username) // Update the supplied booking. out also returns an add-on selection list, and ? allows that list to be null.
         {
-            //_originalBooking = singleBooking;
             //create struct here
-            BookingStruct booking = new BookingStruct(_originalBooking);
+            BookingStruct booking = new BookingStruct(singleBooking);//sets struct to have original info
             while (true) // Repeat the update process until the booking passes validation and the method returns.
             {
                 HouseTypes selectedHouseType = new HouseTypes(); // Create temporary objects to hold the house type and service type during this update attempt.
                 ServiceTypes selectedServiceType = new ServiceTypes();
-                List<AddOnSelection> addOns = new List<AddOnSelection>();
-                //IHouseTypesRepository houseTypesRepository = new RepositoryHouseTypes();
-                //HouseTypeService houseTypeService = new HouseTypeService(houseTypesRepository);
-                //IServiceTypesRepository serviceTypesRepository = new RepositoryServiceTypes();
-                //ServiceTypesService serviceTypesService = new ServiceTypesService(serviceTypesRepository);
                 IAddOnsRepository addOnsRepository = new RepositoryAddOns(); // Create the repository that will be passed to the add-on input helper.
-                //AddOnsService addOnsService = new AddOnsService(addOnsRepository);
-                Bookings newBookingChanges = _originalBooking;//gets original booking info at beginning of each loop to prevent invlaid or cancelled info from carrying over from previos loop
+                Bookings newBookingChanges = singleBooking;
+                //gets original booking info at beginning of each loop to prevent invlaid or cancelled info from carrying over from previous loop
                 newBookingChanges.HouseTypeId = booking.HouseTypeId;
                 newBookingChanges.ServiceTypeId = booking.ServiceTypeId;
                 newBookingChanges.DiscountRuleId = booking.DiscountRuleId;
@@ -156,7 +148,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                         AnsiConsole.MarkupLine("[red]Recurring type cannot be changed because this booking is not recurring.[/]"); // Display a red message explaining why a recurring type cannot be selected.
                     }
                 }
-
+                addOnSelections = new List<AddOnSelection>();
                 //ADD ONS // Collect new add-on selections if the user selected Add Ons.
                 if (UpdateChoices.Contains("Add Ons"))
                 {
@@ -182,8 +174,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                     try
                     {
                         IList<BookingAddOns> bookingAddOns = _bookingAddOnService.FindBookingAddOnsByBookingId(newBookingChanges.BookingId);//throws exception if no booking add ons found
-                        addOnSelections = addOns;//gives addOnSelections a real object
-                        foreach (var bookingAddOn in bookingAddOns)//gets 
+                        addOnSelections = new List<AddOnSelection>();
+                        foreach (var bookingAddOn in bookingAddOns)//gets any booking add ons that were previously selected(this is needed to recalculation)
                         {
                             AddOnSelection addOnSelection = new AddOnSelection();
                             addOnSelection.AddOn.AddOnId = bookingAddOn.AddOnId;
@@ -193,7 +185,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                     }
                     catch
                     {
-                        addOnSelections = new List<AddOnSelection>();
+                        addOnSelections = new List<AddOnSelection>();//if no addons were found in the datasource
                     }
                 }
                 newBookingChanges.SubTotal = pricingService.CalculateSubtotal(newBookingChanges, selectedHouseType, selectedServiceType, addOnSelections); // Recalculate the subtotal using the updated booking details and supplied add-on list.

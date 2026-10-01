@@ -35,7 +35,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 command.ExecuteNonQuery();//executes the query which deletes booking add ons with booking id in the database
             }
         }
-        public int GetLastRowAddOnBookings()
+        public int GetLastPrimaryKeyAddOnBookings()
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
@@ -43,16 +43,18 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlCommand command = new SqlCommand("dbo.GetLastRowAddOnBookings", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
+                int IdNumber = 0;
                 SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
-                if (reader.Read())
+                while (reader.Read())
                 {
                     //removes letters and returns the integer left over 
-                    return Int32.Parse(reader.GetString(reader.GetOrdinal("BookingAddOnId")).Trim(removeChars));
+                    int readNumber = Int32.Parse(reader.GetString(reader.GetOrdinal("BookingAddOnId")).Trim(removeChars));
+                    if (IdNumber< readNumber)
+                    {
+                        IdNumber = readNumber;
+                    }
                 }
-                else
-                {
-                    return 0;
-                }
+                return IdNumber;
             }
         }
         public IList<BookingAddOns> GetBookingAddOnsByBookingId(string Id)
@@ -67,7 +69,6 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
-                    //BookingAddOns bookingAddOn = new BookingAddOns()
                     var bookingAddOn = new BookingAddOns();
                     {
                         bookingAddOn.BookingAddOnId = reader.GetString(reader.GetOrdinal("BookingAddOnId"));
@@ -82,7 +83,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 }
                 
             }
-            if (bookingAddOns.Count == 0)
+            if (bookingAddOns.Count == 0)//if no bookings addons exist throw exception
             {
                 throw new ArgumentException();
             }
