@@ -68,21 +68,23 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 while (reader.Read())
                 {
                     //BookingAddOns bookingAddOn = new BookingAddOns()
-                    var bookingAddOn = new BookingAddOns()
+                    var bookingAddOn = new BookingAddOns();
                     {
-                        BookingAddOnId = reader.GetString(reader.GetOrdinal("BookingAddOnId")),
-                        BookingId = reader.GetString(reader.GetOrdinal("Booking_id")),
-                        AddOnId = reader.GetString(reader.GetOrdinal("AddOn_id")),
-                        LineAmount = reader.GetDecimal(reader.GetOrdinal("Quantity")),
-                        Quantity = reader.GetInt32(reader.GetOrdinal("LineAmount"))
-                    }; 
+                        bookingAddOn.BookingAddOnId = reader.GetString(reader.GetOrdinal("BookingAddOnId"));
+                        bookingAddOn.BookingId = reader.GetString(reader.GetOrdinal("Booking_id"));
+                        bookingAddOn.AddOnId = reader.GetString(reader.GetOrdinal("AddOn_id"));
+                        bookingAddOn.LineAmount = reader.GetDecimal(reader.GetOrdinal("LineAmount"));
+                        bookingAddOn.Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")); 
+                    }
+                    ;
                     bookingAddOns.Add(bookingAddOn);
 
                 }
-                if (bookingAddOns.Count == 0)
-                {
-                    throw new ArgumentException();
-                }
+                
+            }
+            if (bookingAddOns.Count == 0)
+            {
+                throw new ArgumentException();
             }
             return bookingAddOns;
 
