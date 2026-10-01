@@ -1,10 +1,7 @@
 ﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
@@ -60,7 +57,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         }
         public IList<BookingAddOns> GetBookingAddOnsByBookingId(string Id)
         {
-            IList<BookingAddOns> bookingAddOns= new List<BookingAddOns>();
+            List<BookingAddOns> bookingAddOns = new List<BookingAddOns>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
                 SqlCommand command = new SqlCommand("dbo.GetBookingAddOnsByBookingId", connection);//gets stored procedure from database
@@ -70,14 +67,15 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {
-                    BookingAddOns bookingAddOn = new BookingAddOns()
+                    //BookingAddOns bookingAddOn = new BookingAddOns()
+                    var bookingAddOn = new BookingAddOns()
                     {
                         BookingAddOnId = reader.GetString(reader.GetOrdinal("BookingAddOnId")),
                         BookingId = reader.GetString(reader.GetOrdinal("Booking_id")),
                         AddOnId = reader.GetString(reader.GetOrdinal("AddOn_id")),
                         LineAmount = reader.GetDecimal(reader.GetOrdinal("Quantity")),
                         Quantity = reader.GetInt32(reader.GetOrdinal("LineAmount"))
-                    };
+                    }; 
                     bookingAddOns.Add(bookingAddOn);
 
                 }
@@ -85,9 +83,8 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 {
                     throw new ArgumentException();
                 }
-                
-                return bookingAddOns;
             }
+            return bookingAddOns;
 
         }
     }

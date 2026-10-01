@@ -172,7 +172,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                     }
                     catch
                     {
-
+                        addOnSelections = new List<AddOnSelection>();
                     }
                 }
                 singleBooking.SubTotal = pricingService.CalculateSubtotal(singleBooking, selectedHouseType, selectedServiceType, addOnSelections); // Recalculate the subtotal using the updated booking details and supplied add-on list.

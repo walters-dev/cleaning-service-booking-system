@@ -61,8 +61,7 @@ CREATE OR ALTER PROCEDURE AddHouseType
     @BaseRate DECIMAL(10,2),
     @RatePerRoom DECIMAL(10,2),
     @MinRooms INT,
-    @MaxRooms INT,
-    @isActive BIT
+    @MaxRooms INT
 AS
 BEGIN
 
@@ -73,8 +72,7 @@ BEGIN
         BaseRate,
         RatePerRoom,
         MinRooms,
-        MaxRooms,
-        isActive
+        MaxRooms
     )
     VALUES
     (
@@ -83,8 +81,7 @@ BEGIN
         @BaseRate,
         @RatePerRoom,
         @MinRooms,
-        @MaxRooms,
-        @isActive
+        @MaxRooms
     );
 
 END;
@@ -125,7 +122,6 @@ CREATE OR ALTER PROCEDURE AddDiscountRule
     @DiscountRuleId VARCHAR(7),
     @DiscountName VARCHAR(MAX),
     @CriteriaDescription VARCHAR(MAX),
-    @isActive BIT,
     @DiscPercentage DECIMAL(10,2)
 AS
 BEGIN
@@ -135,7 +131,6 @@ BEGIN
         DiscountRuleId,
         DiscountName,
         CriteriaDescription,
-        isActive,
         DiscPercentage
     )
     VALUES
@@ -143,7 +138,6 @@ BEGIN
         @DiscountRuleId,
         @DiscountName,
         @CriteriaDescription,
-        @isActive,
         @DiscPercentage
     );
 
