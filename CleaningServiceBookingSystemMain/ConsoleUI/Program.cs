@@ -22,24 +22,24 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                 .AddChoices("Booking Administrator", "Operations Manager", "Terminate application"));   //menu options output
                 switch (menuChoices)
                 {
-                    case "Booking Administrator":
+                    case "Booking Administrator"://create Booking Administrator from menu options
                         Console.WriteLine("Booking Administrator is selected");
                         Console.Clear();
                         AdminMenu adminMenu = new AdminMenu();
                         adminMenu.ViewAdminMenu();
                         break;
-                    case "Operations Manager":
+                    case "Operations Manager"://create Booking Administrator from menu options
                         Console.WriteLine("Operations Manager is selected");
                         Console.Clear();
                         ManagerMenu managerMenu = new ManagerMenu();
                         managerMenu.ViewManagerMenu();
                         break;
-                    case "Terminate application":
+                    case "Terminate application"://create Booking Administrator from menu options
                         //loads the font for the figlet
                         var font = FigletFont.Load("C:\\Users\\RPS3\\Documents\\Projects\\CleaningServiceBookingSystem\\CleaningServiceBookingSystemMain\\figlet-fonts-main\\DOS Rebel.flf");
                         var centerAligned = new FigletText(font, "BYE")
                         {
-                            Justification = Justify.Center
+                            Justification = Justify.Center//centres figlet
                         };
                         AnsiConsole.Write(centerAligned);//diplays figlet centred
                         AnsiConsole.Status()
@@ -48,8 +48,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             .Start("Terminating appllication...", ctx =>
                             {
                                 Thread.Sleep(3000);
-                            });
-                        IsUserSelected = true;                          //stops menu loop
+                            });//shows spinner/throbber untill applicatio close
+                        IsUserSelected = true;                          //stops menu loop which stops application
                         break;
                 }
 

@@ -9,7 +9,7 @@ namespace CleaningServiceBookingSystemMain.Application.Interfaces
     {
         void RegisterBookingAddOn(BookingAddOns bookingAddOns);//registers booking add on to system
         public void RemoveBookingAddOnsByBookingId(string Id);//deletes 1 booking add on 
-        public int FindLastRowAddOnBookings();// returns the last row primary key number 
-        IList<BookingAddOns> FindBookingAddOnsByBookingId(string Id);
+        public int FindLastPrimaryKeyAddOnBookings();// returns the last primary key number 
+        IList<BookingAddOns> FindBookingAddOnsByBookingId(string Id);//gets a specific customer from storage
     }
 }

@@ -324,11 +324,10 @@ BEGIN
 
 END;
 GO 
-CREATE OR ALTER PROCEDURE GetLastRowAddOnBookings
+CREATE OR ALTER PROCEDURE GetLastPrimaryKeyAddOnBookings
 AS
 BEGIN
-    SELECT TOP 1 * FROM BookingAddOns 
-    ORDER BY BookingAddOnId DESC;
+    SELECT BookingAddOnId FROM BookingAddOns;
 END;
 GO
 CREATE OR ALTER PROCEDURE GetBookingAddOnsByBookingId
