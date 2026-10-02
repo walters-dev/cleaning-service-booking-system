@@ -159,6 +159,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                 }
                 else
                 {
+                    Console.WriteLine("Booking is non-recurring");
                     return false; // Mark the booking as non-recurring 
                 }
             }
@@ -175,6 +176,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                                         "Monthly"
                                         )
                             );
+                Console.WriteLine("Booking recurring type selected: "+ recurringType);
                 return recurringType; // Store the selected repeat frequency in the booking.
             }
         }
