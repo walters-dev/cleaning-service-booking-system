@@ -307,7 +307,6 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         CustomerId = reader.GetString(reader.GetOrdinal("Customers_id")),
                         HouseTypeId = reader.GetString(reader.GetOrdinal("Housetypes_id")),
                         ServiceTypeId = reader.GetString(reader.GetOrdinal("ServiceTypes_id")),
-                        DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id")),
                         BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate")),
                         NumberOfRooms = reader.GetInt32(reader.GetOrdinal("NumberOfRooms")),
                         IsRecurring = reader.GetBoolean(reader.GetOrdinal("IsRecurring")),
@@ -324,6 +323,14 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                         UpdatedAt = reader.GetDateTime(reader.GetOrdinal("UpdatedAt")),
                         UpdatedBy = reader.GetString(reader.GetOrdinal("UpdatedBy"))
                     };
+                    if (reader["DiscountRule_id"] != DBNull.Value)//checks if DiscountRule_id is null, if not then read the record
+                    {
+                        bookings.DiscountRuleId = reader.GetString(reader.GetOrdinal("DiscountRule_id"));
+                    }
+                    else
+                    {
+                        bookings.DiscountRuleId = null;
+                    }
                     bookingsInfo.Add(bookings);
                 }
                 return bookingsInfo;
