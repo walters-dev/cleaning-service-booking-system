@@ -1,6 +1,7 @@
 ﻿using CleaningServiceBookingSystemMain.Application;
 using CleaningServiceBookingSystemMain.Application.Interfaces;
 using CleaningServiceBookingSystemMain.Application.Services;
+using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.ConsoleUI.InputMethods;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using CleaningServiceBookingSystemMain.Infrastructure;
@@ -18,11 +19,15 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             //declare and intialize variables
             bool IsManagerRunning = true;
             //creation of classes and services
+            IAdminRepository adminRepository = new RepositoryAdmins();
+            IAdminService adminService = new AdminService(adminRepository);
             IBookingsRepository bookingsRepository = new RepositoryBookings();
             ICustomerRepository customerRepository = new RepositoryCustomers();
+            ICustomerService customerService = new CustomerService(customerRepository);
             IBookingService bookingService = new BookingService(bookingsRepository);
-            CustomerInput customerInput = new CustomerInput(customerRepository);
-            DateRangeInput dateRangeInput = new DateRangeInput();
+            BookingValidator validator = new BookingValidator(customerService, adminService);
+            CustomerInput customerInput = new CustomerInput(customerRepository, validator);
+            DateRangeInput dateRangeInput = new DateRangeInput(validator);
 
             string phoneNumber;
             while (IsManagerRunning == true)

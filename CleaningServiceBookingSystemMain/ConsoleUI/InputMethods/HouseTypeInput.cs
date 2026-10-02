@@ -9,8 +9,11 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class HouseTypeInput
     {
-        private readonly IHouseTypesRepository _houseTypesRepository = new RepositoryHouseTypes();//bcs its in bookinginput it doesnt like constructors
-
+        private readonly IHouseTypesRepository _houseTypesRepository; /*= new RepositoryHouseTypes();*///bcs its in bookinginput it doesnt like constructors
+        public HouseTypeInput(IHouseTypesRepository houseTypesRepository)
+        {
+            _houseTypesRepository = houseTypesRepository;
+        }
         public HouseTypes GetHouseTypeInput()
         {
            

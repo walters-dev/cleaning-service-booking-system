@@ -1,16 +1,17 @@
 ﻿using CleaningServiceBookingSystemMain;
+using CleaningServiceBookingSystemMain.Application;
 using CleaningServiceBookingSystemMain.Application.InputMethods;
 using CleaningServiceBookingSystemMain.Application.Interfaces;
+using CleaningServiceBookingSystemMain.Application.Services;
+using CleaningServiceBookingSystemMain.Application.Validators;
 using CleaningServiceBookingSystemMain.ConsoleUI.InputMethods;
 using CleaningServiceBookingSystemMain.Domain.Models;
+using CleaningServiceBookingSystemMain.Domain.Services;
 using CleaningServiceBookingSystemMain.Infrastructure;
 using Microsoft.Data.SqlClient;
 using Spectre.Console;
 using System;
 using System.Linq.Expressions;
-using CleaningServiceBookingSystemMain.Application.Services;
-using CleaningServiceBookingSystemMain.Domain.Services;
-using CleaningServiceBookingSystemMain.Application;
 
 namespace CleaningServiceBookingSystemMain.ConsoleUI
 {
@@ -40,6 +41,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             IServiceTypesRepository serviceTypesRepository = new RepositoryServiceTypes();
             IServiceTypesService serviceTypesService = new ServiceTypesService(serviceTypesRepository);
 
+            BookingValidator validator = new BookingValidator(customerService, adminService);
             Customers customersBooking = new Customers();
             HouseTypes houseTypes = new HouseTypes();
             ServiceTypes serviceTypes = new ServiceTypes();
@@ -47,14 +49,14 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             DiscountService discountService = new DiscountService();
             PricingService pricingService = new PricingService(discountService);
             AddOnInput addOnInput = new AddOnInput(addOnsRepository);
-            CustomerInput customerInput = new CustomerInput(customerRepository);
-            HouseTypeInput houseTypeInput = new HouseTypeInput();
-            ServiceTypeInput serviceTypeInput = new ServiceTypeInput();
+            CustomerInput customerInput = new CustomerInput(customerRepository, validator);
+            HouseTypeInput houseTypeInput = new HouseTypeInput(houseTypesRepository);
+            ServiceTypeInput serviceTypeInput = new ServiceTypeInput(serviceTypesRepository);
 
-            ExistingAdmin adminLogInInput = new ExistingAdmin();
+            ExistingAdmin adminLogInInput = new ExistingAdmin(validator);
             Admins admins = new Admins();
             Bookings singleBooking = new Bookings();
-            BookingInput bookingInput = new BookingInput(bookingsRepository);
+            BookingInput bookingInput = new BookingInput(bookingsRepository, validator, houseTypeInput, serviceTypeInput);
 
             Admins adminInDataSource = new Admins();
             Encryption cryptography = new Encryption();
@@ -425,7 +427,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 IsConfirmData = false;
                                 while (IsConfirmData == false)
                                 {
-                                    UpdateInput updateInput = new UpdateInput(houseTypeInput, serviceTypeInput, houseTypeService, serviceTypesService, addOnsService, bookingAddOnService);
+                                    UpdateInput updateInput = new UpdateInput(houseTypeInput, serviceTypeInput, houseTypeService, serviceTypesService, addOnsService, bookingAddOnService, validator);
                                     IList<AddOnSelection>? addOnSelections ;
                                     singleBooking = updateInput.GetUpdateInput(singleBooking, out addOnSelections, admins.Username);//gets user input for booking changes
                                     var confirmSelectedUpdateChoices = AnsiConsole.Prompt(
@@ -495,7 +497,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                         IsConfirmData = false;
                         while (IsConfirmData == false)
                         {
-                            AdminInput newAdminInput = new AdminInput(adminRepository);
+                            AdminInput newAdminInput = new AdminInput(adminRepository, validator);
                             Admins newAdmin = new Admins();
                             newAdmin = newAdminInput.GetAdminInput();                 //gets user input
 

@@ -166,14 +166,7 @@ namespace CleaningServiceBookingSystemMain.Domain.Services
             // Step 5: FinalTotal
             return amountAfterDiscount + surcharge;
 
-            /* Linking this class to the booking class:
-             * Persist every intermediate figure onto the booking so the full breakdown can be shown to staff (FR-05)
-             * and saved to the Bookings table (section 12.1).
-             */
-            booking.SubTotal = subtotal;
-            booking.DiscountAmount = discountAmount;
-            booking.SurchargeAmount = surcharge;
-            //booking.TotalAmount = finalTotal;
+            
         }
     }
 }

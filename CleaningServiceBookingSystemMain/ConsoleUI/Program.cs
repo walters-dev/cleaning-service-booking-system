@@ -37,7 +37,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                     case "Terminate application"://create Booking Administrator from menu options
                         //loads the font for the figlet
                         var font = FigletFont.Load("C:\\Users\\RPS3\\Documents\\Projects\\CleaningServiceBookingSystem\\CleaningServiceBookingSystemMain\\figlet-fonts-main\\DOS Rebel.flf");
-                        var centerAligned = new FigletText(font, "See you tomorrow for another long day of labour")
+                        var centerAligned = new FigletText(font, "Bye")
                         {
                             Justification = Justify.Center//centres figlet
                         };

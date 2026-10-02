@@ -11,13 +11,13 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class CustomerInput
     {
-        private readonly BookingValidator _validator =
-           new BookingValidator();
+        private readonly BookingValidator _validator;
         private readonly ICustomerRepository _customerRepository;
 
-        public CustomerInput(ICustomerRepository customerRepository) 
+        public CustomerInput(ICustomerRepository customerRepository, BookingValidator validator) 
         {
             _customerRepository = customerRepository;
+            _validator = validator;
         }
         public Customers GetCustomerInput(string username)
         {

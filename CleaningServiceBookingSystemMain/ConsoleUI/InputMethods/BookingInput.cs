@@ -10,16 +10,18 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class BookingInput // Collect the information needed to create a new booking object.
     {
-        private readonly HouseTypeInput _houseTypeInput = new HouseTypeInput(); // Create the house-type and service-type input helpers. readonly prevents reassignment after construction.
-        private readonly ServiceTypeInput _serviceTypeInput = new ServiceTypeInput();
+        private readonly HouseTypeInput _houseTypeInput ; // store the house-type and service-type input helpers. readonly prevents reassignment after construction.
+        private readonly ServiceTypeInput _serviceTypeInput;
         
-        private readonly BookingValidator _validator = // Create the validator used to check the booking information.
-            new BookingValidator();
+        private readonly BookingValidator _validator;// Store the validator class supplied through the constructor.
         private readonly IBookingsRepository _bookingRepository; // Store the booking repository supplied through the constructor.
 
-        public BookingInput(IBookingsRepository bookingRepository) // The constructor receives the repository that the booking service will use.
+        public BookingInput(IBookingsRepository bookingRepository, BookingValidator validator, HouseTypeInput houseTypeInput, ServiceTypeInput serviceTypeInput) // The constructor receives the repository that the booking service will use.
         {
             _bookingRepository = bookingRepository; // Save the supplied repository in a field so this class can use it later.
+            _validator = validator;
+            _houseTypeInput = houseTypeInput;
+            _serviceTypeInput = serviceTypeInput;
         }
 
         public Bookings GetBookingInput(int carpetedRooms, IList<AddOnSelection> addOns, string phonenumber, string username, string customerId) // Collect and return a valid booking using the supplied carpeted-room count, add-ons, phone number, username and customer ID.

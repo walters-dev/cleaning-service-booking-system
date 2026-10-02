@@ -9,8 +9,11 @@ namespace CleaningServiceBookingSystemMain.Application.InputMethods
 {
     public class ExistingAdmin
     {
-        private readonly BookingValidator _bookingValidator = new BookingValidator();
-
+        private readonly BookingValidator _bookingValidator;
+        public ExistingAdmin(BookingValidator bookingValidator)
+        {
+            _bookingValidator = bookingValidator;
+        }
         public Admins GetAdminInput() // Gets the admin Input 
         {
             while (true) // Uses a loop to Capture user input and stores them

@@ -9,7 +9,11 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 {
     public class ServiceTypeInput
     {
-        private readonly IServiceTypesRepository _serviceTypesRepository = new RepositoryServiceTypes();
+        private readonly IServiceTypesRepository _serviceTypesRepository;
+        public ServiceTypeInput(IServiceTypesRepository serviceTypesRepository)
+        {
+            _serviceTypesRepository = serviceTypesRepository;
+        }
 
         public ServiceTypes GetServiceTypeInput()
         {
