@@ -30,7 +30,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                        $"{serviceType.ServiceDescription} - Multiplier: {serviceType.Multiplier}x")
                    .AddChoices(serviceTypes)
            );
-
+            Console.WriteLine("Selected service type: " + selectedServiceType.ServiceName);
             // Return the service type selected by the user.
             return selectedServiceType;
 

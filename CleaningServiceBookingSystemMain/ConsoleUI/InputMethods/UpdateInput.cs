@@ -123,6 +123,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                     }
                     else
                     {
+                        Console.WriteLine("Booking is non-recurring");
                         newBookingChanges.IsRecurring = false; // Mark the booking as non-recurring and clear its previous recurring type.
                         newBookingChanges.RecurringBookingType = "";
                     }
@@ -141,6 +142,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                                         "Monthly"
                                         )
                             );
+                        Console.WriteLine("Booking recurring type selected: " + recurringType);
                         newBookingChanges.RecurringBookingType = recurringType; // Store the selected repeat frequency in the booking.
                     }
                     else

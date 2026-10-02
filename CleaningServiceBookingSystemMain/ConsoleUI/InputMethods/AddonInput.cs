@@ -27,12 +27,14 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
                         "Yes",
                         "No"
                     )
+
             );
 
             // If the user does not want add-ons,
             // return an empty list.
             if (addOnChoice == "No")
             {
+                Console.WriteLine("No booking Add ons selected");
                 return new List<AddOnSelection>();
             }
 
@@ -70,7 +72,6 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
             {
                 // Most add-ons only have a quantity of 1.
                 int quantity = 1;
-
                 // AD002 = Carpet Cleaning.
                 if (selectedAddOn.AddOnId == "AD002")
                 {
