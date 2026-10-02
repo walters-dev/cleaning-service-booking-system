@@ -192,7 +192,6 @@ C:\USERS\RPS3\DOCUMENTS\PROJECTS\CLEANINGSERVICEBOOKINGSYSTEM
 
 **Known bugs (priority to fix):**
 - `DiscountService.CalculateDiscountAmount` uses hardcoded percentage constants rather than reading from the `DiscountRules` table, even though a full `IDiscountRulesRepository`/`DiscountRulesService`/`RepositoryDiscountRules` stack already exists and is unused for this purpose. `DiscountRuleId` is currently reconstructed by pattern-matching the returned discount *name* string against hardcoded IDs (`"DR001"`, `"DR002"`, `"DR003"`) in `BookingInput.cs`/`UpdateInput.cs`, rather than the discount lookup itself returning the ID.
-- `BookingValidator` now directly constructs `RepositoryCustomers`/`CustomerService` and `RepositoryAdmins`/`AdminService` internally for uniqueness checks, rather than having them injected — this means the validator can no longer be unit tested without a live database connection.
 
 
 **Planned:**
