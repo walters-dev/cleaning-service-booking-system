@@ -61,8 +61,7 @@ CREATE OR ALTER PROCEDURE AddHouseType
     @BaseRate DECIMAL(10,2),
     @RatePerRoom DECIMAL(10,2),
     @MinRooms INT,
-    @MaxRooms INT,
-    @isActive BIT
+    @MaxRooms INT
 AS
 BEGIN
 
@@ -73,8 +72,7 @@ BEGIN
         BaseRate,
         RatePerRoom,
         MinRooms,
-        MaxRooms,
-        isActive
+        MaxRooms
     )
     VALUES
     (
@@ -83,8 +81,7 @@ BEGIN
         @BaseRate,
         @RatePerRoom,
         @MinRooms,
-        @MaxRooms,
-        @isActive
+        @MaxRooms
     );
 
 END;
@@ -125,7 +122,6 @@ CREATE OR ALTER PROCEDURE AddDiscountRule
     @DiscountRuleId VARCHAR(7),
     @DiscountName VARCHAR(MAX),
     @CriteriaDescription VARCHAR(MAX),
-    @isActive BIT,
     @DiscPercentage DECIMAL(10,2)
 AS
 BEGIN
@@ -135,7 +131,6 @@ BEGIN
         DiscountRuleId,
         DiscountName,
         CriteriaDescription,
-        isActive,
         DiscPercentage
     )
     VALUES
@@ -143,7 +138,6 @@ BEGIN
         @DiscountRuleId,
         @DiscountName,
         @CriteriaDescription,
-        @isActive,
         @DiscPercentage
     );
 
@@ -154,6 +148,13 @@ CREATE OR ALTER PROCEDURE GetAllAddOns
 AS
 BEGIN
     SELECT * FROM AddOns
+END;
+GO 
+CREATE OR ALTER PROCEDURE GetAddOnByAddOnId
+@AddOnId VARCHAR(7)
+AS
+BEGIN
+    SELECT * FROM AddOns WHERE AddOnId = @AddOnId
 END;
 /*booking procedures*/
 GO
@@ -323,14 +324,20 @@ BEGIN
 
 END;
 GO 
-CREATE OR ALTER PROCEDURE GetLastRowAddOnBookings
+CREATE OR ALTER PROCEDURE GetLastPrimaryKeyAddOnBookings
 AS
 BEGIN
-    SELECT TOP 1 * FROM BookingAddOns 
-    ORDER BY BookingAddOnId DESC;
+    SELECT BookingAddOnId FROM BookingAddOns;
 END;
 GO
-CREATE OR ALTER PROCEDURE DeleteBookingAddOnByAddOnId
+CREATE OR ALTER PROCEDURE GetBookingAddOnsByBookingId
+@BookingId VARCHAR(7)
+AS
+BEGIN
+    SELECT * FROM BookingAddOns WHERE Booking_id = @BookingId;
+END;
+GO
+CREATE OR ALTER PROCEDURE DeleteBookingAddOnByBookingId
 @BookingId VARCHAR(7)
 AS
 BEGIN
@@ -580,4 +587,4 @@ select * from DiscountRules
 select * from AddOns
 select * from Housetypes
 SELECT * FROM Servicetypes
-select * from AdminTable
+select * from AdminTable 

@@ -8,5 +8,6 @@ namespace CleaningServiceBookingSystemMain.Application.Interfaces
     public interface IAddOnsService
     {
         IList<AddOns> ViewAllAddOns();//returns all add ons
+        AddOns FindAddOn(string Id);
     }
 }

@@ -1,10 +1,7 @@
 ﻿using CleaningServiceBookingSystemMain.Application.Interfaces;
 using CleaningServiceBookingSystemMain.Domain.Models;
 using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace CleaningServiceBookingSystemMain.Infrastructure
 {
@@ -31,14 +28,14 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.DeleteBookingAddOnByAddOnId", connection);//gets stored procedure from database
+                SqlCommand command = new SqlCommand("dbo.DeleteBookingAddOnByBookingId", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
                 command.Parameters.AddWithValue("@BookingId", Id);
                 command.ExecuteNonQuery();//executes the query which deletes booking add ons with booking id in the database
             }
         }
-        public int GetLastRowAddOnBookings()
+        public int GetLastPrimaryKeyAddOnBookings()
         {
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
@@ -46,17 +43,52 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 SqlCommand command = new SqlCommand("dbo.GetLastRowAddOnBookings", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
+                int IdNumber = 0;
                 SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
-                if (reader.Read())
+                while (reader.Read())
                 {
                     //removes letters and returns the integer left over 
-                    return Int32.Parse(reader.GetString(reader.GetOrdinal("BookingAddOnId")).Trim(removeChars));
+                    int readNumber = Int32.Parse(reader.GetString(reader.GetOrdinal("BookingAddOnId")).Trim(removeChars));
+                    if (IdNumber< readNumber)
+                    {
+                        IdNumber = readNumber;
+                    }
                 }
-                else
-                {
-                    return 0;
-                }
+                return IdNumber;
             }
+        }
+        public IList<BookingAddOns> GetBookingAddOnsByBookingId(string Id)
+        {
+            List<BookingAddOns> bookingAddOns = new List<BookingAddOns>();
+            using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
+            {
+                SqlCommand command = new SqlCommand("dbo.GetBookingAddOnsByBookingId", connection);//gets stored procedure from database
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                command.Parameters.AddWithValue("@BookingId", Id);
+                SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
+                while (reader.Read())
+                {
+                    var bookingAddOn = new BookingAddOns();
+                    {
+                        bookingAddOn.BookingAddOnId = reader.GetString(reader.GetOrdinal("BookingAddOnId"));
+                        bookingAddOn.BookingId = reader.GetString(reader.GetOrdinal("Booking_id"));
+                        bookingAddOn.AddOnId = reader.GetString(reader.GetOrdinal("AddOn_id"));
+                        bookingAddOn.LineAmount = reader.GetDecimal(reader.GetOrdinal("LineAmount"));
+                        bookingAddOn.Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")); 
+                    }
+                    ;
+                    bookingAddOns.Add(bookingAddOn);
+
+                }
+                
+            }
+            if (bookingAddOns.Count == 0)//if no bookings addons exist throw exception
+            {
+                throw new ArgumentException();
+            }
+            return bookingAddOns;
+
         }
     }
 }

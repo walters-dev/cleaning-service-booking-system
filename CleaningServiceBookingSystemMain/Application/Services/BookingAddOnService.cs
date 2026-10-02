@@ -21,9 +21,13 @@ namespace CleaningServiceBookingSystemMain.Application.Services
         {
             _bookingAddOnsRepository.DeleteBookingAddOnByBookingId(Id);
         }
-        public int FindLastRowAddOnBookings()
+        public int FindLastPrimaryKeyAddOnBookings()
         {
-            return _bookingAddOnsRepository.GetLastRowAddOnBookings();
+            return _bookingAddOnsRepository.GetLastPrimaryKeyAddOnBookings();
+        }
+        public IList<BookingAddOns> FindBookingAddOnsByBookingId(string Id)
+        {
+            return _bookingAddOnsRepository.GetBookingAddOnsByBookingId(Id);
         }
     }
 }
