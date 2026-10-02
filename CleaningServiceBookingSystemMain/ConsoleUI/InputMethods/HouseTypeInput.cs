@@ -31,6 +31,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
                     
             );
+            Console.WriteLine("Selected house type: "+ selectedHouseType.Name);
             return selectedHouseType;
         }
     }
