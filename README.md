@@ -191,12 +191,9 @@ C:\USERS\RPS3\DOCUMENTS\PROJECTS\CLEANINGSERVICEBOOKINGSYSTEM
 - Admin login with hashed password verification (BCrypt), including duplicate-username prevention.
 
 **Known bugs (priority to fix):**
-- **Discount and subtotal are calculated twice per booking.** `BookingInput.cs` manually calls `CalculateSubtotal` and `DiscountService.CalculateDiscountAmount` to set `SubTotal`/`DiscountAmount`/`DiscountRuleId`, then separately calls `PricingService.CalculateFinalTotal`, which recalculates the subtotal and discount internally a second time. `UpdateInput.cs` repeats the same pattern. This is the same class of bug fixed earlier in `PricingService` — the fix is to have `CalculateFinalTotal` do the full calculation once and return everything the caller needs, rather than the caller pre-computing pieces of it manually first.
-- **`PricingService.CalculateFinalTotal` has an unreachable `return` statement** — `booking.SubTotal`, `DiscountAmount`, and `SurchargeAmount` are assigned *after* the `return`, so those lines never execute. Currently masked because `BookingInput.cs` sets those fields manually beforehand, but any future caller relying on this method's own documented behavior would get zeroed-out fields.
-- **Possible null-reference crash in `BookingValidator`** — `customer.Email.Length > 255` and `admin.Email.Length > 255` run unconditionally, outside the null/blank check used for the format regex just above. Since email is optional, a customer or admin with no email set would throw.
 - `DiscountService.CalculateDiscountAmount` uses hardcoded percentage constants rather than reading from the `DiscountRules` table, even though a full `IDiscountRulesRepository`/`DiscountRulesService`/`RepositoryDiscountRules` stack already exists and is unused for this purpose. `DiscountRuleId` is currently reconstructed by pattern-matching the returned discount *name* string against hardcoded IDs (`"DR001"`, `"DR002"`, `"DR003"`) in `BookingInput.cs`/`UpdateInput.cs`, rather than the discount lookup itself returning the ID.
 - `BookingValidator` now directly constructs `RepositoryCustomers`/`CustomerService` and `RepositoryAdmins`/`AdminService` internally for uniqueness checks, rather than having them injected — this means the validator can no longer be unit tested without a live database connection.
-- Operations Manager menu (`Summaries`, `Trends`) status not yet re-confirmed against this version.
+
 
 **Planned:**
 - Consolidate discount/pricing calculation to a single call site per booking (fix the duplication above).
