@@ -25,6 +25,13 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
      */
     public class BookingValidator
     {
+        private readonly IAdminService _adminService;
+        private readonly ICustomerService _customerService;
+        public BookingValidator(ICustomerService customerService, IAdminService adminService)
+        {
+            _customerService = customerService;
+            _adminService = adminService;
+        }
         /* Validates a Customer record.
          * BRD: FR-02 and section 15
          * returns True if the customer passes all checks.
@@ -52,9 +59,7 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 return false;
             }
             //checks if a customer is already using this phone number
-            ICustomerRepository customerRepository = new RepositoryCustomers();
-            ICustomerService customerService = new CustomerService(customerRepository);
-            if (customerService.FindCustomerWithPhoneNumber(customer.PhoneNumber).FullName != null)
+            if (_customerService.FindCustomerWithPhoneNumber(customer.PhoneNumber).FullName != null)
             {
                 errorMessage = "Phone number already in use for another customer.";
                 return false;
@@ -86,12 +91,13 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                     errorMessage = "Invalid email format.";
                     return false;
                 }
+                if (customer.Email.Length > 255)
+                {
+                    errorMessage = "Email must be less than 255 characters";
+                    return false;
+                }
             }
-            if (customer.Email.Length > 255)
-            {
-                errorMessage = "Email must be less than 255 characters";
-                return false;
-            }
+            
 
             /* Address is required by the Customers table definition in BRD section 12.1,
              * even though section 15 does not list it explicitly - a booking cannot be useful without a service address.
@@ -209,9 +215,7 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 return false;
             }
             //checks if the admin user name already exists
-            IAdminRepository adminRepository = new RepositoryAdmins();
-            IAdminService adminService = new AdminService(adminRepository);
-            if (adminService.FindAdminPassword(admin.Username).AdminPassword != "")
+            if (_adminService.FindAdminPassword(admin.Username).AdminPassword != "")
             {
                 errorMessage = "Admin username already exists.";
                 return false;
@@ -266,14 +270,6 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
         }
         public bool ValidateStartEndDate(DateTime startDate, DateTime endDate, out string errorMessage)
         {
-            //DateTime startDate = dateRangeInput.GetStartDateInput();
-            //DateTime endDate = dateRangeInput.GetEndDateInput();
-
-            //if (startDate < DateTime.Today)
-            //{
-            //    errorMessage = "Booking date cannot be in the past.";
-            //    return false;
-            //}
 
             if (endDate < startDate)
             {
@@ -300,12 +296,6 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 errorMessage = "Booking date is not a valid date.";
                 return false;
             }
-
-            //if (bookingDateResult1 < DateTime.Today)//......................................................................................................................
-            //{
-            //    errorMessage = "Booking date cannot be in the past.";
-            //    return false;
-            //}
 
             errorMessage = string.Empty;
             return true;

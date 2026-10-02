@@ -14,12 +14,12 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         private readonly HouseTypeInput _houseTypeInput; // Store the input helpers. readonly prevents these fields from being reassigned after construction.
         private readonly ServiceTypeInput _serviceTypeInput;
 
-        private readonly BookingValidator _validator = new BookingValidator(); // Create the validator used to check whether the updated booking is valid.
+        private readonly BookingValidator _validator; // Create the validator used to check whether the updated booking is valid.
         private readonly IHouseTypeService _houseTypeService; // Store the services used to find house-type and service-type details.
         private readonly IServiceTypesService _serviceTypesService;
         private readonly IAddOnsService _addOnsService; // Store the supplied add-on service. This field is currently unused in this class.
         private readonly IBookingAddOnService _bookingAddOnService;
-        public UpdateInput(HouseTypeInput houseTypeInput, ServiceTypeInput serviceTypeInput, IHouseTypeService houseTypeService, IServiceTypesService serviceTypesService, IAddOnsService addOnsService, IBookingAddOnService bookingAddOnService) // The constructor receives the helper and service objects needed by this class.
+        public UpdateInput(HouseTypeInput houseTypeInput, ServiceTypeInput serviceTypeInput, IHouseTypeService houseTypeService, IServiceTypesService serviceTypesService, IAddOnsService addOnsService, IBookingAddOnService bookingAddOnService, BookingValidator validator) // The constructor receives the helper and service objects needed by this class.
         {
             _houseTypeInput = houseTypeInput; // Save the supplied objects in fields so the other methods can use them.
             _serviceTypeInput = serviceTypeInput;
@@ -27,6 +27,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
             _serviceTypesService = serviceTypesService;
             _addOnsService = addOnsService;
             _bookingAddOnService = bookingAddOnService;
+            _validator = validator;
         }
 
         public Bookings GetUpdateInput(Bookings singleBooking, out IList<AddOnSelection> addOnSelections, string username) // Update the supplied booking. out also returns an add-on selection list, and ? allows that list to be null.

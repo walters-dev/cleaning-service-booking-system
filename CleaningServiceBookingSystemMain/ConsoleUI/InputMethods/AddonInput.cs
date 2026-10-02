@@ -11,7 +11,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
 
         public AddOnInput(IAddOnsRepository addOnsRepository)
         {
-            this._addOnsRepository = addOnsRepository;
+            _addOnsRepository = addOnsRepository;
         }
 
         private const int MaxRoomNumber = 12;

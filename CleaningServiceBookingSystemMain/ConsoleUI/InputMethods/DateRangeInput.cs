@@ -8,8 +8,11 @@ namespace CleaningServiceBookingSystemMain.Application
 {
     public class DateRangeInput
     {
-        BookingValidator _validator = new BookingValidator();
-
+        BookingValidator _validator;
+        public DateRangeInput(BookingValidator validator)
+        {
+            _validator = validator;
+        }
         public (DateTime startDate, DateTime endDate) GetDateRangeInput()
         {
             while (true)

@@ -580,11 +580,3 @@ BEGIN
 END;
 
 GO
-select * from Customers
-select * from Bookings
-select * from BookingAddOns
-select * from DiscountRules
-select * from AddOns
-select * from Housetypes
-SELECT * FROM Servicetypes
-select * from AdminTable 
