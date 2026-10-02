@@ -147,26 +147,20 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         {
             while (true)
             {
-                Console.WriteLine();
-                Console.WriteLine("Is this a recurring booking?");
-
-                Console.WriteLine("1. Yes");
-                Console.WriteLine("2. No");
-                Console.Write("Choice: ");
-
-                int choice = GetInteger();
-
-                if (choice == 1)
+                var recurringChoice = AnsiConsole.Prompt(new SelectionPrompt<string>() // Display a menu that allows one choice: Yes or No.
+                        .Title("Is This Booking Recurring?")
+                        .AddChoices("Yes",
+                                    "No"
+                                    )
+                        );
+                if (recurringChoice == "Yes")
                 {
-                    return true;
+                    return true; // Mark the booking as recurring when the user chooses Yes.
                 }
-
-                if (choice == 2)
+                else
                 {
-                    return false;
+                    return false; // Mark the booking as non-recurring 
                 }
-
-                Console.WriteLine("Please choose 1 or 2.");
             }
         }
 
@@ -174,32 +168,14 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI.InputMethods
         {
             while (true)
             {
-                Console.WriteLine();
-                Console.WriteLine("Select recurring type:");
-
-                Console.WriteLine("1. Weekly");
-                Console.WriteLine("2. Bi-weekly");
-                Console.WriteLine("3. Monthly");
-                Console.Write("Choice: ");
-
-                int choice = GetInteger(); // Read the user's menu choice as a whole number.
-
-                if (choice == 1)
-                {
-                    return "Weekly";
-                }
-
-                if (choice == 2)
-                {
-                    return "Bi-weekly";
-                }
-
-                if (choice == 3)
-                {
-                    return "Monthly";
-                }
-
-                Console.WriteLine("Please choose 1, 2 or 3.");
+                var recurringType = AnsiConsole.Prompt(new SelectionPrompt<string>() // Ask the user to choose the booking's repeat frequency.
+                            .Title("Choose recurring Type: ")
+                            .AddChoices("Weekly",
+                                        "Bi-Weekly",
+                                        "Monthly"
+                                        )
+                            );
+                return recurringType; // Store the selected repeat frequency in the booking.
             }
         }
 
