@@ -59,51 +59,34 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
             BookingInput bookingInput = new BookingInput(bookingsRepository, validator, houseTypeInput, serviceTypeInput);
 
             Admins adminInDataSource = new Admins();
-            Encryption cryptography = new Encryption();
+            Encryption cryptography = new Encryption(adminService);
             bool IsCorrectAdmin;
             admins = adminLogInInput.GetAdminInput();//gets new admin log in input
-            adminInDataSource = adminService.FindAdminPassword(admins.Username);//finds the admin in data source
-            if (adminInDataSource.Username != admins.Username)
+            do
             {
-                IsCorrectAdmin = false;
-            }
-            else 
-            {
-                IsCorrectPassword = cryptography.VerifyPassword(adminInDataSource.AdminPassword, admins.AdminPassword); //returns bool true if password is correct
-                if (IsCorrectPassword == false)
+                try
+                {
+                    IsCorrectPassword = cryptography.VerifyPassword(admins); //trys to find admin in storage then compares hashed passwords returns bool true if password is correct
+                    if (IsCorrectPassword == false)
+                    {
+                        IsCorrectAdmin = false;
+                        AnsiConsole.MarkupLine("[red]Incorrect password[/]");
+                        admins = adminLogInInput.GetAdminInput();//gets new admin log in input
+                    }
+                    else
+                    {
+                        IsCorrectAdmin = true;
+                    }
+                }
+                catch// if no admin was found
                 {
                     IsCorrectAdmin = false;
-                }
-                else
-                {
-                    IsCorrectAdmin = true;
-                }
-            }
-            while (IsCorrectAdmin == false)//runs if admin input incorrect
-            {
-                if (adminInDataSource.Username != admins.Username)          //checks if username exists
-                {
                     AnsiConsole.MarkupLine("[red]No admin by that username[/]");
-                    admins = adminLogInInput.GetAdminInput();                   //gets new admin log in input
-                    adminInDataSource = adminService.FindAdminPassword(admins.Username);//finds the admin in data source
-                    IsCorrectAdmin = false;
-                    continue;
+                    admins = adminLogInInput.GetAdminInput();//gets new admin log in input
                 }
-                IsCorrectPassword = cryptography.VerifyPassword(adminInDataSource.AdminPassword, admins.AdminPassword);//returns bool true if password is correct
-                if (IsCorrectPassword == false)
-                {
-                    AnsiConsole.MarkupLine("[red]Incorrect password[/]");
-                    admins = adminLogInInput.GetAdminInput();               //gets new admin log in input
-                    adminInDataSource = adminService.FindAdminPassword(admins.Username);//finds the admin in data source
-                    IsCorrectAdmin = false;
-                }
-                else
-                {
-                    IsCorrectAdmin = true;
-                }
-            }
+            } while (IsCorrectAdmin == false);
 
-            Console.Clear();            //clears console so that the username and password
+            Console.Clear();            //clears console so that the username and password arent there anymore
             AnsiConsole.MarkupLine("[green]Signed in[/]");
             IsAdminMenuRunning = true;              //keeps admin menu in loop
             while (IsAdminMenuRunning == true)

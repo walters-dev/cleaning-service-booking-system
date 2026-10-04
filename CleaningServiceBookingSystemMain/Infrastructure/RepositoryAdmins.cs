@@ -45,9 +45,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
                 }
                 else
                 {
-                    admin.AdminPassword = "";
-                    admin.Username = "";
-                    return admin;
+                    throw new ArgumentNullException();//throws exception if no admin found
                 }
             }
             
