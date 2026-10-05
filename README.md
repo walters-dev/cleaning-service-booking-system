@@ -164,6 +164,7 @@ C:\USERS\RPS3\DOCUMENTS\PROJECTS\CLEANINGSERVICEBOOKINGSYSTEM
 4. Run the provided SQL script (`Cleaning Service Booking Database.sql` then `Cleaning Service Booking Procedures.sql` and `Cleaning Service Booking Seeded Data.sql`) against your SQL Server instance to create and seed the database.
 5. Configure the connection string in `Infrastructure/DatabaseConnection.cs` to point at your local database.
 6. Build and run the project (`F5` in Visual Studio).
+7. To sign into Admin Menu, the default username is Admin1 and the default password is Password1.
 
 ### Branching
 - Each team member works on a dedicated feature branch (e.g. `ntando---calculation-+-validation`) rather than committing directly to `main`.
