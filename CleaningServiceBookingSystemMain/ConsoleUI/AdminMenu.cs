@@ -259,6 +259,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                 var allBookingsTable = new Table()
                                 .HeavyHeadBorder()
                                 .ShowRowSeparators()
+                                .BorderColor(Color.Blue)
+                                .ShowRowSeparators()
                                 .AddColumn("Booking Date")
                                 .AddColumn("Number of rooms")
                                 .AddColumn("Booking Status")
@@ -289,6 +291,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                     break;
                                 }
                                 Table bookingsReportTable = new Table()
+                                    .HeavyHeadBorder()
+                                    .ShowRowSeparators()
+                                    .BorderColor(Color.Blue)
                                     .AddColumn("Booking Status")
                                     .AddColumn("Recurring Type")
                                     .AddColumn("Number of Rooms")
@@ -300,7 +305,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                     //adds booking info to table then repeats till last booking
                                     bookingsReportTable.AddRow(booking.BookingStatus, booking.RecurringBookingType, booking.NumberOfRooms.ToString(), booking.CarpetedRooms.ToString(), booking.CreatedBy, booking.TotalAmount.ToString("C"));
                                 }
-                                AnsiConsole.Write(bookingsReportTable);//displays all bookings created today
+                                var centeredReport = Align.Center(bookingsReportTable);
+                                AnsiConsole.Write(centeredReport);//displays all bookings created today
                                 break;
                             case "Change status":
                                 IsConfirmData = false;

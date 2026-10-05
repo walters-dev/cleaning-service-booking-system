@@ -57,7 +57,7 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                     break;
                                 }
                                 var tableHistory = new Table();
-                                tableHistory.DoubleBorder();
+                                tableHistory.HeavyHeadBorder();
                                 tableHistory.ShowRowSeparators();
                                 tableHistory.BorderColor(Color.Blue);
                                 tableHistory.Title($"{bookingsHistory[0].Fullname}'s booking history:");
@@ -72,8 +72,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                     //adds booking info to table then repeats till last booking
                                     tableHistory.AddRow(booking.HouseName, booking.ServiceName, booking.BookingDate.Date.ToString("dd MMM yyyy"), booking.NumberOfRooms.ToString(), booking.TotalAmount.ToString("C"), booking.BookingStatus);
                                 }
-                                var centered = Align.Center(tableHistory);
-                                AnsiConsole.Write(centered);//displays all bookings asociated with specified customer
+                                var centeredHistory = Align.Center(tableHistory);
+                                AnsiConsole.Write(centeredHistory);//displays all bookings asociated with specified customer
                                 break;
                             case "Booking List By Range"://Booking List By Range chosen from booking options
                                 var dateRange = dateRangeInput.GetDateRangeInput();//get date range input for bookings
@@ -84,7 +84,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                     break;
                                 }
                                 var tableRange = new Table();
-                                tableRange.DoubleBorder();
+                                tableRange.HeavyHeadBorder();
+                                tableRange.ShowRowSeparators();
+                                tableRange.BorderColor(Color.Blue);
                                 tableRange.ShowRowSeparators();
                                 tableRange.AddColumn("Customer name");
                                 tableRange.AddColumn("House type");
@@ -99,7 +101,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                                     //adds booking info to table then repeats till last booking
                                     tableRange.AddRow(booking.Fullname, booking.HouseName, booking.ServiceName, booking.BookingDate.Date.ToString("dd MMM yyyy"), booking.NumberOfRooms.ToString(), booking.TotalAmount.ToString("C"), booking.BookingStatus.ToString());
                                 }
-                                AnsiConsole.Write(tableRange);//displays all bookings within date range
+                                var centeredRange = Align.Center(tableRange);
+                                AnsiConsole.Write(centeredRange);//displays all bookings within date range
                                 break;
                             case "Bookings Order By House Type"://Bookings Order By House Type chosen from booking options
                                 var chart = new BarChart();
@@ -191,7 +194,9 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             break;
                         }
                         var discountTable = new Table();
-                        discountTable.DoubleBorder();
+                        discountTable.HeavyHeadBorder();
+                        discountTable.ShowRowSeparators();
+                        discountTable.BorderColor(Color.Blue);
                         discountTable.ShowRowSeparators();
                         discountTable.AddColumn("Discount name:");
                         discountTable.AddColumn("Customer name:");
@@ -203,7 +208,8 @@ namespace CleaningServiceBookingSystemMain.ConsoleUI
                             discountTable.AddRow(booking.DiscountName, booking.Fullname, booking.SubTotal.ToString("C"), booking.DiscountAmount.ToString("C"), booking.AmountAfterDiscount.ToString("C"));
                             //adds booking info to table then repeats till last booking
                         }
-                        AnsiConsole.Write(discountTable);//displays all discounted bookings created today
+                        var centeredDiscount = Align.Center(discountTable);
+                        AnsiConsole.Write(centeredDiscount);//displays all discounted bookings created today
                         break;
                     case "Return to Main Menu"://Return to Main Menu chosen from manager menu
                         Console.Clear();
