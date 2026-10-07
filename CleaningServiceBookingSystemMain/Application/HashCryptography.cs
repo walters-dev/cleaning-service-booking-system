@@ -28,7 +28,8 @@ namespace CleaningServiceBookingSystemMain.Application
 		public bool VerifyPassword(Admins enteredAdmin)//checks if password is the same as the password in database
 		{
             hashedpassword = _adminService.FindAdminPassword(enteredAdmin.Username).AdminPassword;//finds the admin in storage
-            var isValid = BCrypt.Net.BCrypt.Verify(enteredAdmin.AdminPassword, hashedpassword);//hashes enteredpassword with the salt in hashpassword then compares 2
+            //hashes enteredpassword with the salt in hashpassword then compares 2
+            var isValid = BCrypt.Net.BCrypt.Verify(enteredAdmin.AdminPassword, hashedpassword);
 			if (isValid)
 			{
 				return true;
