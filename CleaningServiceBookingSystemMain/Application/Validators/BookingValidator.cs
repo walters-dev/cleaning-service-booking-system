@@ -270,6 +270,12 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
         }
         public bool ValidateStartEndDate(DateTime startDate, DateTime endDate, out string errorMessage)
         {
+            var overflowDate = new DateTime(1753,01,01);
+            if ((overflowDate > endDate) || (overflowDate > startDate))
+            {
+                errorMessage = "Date must be 1753/01/01 or after";
+                return false;
+            }
 
             if (endDate < startDate)
             {
@@ -283,6 +289,12 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
         public bool ValidateSingleDateInput(string bookingDate, out string errorMessage)
         {
             string format = "yyyy-MM-dd HH:mm";
+            if (!DateTime.TryParse(bookingDate, out DateTime bookingDateResult))
+            {
+                errorMessage = "Booking date is not a valid date.";
+                return false;
+            }
+
             DateTime.TryParseExact(bookingDate, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime bookingDateResult1);
 
             if (string.IsNullOrWhiteSpace(bookingDate))
@@ -291,9 +303,10 @@ namespace CleaningServiceBookingSystemMain.Application.Validators
                 return false;
             }
 
-            if (!DateTime.TryParse(bookingDate, out DateTime bookingDateResult))
+            var overflowDate = new DateTime(1753, 01, 01);
+            if (overflowDate > bookingDateResult)
             {
-                errorMessage = "Booking date is not a valid date.";
+                errorMessage = "Date must be 1753/01/01 or after";
                 return false;
             }
 

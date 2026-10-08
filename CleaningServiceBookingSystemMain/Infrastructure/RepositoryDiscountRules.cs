@@ -16,7 +16,7 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             List<DiscountRules> discountRulesInfo = new List<DiscountRules>();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("fghj", connection);//gets stored procedure from database
+                SqlCommand command = new SqlCommand("dbo.DiscountRules", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
@@ -39,9 +39,10 @@ namespace CleaningServiceBookingSystemMain.Infrastructure
             DiscountRules discountRulesInfo = new DiscountRules();
             using (SqlConnection connection = new SqlConnection(databaseConnection.ConnectionString))//sets up connection to database
             {
-                SqlCommand command = new SqlCommand("dbo.GetCustomer", connection);//gets stored procedure from database
+                SqlCommand command = new SqlCommand("dbo.GetDiscountRules", connection);//gets stored procedure from database
                 command.CommandType = CommandType.StoredProcedure;
                 command.Connection.Open();
+                command.Parameters.AddWithValue("@DiscountId", Id);
                 SqlDataReader reader = command.ExecuteReader();//executes the query and reads output
                 while (reader.Read())
                 {

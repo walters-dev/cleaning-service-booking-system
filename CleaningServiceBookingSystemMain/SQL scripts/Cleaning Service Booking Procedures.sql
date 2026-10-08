@@ -53,6 +53,22 @@ BEGIN
     );
 END;
 GO
+/* DiscountRules PROCEDURES ===========================================================================================================================================================================*/
+CREATE OR ALTER PROCEDURE GetAllDiscountRules
+AS
+BEGIN
+    SELECT * 
+    FROM DiscountRules;
+END
+GO
+CREATE OR ALTER PROCEDURE GetDiscountRules
+@DiscountId VARCHAR(7)
+AS
+BEGIN
+    SELECT * FROM DiscountRules
+    WHERE DiscountRuleId = @DiscountId
+END;
+GO
 /* Housetype PROCEDURES ===========================================================================================================================================================================*/
 
 CREATE OR ALTER PROCEDURE AddHouseType
